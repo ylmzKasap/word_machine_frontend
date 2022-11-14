@@ -42,17 +42,16 @@ export const LoginForm: React.FC = () => {
     axios.post(`${isProduction ? serverUrl : ''}/login`, {
       username: loginForm.username,
       password: loginForm.password
-    }, { withCredentials: true })
-      .then(res => {
-        setLoginForm({type: 'submitting', value: 'false'});
-        navigate(`/user/${res.data.username}`);
-      }).catch(err => {
-        if (err.response.status === 401) {
-          setLoginForm({type: 'formError', value: 'Incorrect username or password'});
-        } else {
-          setLoginForm({type: 'formError', value: 'Oops... Refresh and try again'});
-        }
-      });
+    }).then(res => {
+      setLoginForm({type: 'submitting', value: 'false'});
+      navigate(`/user/${res.data.username}`);
+    }).catch(err => {
+      if (err.response.status === 401) {
+        setLoginForm({type: 'formError', value: 'Incorrect username or password'});
+      } else {
+        setLoginForm({type: 'formError', value: 'Oops... Refresh and try again'});
+      }
+    });
   };
 
   return (
