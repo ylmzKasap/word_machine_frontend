@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useContext } from 'react';
+import { isProduction, serverUrl } from '../../../constants';
 import { NavbarContext, NavbarContextTypes } from '../../../navbar/layout_with_navbar';
 import { ProfileContext } from '../../profile_page/profile_page';
 import { ProfileContextTypes } from '../../types/profilePageTypes';
@@ -93,7 +94,7 @@ export const Filler: React.FC<FillerTypes> = (props) => {
     setDrag({type: 'reset'});
 
     axios
-      .put('/file_order', {
+      .put(`${isProduction ? serverUrl : ''}/file_order`, {
         item_id: extract_int(drag.draggedElement.id),
         category_id: categoryContainer
           ? extract_int(categoryContainer.id)

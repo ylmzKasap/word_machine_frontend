@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, useEffect, useReducer, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { isProduction, serverUrl } from '../constants';
 import { NavBar } from './navbar';
 
 export const NavbarContext = createContext<NavbarContextTypes | undefined>(undefined);
@@ -12,7 +13,7 @@ export function LayoutsWithNavbar() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-    axios.get('/logged_in_user')
+    axios.get(`${isProduction ? serverUrl : ''}/logged_in_user`)
       .then(res => {
         setCurrentUserInfo(res.data);
         setSessionChecked(true);

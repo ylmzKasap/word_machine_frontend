@@ -45,6 +45,7 @@ import { NavbarContext, NavbarContextTypes } from '../../navbar/layout_with_navb
 import { 
   contextMenuDefaults, 
   handleContextMenuReducer } from '../common/reducers/contextMenuReducer';
+import { isProduction, serverUrl } from '../../constants';
 
 export const ProfileContext = createContext<
   types.ProfileContextTypes | undefined
@@ -109,8 +110,6 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
     editImagesDefaults
   );
 
-  console.log(process.env);
-
   let currentContainer: string;
   if (directoryInfo) {
     currentContainer =
@@ -123,7 +122,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
   useEffect(() => {
     const currentDir = dirId ? dirId : dir;
     axios
-      .get(`/u/${directoryUsername}/${currentDir}`)
+      .get(`${isProduction ? serverUrl : ''}/u/${directoryUsername}/${currentDir}`)
       .then((response) => {
         const [dirItems, dirInfo] = response.data as types.userResponse;
         const rootDirectory = dirInfo.root_id;

@@ -20,6 +20,7 @@ import {
 import axios from 'axios';
 import SubmitForm from '../../../common/form_components/submit_form';
 import { seperate_language_region } from '../../../common/functions';
+import { isProduction, serverUrl } from '../../../../constants';
 
 export const AddImageOverlay = () => {
   // Rendered by "../edit_image/edit_add_image_content".
@@ -230,7 +231,7 @@ export const AddImageOverlay = () => {
       const { targetLanguage, sourceLanguage } = deckOverlay.language;
 
       axios
-        .post('/image_upload', {
+        .post(`${isProduction ? serverUrl : ''}/image_upload`, {
           artist_name: imageOverlay.artist.value.toLowerCase(),
           references: imageOverlay.references.map((x) => x.value),
           image: reader.result,
@@ -239,7 +240,7 @@ export const AddImageOverlay = () => {
         })
         .then(() => {
           axios
-            .post('/image_search', {
+            .post(`${isProduction ? serverUrl : ''}/image_search`, {
               word_array:
                 deckOverlay.purpose === 'learn'
                   ? [imageOverlay.source.value]

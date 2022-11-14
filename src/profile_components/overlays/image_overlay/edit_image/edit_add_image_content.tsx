@@ -9,6 +9,7 @@ import axios from 'axios';
 import LoadingIcon from '../../../../assets/animations/loading_icon';
 import { AddSoundOverlay } from '../add_sound/add_sound';
 import limits from '../../../common/constants/limits';
+import { isProduction, serverUrl } from '../../../../constants';
 
 const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
   // Rendered by "./edit_image_overlay" -> EditImageOverlay
@@ -149,7 +150,7 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
 
     setSubmitRequest(true);
     axios
-      .post('/deck', {
+      .post(`${isProduction ? serverUrl : ''}/deck`, {
         deck_name: deckOverlay.deckName,
         selected_ids: selectedImages.map((i) => ({
           image_id: i.image_id,

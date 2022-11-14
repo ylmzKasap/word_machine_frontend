@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useContext, useState, useReducer } from 'react';
+import { isProduction, serverUrl } from '../../../constants';
 import { NavbarContext, NavbarContextTypes } from '../../../navbar/layout_with_navbar';
 import SubmitForm from '../../../profile_components/common/form_components/submit_form';
 import { TogglePasswordVisibility } from '../../password/reset_password/toggle_password_visibility';
@@ -37,7 +38,7 @@ export const ChangeEmailOverlay: React.FC = () => {
     if (changeEmailOverlay.submitting) return;
 
     setChangeEmailOverlay({type: 'submitNewEmail', value: 'true'});
-    axios.post('/change_email', {
+    axios.post(`${isProduction ? serverUrl : ''}/change_email`, {
       password: changeEmailOverlay.password,
       new_email: changeEmailOverlay.newEmail
     }).then(() => {

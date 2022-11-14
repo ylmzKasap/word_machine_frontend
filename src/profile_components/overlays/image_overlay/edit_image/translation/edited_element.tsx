@@ -7,6 +7,7 @@ import { get_row_default } from '../../../../types/overlayDefaults';
 import { ImageRowTypes } from '../edit_image_overlay';
 import limits from '../../../../common/constants/limits';
 import { NavbarContext, NavbarContextTypes } from '../../../../../navbar/layout_with_navbar';
+import { isProduction, serverUrl } from '../../../../../constants';
 
 const EditedElement: React.FC<EditedElementPropTypes> = ({
   elementId,
@@ -107,7 +108,7 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
     ) {
       setRequestExists(true);
       axios
-        .post('/image_search', {
+        .post(`${isProduction ? serverUrl : ''}/image_search`, {
           word_array: [trimmedInput],
           search:
             deckOverlay.purpose === 'learn' ? sourceLanguage : targetLanguage,
@@ -146,7 +147,7 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
     ) {
       if (!word.image_path) return;
       axios
-        .put('/translation', {
+        .put(`${isProduction ? serverUrl : ''}/translation`, {
           translation_id: word.translation_id,
           language:
             type === 'sourceLanguage'

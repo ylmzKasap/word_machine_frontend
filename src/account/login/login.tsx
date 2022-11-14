@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ChangeEvent, useReducer, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { serverUrl, isProduction } from '../../constants';
 import SubmitForm from '../../profile_components/common/form_components/submit_form';
 import { ForgottenPassword } from '../password/forgotten_password/forgotten_password';
 import { ForgottenUsername } from '../username/forgotten_username';
@@ -12,7 +13,7 @@ export const LoginForm: React.FC = () => {
   const [loginForm, setLoginForm] = useReducer(loginReducer, loginDefaults);
   
   useEffect(() => {
-    axios.get('/is_logged_in')
+    axios.get(`${isProduction ? serverUrl : ''}/is_logged_in`)
       .then(res => {
         if (res.data.is_logged_in) {
           if (res.data.username) {
@@ -38,7 +39,7 @@ export const LoginForm: React.FC = () => {
     if (loginForm.submitting) return;
 
     setLoginForm({type: 'submitting', value: 'true'});
-    axios.post('/login', {
+    axios.post(`${isProduction ? serverUrl : ''}/login`, {
       username: loginForm.username,
       password: loginForm.password
     }).then(res => {

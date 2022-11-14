@@ -9,6 +9,7 @@ import { ProfileContextTypes } from '../types/profilePageTypes';
 import { handleItemName } from '../common/form_components/handlers/handle_item_name';
 import { itemNameFilter } from '../common/regex';
 import DoubleChoice from '../common/form_components/double_choice';
+import { isProduction, serverUrl } from '../../constants';
 
 
 export const CreateFolderOverlay: React.FC = () => {
@@ -65,7 +66,7 @@ export const CreateFolderOverlay: React.FC = () => {
       setSubmitRequest(true);
       let serverFolderType = folderOverlay.folderType.toLowerCase().replace(' ', '_');
       axios
-        .post('/folder', {
+        .post(`${isProduction ? serverUrl : ''}/folder`, {
           folder_name: folderOverlay.folderName,
           folder_type:
             serverFolderType === 'regular_folder'

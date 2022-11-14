@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isProduction, serverUrl } from '../../../constants';
 import {
   DraggedElementTypes,
   RequestErrorTypes,
@@ -24,7 +25,7 @@ export default function delete_item(
 
   if (window.confirm(message)) {
     axios
-      .delete('/file', {
+      .delete(`${isProduction ? serverUrl : ''}/file`, {
         data: {
           item_id: extract_int(itemObj.id),
         },

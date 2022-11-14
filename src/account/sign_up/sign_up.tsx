@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ChangeEvent, useReducer, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isProduction, serverUrl } from '../../constants';
 import SubmitForm from '../../profile_components/common/form_components/submit_form';
 import { TogglePasswordVisibility } from '../password/reset_password/toggle_password_visibility';
 import { validate_email } from '../validators/validate_email';
@@ -15,7 +16,7 @@ export const SignUpForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    axios.get('/is_logged_in')
+    axios.get(`${isProduction ? serverUrl : ''}/is_logged_in`)
       .then(res => {
         if (res.data.is_logged_in) {
           if (res.data.username) {
@@ -120,7 +121,7 @@ export const SignUpForm: React.FC = () => {
     }
 
     setSignUpForm({type: 'setSubmitting', value: 'true'});
-    axios.post('/signup', {
+    axios.post(`${isProduction ? serverUrl : ''}/signup`, {
       username: signUpForm.username.value.trim(),
       email: signUpForm.email.value.trim(),
       password: signUpForm.password.value

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useContext, useState } from 'react';
 import LoadingIcon from '../../../../../assets/animations/loading_icon';
+import { isProduction, serverUrl } from '../../../../../constants';
 import { ProfileContext } from '../../../../profile_page/profile_page';
 import { ProfileContextTypes } from '../../../../types/profilePageTypes';
 
@@ -19,7 +20,7 @@ export const SoundContainer: React.FC<{
   function generate_sound() {
     setRequestExists(true);
     axios
-      .post('sound_generation', {
+      .post(`${isProduction ? serverUrl : ''}/sound_generation`, {
         text: word,
         language: language,
       })

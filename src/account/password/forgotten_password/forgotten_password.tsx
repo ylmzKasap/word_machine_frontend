@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useReducer } from 'react';
+import { isProduction, serverUrl } from '../../../constants';
 import SubmitForm from '../../../profile_components/common/form_components/submit_form';
 import { ExitButton } from '../../settings/common/exit_button';
 import { validEmailRegex } from '../../validators/constants';
@@ -36,7 +37,7 @@ export const ForgottenPassword: React.FC<{handleExit: () => void}> = ({ handleEx
     if (forgotPasswordForm.submittingResend) return;
 
     setForgotPasswordForm({type: 'submittingResend', value: 'true'});
-    axios.post('resend_verification_url', {
+    axios.post(`${isProduction ? serverUrl : ''}/resend_verification_url`, {
       email: forgotPasswordForm.email
     })
       .then(() => {
@@ -62,7 +63,7 @@ export const ForgottenPassword: React.FC<{handleExit: () => void}> = ({ handleEx
     }
 
     setForgotPasswordForm({type: 'submitting', value: 'true'});
-    axios.post('mail_password_reset', {
+    axios.post(`${isProduction ? serverUrl : ''}/mail_password_reset`, {
       username: forgotPasswordForm.username,
       email: forgotPasswordForm.email
     })

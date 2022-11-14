@@ -4,6 +4,7 @@ import { ProfileContext } from '../../profile_page/profile_page';
 import { ProfileContextTypes } from '../../types/profilePageTypes';
 import delete_item from '../functions/delete_item';
 import { extract_int } from '../utils';
+import { isProduction, serverUrl } from '../../../constants';
 
 const ItemContextMenu: React.FC = () => {
   const {
@@ -79,7 +80,7 @@ const ItemContextMenu: React.FC = () => {
       if (!clipboard.id) throw Error;
 
       axios
-        .put('/paste', {
+        .put(`${isProduction ? serverUrl : ''}/paste`, {
           item_id: extract_int(clipboard.id),
           new_parent: directory,
           category_id:

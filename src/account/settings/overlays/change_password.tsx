@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useContext, useReducer } from 'react';
+import { isProduction, serverUrl } from '../../../constants';
 import SubmitForm from '../../../profile_components/common/form_components/submit_form';
 import { minPasswordLength } from '../../validators/constants';
 import { ExitButton } from '../common/exit_button';
@@ -82,7 +83,7 @@ export const ChangePasswordOverlay: React.FC = () => {
     }
 
     setChangePasswordOverlay({type: 'submitNewPassword', value: 'true'});
-    axios.post('/change_password', {
+    axios.post(`${isProduction ? serverUrl : ''}/change_password`, {
       password: changePasswordOverlay.password,
       new_password: changePasswordOverlay.newPassword
     }).then(() => {

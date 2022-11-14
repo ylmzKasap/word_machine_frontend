@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useContext, useState, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isProduction, serverUrl } from '../../constants';
 import { NavbarContext, NavbarContextTypes } from '../../navbar/layout_with_navbar';
 import delete_item from '../common/functions/delete_item';
 import { extract_int } from '../common/utils';
@@ -59,7 +60,7 @@ export const SideBar: React.FC = () => {
       return;
     }
     axios
-      .put('/file_directory', {
+      .put(`${isProduction ? serverUrl : ''}/file_directory`, {
         item_id: extract_int(drag.draggedElement.id),
         target_id: null,
       })

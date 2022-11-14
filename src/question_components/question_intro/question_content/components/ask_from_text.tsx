@@ -9,6 +9,7 @@ import * as defaults from '../../../types/QuestionPageDefaults';
 import * as types from '../../../types/QuestionPageTypes';
 import axios from 'axios';
 import { QuestionContext } from '../../question_intro';
+import { isProduction, serverUrl } from '../../../../constants';
 
 export const AskFromText: React.FC<types.QuestionComponentPropTypes> = ({
   wordInfo,
@@ -107,7 +108,7 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
 
       if (currentPage.answered || username !== logged_in_user) return;
       setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
-      axios.put('/question_answer', {
+      axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
         translation_id: props.translation_id,
         deck_id: props.deck_id,
         is_correct: true
@@ -121,7 +122,7 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
 
       if (currentPage.answered || username !== logged_in_user) return;
       setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
-      axios.put('/question_answer', {
+      axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
         translation_id: currentPage.word.translation_id,
         deck_id: currentPage.word.deck_id,
         is_correct: false

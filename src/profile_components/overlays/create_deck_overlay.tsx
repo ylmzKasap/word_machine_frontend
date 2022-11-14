@@ -14,6 +14,7 @@ import { itemNameFilter, specialCharacterRegex } from '../common/regex';
 import { handleItemName } from '../common/form_components/handlers/handle_item_name';
 import limits from '../common/constants/limits';
 import { seperate_language_region } from '../common/functions';
+import { isProduction, serverUrl } from '../../constants';
 
 
 export const CreateDeckOverlay: React.FC = () => {
@@ -143,7 +144,7 @@ export const CreateDeckOverlay: React.FC = () => {
       
       setSubmitRequest(true);
       axios
-        .post('/image_search', {
+        .post(`${isProduction ? serverUrl : ''}/image_search`, {
           word_array: allWords,
           search:
             deckOverlay.purpose === 'study'

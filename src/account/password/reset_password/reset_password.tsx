@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useReducer } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { isProduction, serverUrl } from '../../../constants';
 import SubmitForm from '../../../profile_components/common/form_components/submit_form';
 import { PasswordField } from '../../settings/common/password_field';
 import { CheckVerification } from '../../verification/check_verification';
@@ -14,7 +15,7 @@ export const ResetPassword: React.FC = () => {
   const [resetReducer, setResetReducer] = useReducer(resetPasswordReducer, resetPasswordDefaults);
 
   useEffect(() => {
-    axios.get(`/reset_exists/${reset_string}`)
+    axios.get(`${isProduction ? serverUrl : ''}/reset_exists/${reset_string}`)
       .then(res => {
         setResetReducer({type: 'resetExists', value: 'true'});
       })
@@ -56,7 +57,7 @@ export const ResetPassword: React.FC = () => {
     if (newPassword.length + confirmPassword.length < 16) return;
 
     setResetReducer({type: 'submitting', value: 'true'});
-    axios.post('reset_password', {
+    axios.post(`${isProduction ? serverUrl : ''}/reset_password`, {
       reset_string: reset_string,
       new_password: newPassword
     }).then(() => {

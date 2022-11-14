@@ -8,6 +8,7 @@ import * as types from '../types/QuestionPageTypes';
 import NotFound from '../../profile_components/common/components/not_found';
 import { QuestionIntroContent } from './components/question_intro_content';
 import QuestionContent from './question_content/question_content';
+import { isProduction, serverUrl } from '../../constants';
 
 export const QuestionContext = createContext<
   types.QuestionContextTypes | undefined
@@ -31,7 +32,7 @@ export const QuestionIntro = () => {
     }, 500);
 
     axios
-      .get(`/deck/${params.username}/${deck_id}`)
+      .get(`${isProduction ? serverUrl : ''}/deck/${params.username}/${deck_id}`)
       .then((res) => {
         const response = res.data as types.DeckResponseTypes;
         setQuestionPage({type: 'setDeckData', value: response});

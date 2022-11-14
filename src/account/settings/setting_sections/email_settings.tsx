@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useContext, useState } from 'react';
+import { isProduction, serverUrl } from '../../../constants';
 import { CurrentUserTypes } from '../../../navbar/layout_with_navbar';
 import { UserSettingsContext, UserSettingsContextTypes } from '../user_settings';
 
@@ -13,7 +14,7 @@ export const EmailSettings: React.FC<{
       if (resendRequest) return;
 
       setResendRequest(true);
-      axios.post('resend_verification_url', {
+      axios.post(`${isProduction ? serverUrl : ''}resend_verification_url`, {
         email: currentUserInfo.email
       })
         .then(() => setResendRequest(false))

@@ -1,6 +1,7 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import axios from 'axios';
 import { useReducer, useRef } from 'react';
+import { isProduction, serverUrl } from '../../constants';
 import SubmitForm from '../../profile_components/common/form_components/submit_form';
 import { ExitButton } from '../settings/common/exit_button';
 import { captchaSiteKey, validEmailRegex } from '../validators/constants';
@@ -28,7 +29,7 @@ export const ForgottenUsername: React.FC<{handleExit: () => void}> = ({ handleEx
     if (forgotUsernameForm.submittingResend) return;
 
     setForgotUsernameForm({type: 'submittingResend', value: 'true'});
-    axios.post('resend_verification_url', {
+    axios.post(`${isProduction ? serverUrl : ''}/resend_verification_url`, {
       email: forgotUsernameForm.email
     })
       .then(() => {
@@ -61,7 +62,7 @@ export const ForgottenUsername: React.FC<{handleExit: () => void}> = ({ handleEx
     }
 
     setForgotUsernameForm({type: 'submitting', value: 'true'});
-    axios.post('forgotten_username', {
+    axios.post(`${isProduction ? serverUrl : ''}/forgotten_username`, {
       email: forgotUsernameForm.email,
       token: forgotUsernameForm.captchaToken
     })

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isProduction, serverUrl } from '../../constants';
 import { NavbarContext, NavbarContextTypes } from '../../navbar/layout_with_navbar';
 import Filler from '../common/components/filler';
 import handleDownOnDragged from '../common/handlers/handle_down_on_dragged';
@@ -159,7 +160,7 @@ export const PageItem: React.FC<PageItemPropTypes> = (props) => {
 
     if (drag.isDragging && drag.draggedElement.id ) {
       axios
-        .put('/file_directory', {
+        .put(`${isProduction ? serverUrl : ''}/file_directory`, {
           item_id: extract_int(drag.draggedElement.id),
           target_id: extract_int(targetElem.id),
         })

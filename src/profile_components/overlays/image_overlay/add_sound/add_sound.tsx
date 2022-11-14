@@ -8,6 +8,7 @@ import OverlayNavbar from '../../common/components/overlay_navbar';
 import validate_sound_upload from '../functions/validate_sound';
 import UploadedSound from './uploaded_sound';
 import { seperate_language_region } from '../../../common/functions';
+import { isProduction, serverUrl } from '../../../../constants';
 
 export const AddSoundOverlay: React.FC = () => {
   const [submitValid, setSubmitValid] = useState(false);
@@ -80,7 +81,7 @@ export const AddSoundOverlay: React.FC = () => {
     reader.onloadend = () => {
       setSubmitRequest(true);
       axios
-        .post('/sound_upload', {
+        .post(`${isProduction ? serverUrl : ''}/sound_upload`, {
           text: editImageOverlay.soundOverlay.soundText,
           language: deckOverlay.language.targetLanguage,
           sound_file: reader.result,
@@ -91,7 +92,7 @@ export const AddSoundOverlay: React.FC = () => {
             value: 'reset',
           });
           axios
-            .post('sound_generation', {
+            .post(`${isProduction ? serverUrl : ''}/sound_generation`, {
               text: editImageOverlay.soundOverlay.soundText,
               language: deckOverlay.language.targetLanguage,
             })

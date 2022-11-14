@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { isProduction, serverUrl } from '../../constants';
 import { CheckVerification } from './check_verification';
 
 export const RevertEmailChage: React.FC = () => {
@@ -8,7 +9,7 @@ export const RevertEmailChage: React.FC = () => {
   const [verified, setVerified] = useState<null | boolean>(null);
 
   useEffect(() => {
-    axios.get(`/revert_email_change/${reversion_string}`)
+    axios.get(`${isProduction ? serverUrl : ''}/revert_email_change/${reversion_string}`)
       .then(() => setVerified(true))
       .catch(() => setVerified(false));
   }, []);

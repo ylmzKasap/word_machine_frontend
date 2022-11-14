@@ -2,6 +2,7 @@ import { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { NavbarContext, NavbarContextTypes } from './layout_with_navbar';
+import { isProduction, serverUrl } from '../constants';
 
 export const UserDropdown: React.FC<UserDropdownPropTypes> = (props) => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export const UserDropdown: React.FC<UserDropdownPropTypes> = (props) => {
       // Prevent log out with middle click
       if (event.button === 1) return;
       setSessionChecked(false);
-      axios.post('/logout', {
+      axios.post(`${isProduction ? serverUrl : ''}/logout`, {
         username: props.username
       }).then(() => {
         setReRender();

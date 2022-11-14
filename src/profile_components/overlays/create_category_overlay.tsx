@@ -12,6 +12,7 @@ import allLanguages from '../common/constants/all_languages';
 import { ProfileContextTypes } from '../types/profilePageTypes';
 import { handleItemName } from '../common/form_components/handlers/handle_item_name';
 import { itemNameFilter } from '../common/regex';
+import { isProduction, serverUrl } from '../../constants';
 
 
 export const CreateCategoryOverlay: React.FC = () => {
@@ -97,7 +98,7 @@ export const CreateCategoryOverlay: React.FC = () => {
     } else {
       setSubmitRequest(true);
       axios
-        .post('/category', {
+        .post(`${isProduction ? serverUrl : ''}/category`, {
           category_name: categoryOverlay.categoryName,
           parent_id: directory,
           color: categoryOverlay.color,
