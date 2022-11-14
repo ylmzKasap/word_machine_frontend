@@ -1,0 +1,46 @@
+@media (max-width: 600px) {
+  #add-image-overlay {
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  #add-image-content {
+    flex-direction: column;
+    max-height: 92vh;
+  }
+
+  #image-to-add {
+    width: 100%;
+  }
+  
+  #uploaded-image-container {
+    margin: 20px;
+    height: 90%;
+    min-height: 150px;
+    width: 50%;
+    max-height: none;
+    > img {
+      max-height: 150px;
+      min-height: 125px;
+    }
+  }
+
+  #add-image-info {
+    width: 100%;
+  }
+}
+
+@media (max-height: 500px) {
+  #add-image-overlay {
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  #add-image-content {
+    max-height: 92vh;
+  }
+
+  #uploaded-image-container {
+    height: 80%;
+  }
+}

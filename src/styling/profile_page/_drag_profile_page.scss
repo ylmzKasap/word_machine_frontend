@@ -1,0 +1,28 @@
+#drag-item-clone {
+  @include flexit();
+  flex-direction: column;
+  background-color: white;
+  box-shadow: rgb(175, 175, 175) 0px 0px 3px 1px;
+  overflow: hidden;
+  white-space: var(2);
+  font-weight: bold;
+  position: fixed;
+  width: 126px;
+  height: 112px;
+  cursor: pointer;
+  z-index: 1020;
+  border-radius: 16px;
+  &.dragged-category {
+    border-radius: 0px;
+  }
+}
+
+.dragged-folder {
+  color: rgb(150, 204, 0);
+}
+
+
+
+.drag-hover-folder {
+  color: rgb(0, 196, 59);
+}

@@ -1,0 +1,128 @@
+@media (max-width: $mobile) {
+  #user-dropdown {
+    height: 90%;
+  }
+
+  .profile-content {
+    flex-direction: column;
+  }
+
+  .sidebar-container {
+    position: static;
+    flex-direction: row;
+    height: auto;
+    min-height: 80px;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    border-top: solid rgb(117, 117, 117) 1px;
+  }
+
+  .sidebar-item {
+    height: 100%;
+    min-width: 80px;
+    font-size: 0.8rem;
+  }
+
+  .sidebar-user-image {
+    max-width: 50%;
+  }
+
+  .sidebar-username {
+    border: none;
+  }
+
+  .profile-error-box {
+    width: 70vw;
+  }
+
+  .card-container {
+    margin: 0;
+    row-gap: 20px;
+    padding: 15px 0 15px 0;
+    grid-template-columns: repeat(auto-fill, 110px);
+    grid-template-rows: repeat(auto-fill, 100px);
+    min-height: calc(100% - 120px);
+  }
+
+  .category-container {
+    margin: 0;
+  }
+
+  .category {
+    grid-template-columns: repeat(auto-fill, 110px);
+    grid-template-rows: repeat(auto-fill, 100px);
+    row-gap: 20px;
+    padding: 60px 0 15px 0;
+  }
+
+  .item-with-filler {
+    width: 110px;
+    height: 100px;
+    position: relative;
+  }
+
+  #item-icon {
+    font-size: 3rem;
+  }
+
+  .item-filler {
+    display: none;
+  }
+
+  .sidebar-item.disabled {
+    display: none;
+  }
+
+  .context-menu {
+    width: 170px;
+  }
+
+  .create-item-info {
+    height: 100%;
+    width: 100%;
+  }
+
+  .exit-sign {
+    font-size: 1.3rem;
+  }
+
+  .submit-form {
+    margin-bottom: 70px;
+  }
+}
+
+@media (max-height: 450px) {
+  .create-item-info {
+    height: 100%;
+    width: 100%;
+  }
+  .card-container {
+    row-gap: 15px;
+    padding-top: 10px;
+    grid-template-columns: repeat(auto-fill, 110px);
+    grid-template-rows: repeat(auto-fill, 100px);
+  }
+  .item-with-filler {
+    width: 110px;
+    height: 100px;
+    > * .fas, .fa-solid {
+      font-size: calc(3rem + 2vh);
+    }
+  }
+  .item-filler {
+    height: 100px;
+  }
+  .category {
+    grid-template-columns: repeat(auto-fill, 110px);
+    grid-template-rows: repeat(auto-fill, 100px);
+    row-gap: 20px;
+    padding: 60px 0 15px 0;
+  }
+  .sidebar-item {
+    height: 70px;
+    > *.fas, .fa-solid {
+      font-size: 1.5rem;
+    }
+  }
+}

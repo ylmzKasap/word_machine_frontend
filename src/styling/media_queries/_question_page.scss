@@ -1,0 +1,177 @@
+@media (max-aspect-ratio: 1/1) {
+  .image-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  .image-option {
+    width: max(40vw, 200px);
+    height: max(26vh, 150px);
+  }
+  .intro-word {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .text-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    column-gap: 10px;
+  }
+  .intro-img-box {
+    margin-top: max(3vh, 30px);
+    height: max(50vh, 300px);
+    width: max(80vw, 350px);  
+  }
+  .intro-text {
+    height: max(10vh, 70px);
+    width: max(60vw, 300px);
+  }
+  .text-option {
+    width: max(38vw, 200px);
+  }
+  .option-text {
+    font-size: calc(1rem + 1vh);
+  }
+  #answer-sign {
+    width: max(40px, 5vw);
+  }
+}
+
+@media (max-width: 850px) {
+  #question-intro-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr;
+    align-content: flex-start;
+  }
+  #word-success {
+    margin: 50px 30px 30px 30px;
+  }
+  #deck-info-intro {
+    margin:  50px 15% 0px 15%;
+  }
+  #deck-stats-table {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: $mobile) {
+  .intro-word {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .intro-text {
+    font-size: 1.5rem;
+    height: max(10vh, 70px);
+    width: max(70vw, 200px);
+  }
+  .intro-img-box {
+    margin-top: max(10px, 0.5vh);
+    height: max(40vh, 250px);
+    width: max(85vw, 250px);
+  }
+  .intro-img {
+    height: 100%;
+    width: 100%;
+  }
+  .text-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
+    margin-top: 10px;
+  }
+  .text-number-box {
+    width: max(14%, 20px);
+    font-size: 1rem;
+  }
+  .text-option {
+    height: max(8vh, 50px);
+    width: max(38vw, 80px);
+  }
+  .option-text {
+    font-size: calc(0.5rem + 1vh);
+    margin-left: max(5vw, 25px);
+    margin-right: 0px;
+  }
+  .image-options {
+    margin-top: 0px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+  .image-option {
+    max-width: 100%;
+    height: max(23vh, 100px);
+    border-radius: 25px 25px 0px 0px;
+    box-shadow: 0px 1px 1px rgb(197, 197, 197);
+  }
+  .image-option-box {
+    width: max(40vw, 100px);
+    >.word-translation {
+      font-size: calc(0.5rem + 1vh);
+    }
+  }
+  .ask-from-text {
+    height: max(7vh, 30px);
+  }
+
+  #word-success {
+    margin: 50px 10px 30px 10px;
+  }
+}
+
+@media (max-width: 320px) {
+  #word-success {
+    margin: 50px 2px 20px 2px;
+  }
+  #deck-info-intro {
+    margin:  50px 10px 0px 10px;
+  }
+  #deck-stats-table {
+    font-size: 0.6rem;
+  }
+}
+
+
+@media (max-height: 500px) {
+  .intro-text {
+    font-size: calc(0.9rem + 1vh);
+    height: max(10vh, 35px);
+  }
+  .intro-img-box {
+    margin-top: 10px;
+    height: max(70vh, 200px);
+    width: max(45vw, 200px);
+  }
+  .text-options {
+    margin-top: 0px;
+  }
+  .text-number-box {
+    font-size: 1rem;
+  }
+  .image-options {
+    margin-top: 0px;
+  }
+  .image-option {
+    height: max(20vh, 150px);
+  }
+  .ask-from-text {
+    margin-top: max(10px, 4vh);
+  }
+}
+
+@media (max-height: 300px) {
+  .intro-img-box {
+    height: max(60vh, 200px);
+  }
+  .intro-text {
+    font-size: calc(0.7rem + 1vh);
+    height: max(6vh, 15px);
+  }
+  .text-number-box {
+    width: max(10%, 10px);
+  }
+  .image-option {
+    height: max(15vh, 125px);
+  }
+}

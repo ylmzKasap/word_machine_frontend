@@ -1,0 +1,29 @@
+@media (max-width: $mobile) {
+  #form-body {
+    height: 100% !important;
+    width: 100%;
+    border-radius: 0;
+    &.login-form-body {
+      height: 100% !important;
+      width: 100%;
+    }
+    &.navbar-margin {
+      margin: 0;
+    }
+  }
+}
+
+@media (max-height: 500px) {
+  #form-body {
+    height: 100% !important;
+    width: 100%;
+    border-radius: 0;
+    &.login-form-body {
+      height: 100% !important;
+      width: 100%;
+    }
+    &.navbar-margin {
+      margin: 0;
+    }
+  }
+}

@@ -1,0 +1,118 @@
+@keyframes shake {
+  25% {
+    transform: rotate(3deg);
+  }
+  55% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes shakeTransparent {
+  0% {
+    opacity: 0.2;
+  }
+  25% {
+    transform: rotate(3deg);
+  }
+  55% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+    opacity: 0.2;
+  }
+}
+
+@keyframes lightIt {
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    color: white;
+    background-color: #24c953;
+    transform: scale(1);
+  }
+}
+
+@keyframes onlyLightIt {
+  100% {
+    color: white;
+    background-color: #24c953;
+  }
+}
+
+@keyframes emphasis {
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideLeftIn {
+  0% {
+    margin-left: -1%;
+    opacity: 0.1;
+  }
+  100% {
+    margin-left: 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes slideRightIn {
+  0% {
+    margin-left: 1%;
+    opacity: 0.1;
+  }
+  100% {
+    margin-left: 0%;
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    bottom: 5px;
+    opacity: 0.1;
+  }
+  100% {
+    bottom: 0px;
+    opacity: 1;
+  }
+}
+
+@keyframes popup {
+  0% {
+    margin-top: -10px;
+    margin-right: -5px;
+    transform: scale(0.95);
+  }
+  100% {
+    margin-top: 0px;
+    margin-right: 0px;
+    transform: scale(1);
+  }
+}
+
+@keyframes jumpIn {
+  0% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

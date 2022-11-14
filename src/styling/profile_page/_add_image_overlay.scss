@@ -1,0 +1,168 @@
+@use '../icons/arrow_down';
+
+#add-image-overlay {
+  height: min(700px, 70vh);
+  width: min(70vw, 900px);
+  min-width: 500px;
+  .exit-button {
+    font-size: 1.2rem;
+  }
+}
+
+.hidden-upload {
+  position: absolute;
+  left: -99999rem;
+}
+
+#image-to-add {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: max(40%, 300px);
+  min-width: 150px;
+  box-shadow: rgb(192, 192, 192) 3px 0px 4px;
+}
+
+#uploaded-image-container {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 2px 2px 1px #a7a4c2;
+  min-height: 250px;
+  max-height: 70%;
+  width: 80%;
+  border-radius: 10px;
+  margin: auto;
+  overflow: hidden;
+  > img {
+    height: 85%;
+    max-width: 100%;
+  }
+}
+
+#uploaded-sound-container {
+  background: radial-gradient(
+    circle,
+    rgb(239, 236, 139) 0%,
+    rgb(230, 230, 73) 100%
+  );
+  cursor: pointer;
+  @include flexit();
+  flex-direction: column;
+  height: 250px;
+  min-height: 150px;
+  &.file-present {
+    height: 150px;
+  }
+}
+
+#uploaded-sound {
+  margin: auto;
+}
+
+.custom-image-upload {
+  width: 100%;
+  background-color: rgb(56, 56, 56);
+  color: white;
+  text-align: center;
+  border: solid #ccc;
+  border-width: 2px 0 0 0;
+  display: inline-block;
+  padding: 5px 0 5px 0;
+  cursor: pointer;
+}
+
+.action-to-add-file {
+  @include flexit();
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle,
+    rgb(239, 236, 139) 0%,
+    rgb(230, 230, 73) 100%
+  );
+  @include arrow_down.arrow-down(4, rgb(43, 43, 44));
+  > .arrow-down {
+    transition: 0.2s;
+    margin-bottom: 20px;
+    &.sound {
+      bottom: 15px;
+    }
+  }
+  &:hover {
+    > .arrow-down {
+      transform: scale(4.3);
+      background-color: rgb(230, 230, 73);
+    }
+  }
+  > .description {
+    @include flexit();
+    background-color: white;
+    position: absolute;
+    bottom: 0px;
+    margin: 0;
+    width: 100%;
+    min-height: 15%;
+    text-align: center;
+    &.sound {
+      color: white;
+      background-color: #25257c;
+      padding: 10px 0px 10px 0px;
+      border-bottom: solid black;
+    }
+  }
+}
+
+#file-selected {
+  @include flexit();
+  color: black;
+  border-top: solid black;
+  width: 100%;
+  min-height: 40px;
+  text-align: center;
+  background-color: white;
+  &.sound {
+    color: white;
+    background-color: #25257c;
+    border-bottom: solid black;
+  }
+}
+
+#add-image-content {
+  display: flex;
+  width: 100%;
+  max-height: 70vh;
+  height: 100%;
+  overflow: hidden;
+}
+
+#add-image-info {
+  width: 60%;
+  overflow: auto;
+}
+
+#trash-container.artist-reference {
+  width: max(10%, 40px);
+  background-color: black;
+  margin-left: 3px;
+  border-radius: 6px;
+}
+
+#add-more-reference {
+  @include flexit();
+  cursor: pointer;
+  width: 84%;
+  min-height: 30px;
+  color: white;
+  padding: 2%;
+  margin: 1% 6% 1% 6%;
+  border-radius: 10px;
+  background-color: black;
+  text-align: center;
+  &:active {
+    opacity: 0.7;
+  }
+}

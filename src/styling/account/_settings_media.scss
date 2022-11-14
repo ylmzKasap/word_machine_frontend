@@ -1,0 +1,38 @@
+@media (max-width: $mobile) {
+  #user-settings {
+    font-size: 0.9rem;
+  }
+  #setting-container {
+    margin: 0;
+    width: 100%;
+    border-top: solid gray 1px;
+  }
+  .setting-info-header {
+    font-size: 1rem;
+  }
+  .setting-info-item-description {
+    font-size: 0.7rem;
+  }
+  .setting-info {
+    padding-right: 10px;
+  }
+  .setting-info-button {
+    font-size: 0.7rem;
+    margin-left: 5px;
+    margin-right: 0;
+    width: 70px;
+  }
+}
+
+@media (max-width: 300px) {
+  .setting-header {
+    min-width: 50px;
+    font-size: 0.6rem;
+    > .fa-solid {
+      font-size: 1.4rem;
+    }
+  }
+  .setting-info-item-description {
+    font-size: 0.6rem;
+  }
+}

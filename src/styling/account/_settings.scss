@@ -1,0 +1,201 @@
+#user-verify-container {
+  @include flexit();
+  height: 100%;
+  background-color: aliceblue;
+  overflow: auto;
+}
+
+#user-verify-box {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: max(300px, 30vw);
+  height: max(300px, 30vh);
+  background-color: white;
+  margin: 10vh 0 auto 0;
+}
+
+#verify-header {
+  @include flexit();
+  font-size: calc(1rem + 0.5vh);
+  min-height: 50px;
+  width: 100%;
+  text-align: center;
+  background-color: #3f3c3c;
+  color: white;
+}
+
+#verify-response {
+  width: 100%;
+  height: 100%;
+}
+
+.response-with-icon {
+  display: flex;
+  align-items: center;
+  margin-top: max(5vh, 30px);
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  > .fa-solid {
+    font-size: 5rem;
+    &.fa-square-xmark {
+      color: rgb(222, 17, 17);
+    }
+    &.fa-square-check {
+      color: green;
+    }
+  }
+}
+
+.verify-user-description {
+  box-sizing: border-box;
+  font-size: calc(0.8rem + 0.5vh);
+  width: 100%;
+  padding: 10px 30px 20px 30px;
+  text-align: center;
+}
+
+#user-settings {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: calc(100% - $navbar-height);
+  overflow: auto;
+}
+
+#setting-container {
+  height: auto;
+  box-sizing: border-box;
+  margin: 40px 20vw 40px 20vw;
+  width: max(400px, 60vw);
+}
+
+#setting-container-header {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  padding-left: max(1vw, 10px);
+  height: max(50px, 5vh);
+  background-color: #3f3c3c;
+  color: white;
+  border-bottom: solid white 2px;
+}
+
+.setting-section {
+  box-sizing: border-box;
+  display: flex;
+  border-bottom: solid white 1px;
+}
+
+.setting-header {
+  @include flexit();
+  box-sizing: border-box;
+  flex-direction: column;
+  height: auto;
+  min-height: 125px;
+  flex-basis: 20%;
+  min-width: 75px;
+  padding: 3px;
+  background-color: #3c3f3c;
+  > .fa-solid {
+    color: white;
+    font-size: 2rem;
+  }
+}
+
+.setting-info-container {
+  box-sizing: border-box;
+  flex-basis: 80%;
+  border-width: 0 2px 2px 0;
+}
+
+.setting-info {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  grid-template-areas: 
+    "header button"
+    "item button" ;
+  box-sizing: border-box;
+  background-color: rgb(246, 249, 252);
+  padding: 20px;
+  height: 100%;
+}
+
+.setting-info-header {
+  grid-area: header;
+  font-size: 1.2rem;
+}
+
+.setting-info-item {
+  grid-area: item;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.setting-info-item-description {
+  margin-right: 7px; 
+}
+
+.setting-info-button {
+  grid-area: button;
+  cursor: pointer;
+  margin-left: 15px;
+  background-color: rgb(71, 71, 71);
+  border-radius: 15px;
+  color: white;
+  border: none;
+  width: max(75px, 10vw);
+  &:hover {
+    background-color: rgb(90, 90, 90);
+  }
+  &:not(.no-submit):active {
+    opacity: 0.8;
+    color: rgb(238, 238, 238);
+    transform: scale(0.98);
+  }
+  &.mini {
+    padding: 7px;
+    background-color: rgb(29, 151, 172);
+    font-size: 0.6rem;
+  }
+  &[type=button]:not(.mini) {
+    min-height: 60px;
+  } 
+}
+
+.setting-description {
+  color: white;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.extra-setting-content {
+  font-size: 0.75rem;
+  color: #3c3f3c;
+  > * .fa-solid {
+    margin: 0 5px 0 0px;
+  }
+  > div {
+    margin-top: 5px;
+  }
+}
+
+input.space-bottom {
+  margin-bottom: max(10px, 1vh);
+}
+
+#settings-error {
+  @extend .profile-error-box;
+}
+
+.resend-email {
+  width: 150px;
+  min-height: 40px !important;
+}

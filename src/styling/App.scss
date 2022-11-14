@@ -1,0 +1,53 @@
+// Imports
+@import url('https://fonts.googleapis.com/css2?family=Taviraj&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+html,
+body,
+#main-app,
+#app-wrapper {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+// Variables
+$mobile: 480px;
+$tablet: 768px;
+$small-screen: 1024px;
+$navbar-height: max(5.5vh, 50px);
+
+// Mixins
+@mixin flexit() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Partials
+@import 'overlay';
+@import 'question_page';
+@import 'font_awesome';
+@import './profile_page/drag_profile_page';
+@import './profile_page/item_profile_page';
+@import './profile_page/profile_page';
+@import './profile_page/edit_image_overlay';
+@import './profile_page/add_image_overlay';
+@import './account/sign_in';
+@import './animations/animation_classes';
+@import './animations/animation_keyframes';
+@import './account/settings';
+@import './media_queries/media_queries';
+@import './media_queries/profile_page';
+@import './media_queries/question_page';
+@import './media_queries/edit_image_overlay';
+@import './media_queries/font_awesome';
+@import './media_queries/add_image_overlay';
+@import './account/sign_in_media';
+@import './account/settings_media';
