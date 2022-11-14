@@ -13,7 +13,7 @@ export function LayoutsWithNavbar() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-    axios.get(`${isProduction ? serverUrl : ''}/logged_in_user`)
+    axios.get(`${isProduction ? serverUrl : ''}/logged_in_user`, { withCredentials: true })
       .then(res => {
         setCurrentUserInfo(res.data);
         setSessionChecked(true);
