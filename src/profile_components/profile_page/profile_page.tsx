@@ -109,6 +109,8 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
     editImagesDefaults
   );
 
+  console.log(process.env);
+
   let currentContainer: string;
   if (directoryInfo) {
     currentContainer =
