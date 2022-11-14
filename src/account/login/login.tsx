@@ -42,7 +42,7 @@ export const LoginForm: React.FC = () => {
     axios.post(`${isProduction ? serverUrl : ''}/login`, {
       username: loginForm.username,
       password: loginForm.password
-    }).then(res => {
+    },{ withCredentials: true }).then(res => {
       setLoginForm({type: 'submitting', value: 'false'});
       navigate(`/user/${res.data.username}`);
     }).catch(err => {
