@@ -14,7 +14,7 @@ export const EmailSettings: React.FC<{
       if (resendRequest) return;
 
       setResendRequest(true);
-      axios.post(`${isProduction ? serverUrl : ''}resend_verification_url`, {
+      axios.post(`${isProduction ? serverUrl : ''}/resend_verification_url`, {
         email: currentUserInfo.email
       })
         .then(() => setResendRequest(false))
