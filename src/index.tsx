@@ -15,6 +15,9 @@ import { UserSettings } from './account/settings/user_settings';
 import { RevertEmailChage } from './account/verification/revert_email';
 import { ResetPassword } from './account/password/reset_password/reset_password';
 import { QuestionIntro } from './question_components/question_intro/question_intro';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 const App = () => {
   return (
