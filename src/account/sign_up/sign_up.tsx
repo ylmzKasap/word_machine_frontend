@@ -5,6 +5,7 @@ import { isProduction, serverUrl } from '../../constants';
 import SubmitForm from '../../profile_components/common/form_components/submit_form';
 import { TogglePasswordVisibility } from '../password/reset_password/toggle_password_visibility';
 import { validate_email } from '../validators/validate_email';
+import { validate_username } from '../validators/validate_username';
 import { checkEmailExists, checkUsernameExists } from './control_functions';
 import { handleSignUpForm } from './sign_up_reducer';
 

@@ -51,6 +51,9 @@ export const handleSignUpForm = (
 
     case 'setUsernameExists':
       let usernameExistsInDatabase = action.value === 'true';
+      const [usernameErrorExists] = validate_username(state.username.value);
+      if (usernameErrorExists) return state;
+      
       return {
         ...state,
         username: {
