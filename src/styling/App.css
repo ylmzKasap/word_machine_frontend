@@ -819,6 +819,12 @@ input[type=radio] {
   height: 100%;
 }
 
+#please-login-deck-stats {
+  padding: 20px;
+  text-align: center;
+  background-color: #f0f0f0;
+}
+
 .fas, .fa-home {
   color: white;
   cursor: pointer;
@@ -2268,10 +2274,10 @@ hr.margin-top {
 .switch-form-button {
   text-decoration: none;
   transition: color 0.2s;
-  color: #1414b5;
+  color: #0f55ce;
 }
 .switch-form-button:hover {
-  color: #ca18b8;
+  color: #bc14ab;
 }
 
 .form-error {

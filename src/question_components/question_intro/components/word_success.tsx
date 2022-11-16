@@ -5,11 +5,15 @@ import { QuestionContext } from '../question_intro';
 
 import { useState } from 'react';
 import { format_date } from '../../common/utils';
+import { Link, useParams } from 'react-router-dom';
 
 export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
+  const params = useParams();
   const { questionPage, reRender } = useContext(QuestionContext) as QuestionContextTypes;
+
   const [sortType, setSortType] = useState({column: '', descending: false});
   const [wordStats, setWordstats] = useState<WordStatsTypes[]>([]);
+  const allHeaders = ['#', 'Word', 'Success', 'Revisions', 'Last revision'];
   
   // Calculate success breakdown and sort rows
   useEffect(() => {
@@ -82,7 +86,6 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
   };
 
   const createHeaders = () => {
-    const allHeaders = ['#', 'Word', 'Success', 'Revisions', 'Last revision'];
     return allHeaders.map((header, i) => {
       return <th 
         onClick={handleSortClick}
@@ -96,12 +99,14 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
     });
   };
 
+  const { logged_in_user } = questionPage.deckInfo;
   return (
     <div id="word-success">
       <div id="deck-name-intro">
         {title}
       </div>
       <div id="deck-table-container">
+        {logged_in_user &&
         <table id="deck-stats-table">
           <colgroup>
             <col className="word-index" />	
@@ -140,7 +145,17 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
               );
             })}
           </tbody>
-        </table>
+        </table>}
+        {logged_in_user !== null && !logged_in_user &&
+          <div id="please-login-deck-stats">
+            <Link
+              to="/login"
+              className="switch-form-button"
+              state={{
+                next: `/deck/${params.username}/${params.deckId}`}}
+            >Log in</Link> to save your progress
+          </div>
+        }
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ChangeEvent, useReducer, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { serverUrl, isProduction } from '../../constants';
 import SubmitForm from '../../profile_components/common/form_components/submit_form';
 import { ForgottenPassword } from '../password/forgotten_password/forgotten_password';
@@ -9,6 +9,7 @@ import { loginReducer } from './login_reducer';
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [loginForm, setLoginForm] = useReducer(loginReducer, loginDefaults);
   
@@ -44,7 +45,11 @@ export const LoginForm: React.FC = () => {
       password: loginForm.password
     }).then(res => {
       setLoginForm({type: 'submitting', value: 'false'});
-      navigate(`/user/${res.data.username}`);
+      if (location.state) {
+        navigate(location.state.next);
+      } else {
+        navigate(`/user/${res.data.username}`);
+      }
     }).catch(err => {
       if (err.response.status === 401) {
         setLoginForm({type: 'formError', value: 'Incorrect username or password'});

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useReducer, createContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { QuestionNavbar } from './question_content/components';
-import { handleQuestionPage } from './question_page_reducer';
+import { handleQuestionPage } from './question_intro_reducer';
 import * as defaults from '../types/QuestionPageDefaults';
 import * as types from '../types/QuestionPageTypes';
 import NotFound from '../../profile_components/common/components/not_found';

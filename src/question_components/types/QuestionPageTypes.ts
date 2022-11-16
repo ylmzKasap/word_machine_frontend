@@ -62,7 +62,7 @@ export interface DeckInfoTypes {
   root_id: string;
   directory: string;
   username: string;
-  logged_in_user: string;
+  logged_in_user: string | null;
   correct_sound: string;
   incorrect_sound: string;
 };

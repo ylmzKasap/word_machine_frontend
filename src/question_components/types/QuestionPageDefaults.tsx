@@ -31,7 +31,7 @@ export const deckInfoDefault = {
   root_id: '',
   directory: '',
   username: '',
-  logged_in_user: '',
+  logged_in_user: null,
   correct_sound: '',
   incorrect_sound: ''
 };
