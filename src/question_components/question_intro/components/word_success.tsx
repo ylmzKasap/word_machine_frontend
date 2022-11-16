@@ -59,8 +59,10 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
     
     else if (sortType.column === 'Last revision') {
       sortedStats = wordStats.sort((a, b) => {
-        const aDate = new Date(Date.parse(a.lastReview)).valueOf();
-        const bDate = new Date(Date.parse(b.lastReview)).valueOf();
+        const aLastReview = a.lastReview ? Date.parse(a.lastReview) : new Date('January 1, 2022');
+        const bLastReview = b.lastReview ? Date.parse(b.lastReview) : new Date('January 1, 2022');
+        const aDate = new Date(aLastReview).valueOf();
+        const bDate = new Date(bLastReview).valueOf();
         return sortType.descending ? bDate - aDate : aDate - bDate;
       });
     } 
@@ -99,14 +101,14 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
     });
   };
 
-  const { logged_in_user } = questionPage.deckInfo;
+  const { logged_in_user, username } = questionPage.deckInfo;
   return (
     <div id="word-success">
       <div id="deck-name-intro">
         {title}
       </div>
       <div id="deck-table-container">
-        {logged_in_user &&
+        {logged_in_user && logged_in_user === username &&
         <table id="deck-stats-table">
           <colgroup>
             <col className="word-index" />	
@@ -154,6 +156,11 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
               state={{
                 next: `/deck/${params.username}/${params.deckId}`}}
             >Log in</Link> to save your progress
+          </div>
+        }
+        {logged_in_user !== null && logged_in_user !== username &&
+          <div id="please-login-deck-stats">
+            <span className="switch-form-button">Clone</span> this deck to save your progress
           </div>
         }
       </div>

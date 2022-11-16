@@ -141,6 +141,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
             type: 'view-edit-image',
             value: 'reset',
           });
+          setContextMenu({type: 'reset'});
         }
         setDirectory(dirId ? dirId : rootDirectory);
 
