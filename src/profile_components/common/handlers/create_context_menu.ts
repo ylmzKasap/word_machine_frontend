@@ -46,9 +46,15 @@ export function create_context_menu(
     if (closestItem.className === 'category') {
       contextMenuInfo.ops = userAtHome ? ['cut', 'paste', 'delete'] : [];
     } else if (closestItem.className === 'deck') {
-      contextMenuInfo.ops = userAtHome ? ['copy', 'cut', 'delete'] : [];
+      contextMenuInfo.ops = userAtHome ? ['copy', 'cut', 'delete'] : ['clone'];
     } else {
-      contextMenuInfo.ops = userAtHome ? ['cut', 'delete'] : [];
+      // Folder or thematic-folder
+      if (userAtHome) {
+        contextMenuInfo.ops = ['cut', 'delete'];
+      } else {
+        // Someone elses directory
+        contextMenuInfo.ops = closestItem.className === 'thematic-folder' ? ['clone'] : [];
+      }
     }
   }
   return contextMenuInfo;

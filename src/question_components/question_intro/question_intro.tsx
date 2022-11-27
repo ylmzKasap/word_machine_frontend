@@ -9,6 +9,9 @@ import NotFound from '../../profile_components/common/components/not_found';
 import { QuestionIntroContent } from './components/question_intro_content';
 import QuestionContent from './question_content/question_content';
 import { isProduction, serverUrl } from '../../constants';
+import { RequestMessageTypes } from '../../profile_components/types/profilePageTypes';
+import { requestMessageDefault } from '../../profile_components/types/profilePageDefaults';
+import { RequestInfo } from '../../profile_components/profile_page/other_components';
 
 export const QuestionContext = createContext<
   types.QuestionContextTypes | undefined
@@ -69,7 +72,7 @@ export const QuestionIntro = () => {
     }
   }
 
-  const { deckInfo, fetchError } = questionPage;
+  const { deckInfo, fetchError, requestMessage } = questionPage;
   return (
     <QuestionContext.Provider
       value={{
@@ -90,6 +93,14 @@ export const QuestionIntro = () => {
           && <QuestionIntroContent />}
         {questionPage.view === 'question' && deckInfo.isLoaded
           && <QuestionContent />}
+        {requestMessage.description && <RequestInfo 
+          className="request-message"
+          loading={requestMessage.loading}
+          link={requestMessage.link}
+          linkDescription={requestMessage.linkDescription}
+          description={requestMessage.description}
+          exitHandler={() => setQuestionPage({type: 'requestMessage', value: 'reset'})}
+        />}
         {fetchError && <NotFound />}
       </div>
     </QuestionContext.Provider>
@@ -106,6 +117,7 @@ export interface QuestionPageTypes {
   childAnimation: string;
   correctFound: boolean;
   fetchError: boolean;
+  requestMessage: RequestMessageTypes;
 }
 
 export const QuestionPageDefaults = {
@@ -117,5 +129,6 @@ export const QuestionPageDefaults = {
   progress: 0,
   childAnimation: 'load-page',
   correctFound: false,
-  fetchError: false
+  fetchError: false,
+  requestMessage: requestMessageDefault
 };

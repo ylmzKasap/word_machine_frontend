@@ -13,6 +13,13 @@ export const requestErrorDefault = {
   description: '',
 };
 
+export const requestMessageDefault = {
+  loading: false,
+  link: '',
+  linkDescription: '',
+  description: '',
+};
+
 export const cloneStyleDefault = {
   width: '',
   height: '',

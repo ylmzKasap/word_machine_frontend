@@ -1,3 +1,4 @@
+import { RequestMessageTypes } from '../../profile_components/types/profilePageTypes';
 import { cache_question_audio, cache_question_image, generate_pages } from '../common/handlers';
 import { randint } from '../common/utils';
 import { DeckResponseTypes } from '../types/QuestionPageTypes';
@@ -7,7 +8,7 @@ export const handleQuestionPage = (
   state: QuestionPageTypes,
   action: {
     type: string,
-    value?: string | boolean | DeckResponseTypes
+    value?: string | boolean | DeckResponseTypes | RequestMessageTypes
   }
 ): QuestionPageTypes => {
   switch (action.type) {
@@ -124,6 +125,12 @@ export const handleQuestionPage = (
       return {
         ...state,
         correctFound: action.value === 'true'
+      };
+
+    case 'requestMessage':      
+      return {
+        ...state,
+        requestMessage: action.value as RequestMessageTypes
       };
 
     case 'questionAnswered':

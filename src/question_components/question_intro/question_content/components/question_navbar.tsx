@@ -10,7 +10,7 @@ export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
   const { deckInfo, fetchError, pageNumber } = questionPage;
 
   let currentDirectory = '';
-  if (deckInfo.directory === deckInfo.root_id || fetchError) {
+  if (deckInfo.directory !== deckInfo.root_id && !fetchError) {
     currentDirectory = `/${deckInfo.directory}`;
   }
 
@@ -24,25 +24,24 @@ export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
 
   return (
     <div className="navbar">
-      {deckInfo.isLoaded && 
       <>
         {/* Back Arrow */}
-        {!fetchError && pageNumber > 0 && questionPage.view === 'question'
+        {!fetchError && deckInfo.isLoaded && pageNumber > 0 && questionPage.view === 'question'
         && (
           <i className="fas fa-arrow-left navbar-arrow" onClick={props.goBack} />
         )}
 
         {/* Return home */}
-        <i className="fas fa-home navbar-home"
-          onClick={handleHomeClick}
-        />
-
+        {(deckInfo.isLoaded || fetchError) && 
+          <i className="fas fa-home navbar-home"
+            onClick={handleHomeClick} />
+        }
+        
         {/* Forward arrow */}
-        {!fetchError && questionPage.view === 'question' && (
+        {!fetchError && deckInfo.isLoaded && questionPage.view === 'question' && (
           <i className="fas fa-arrow-right navbar-arrow" onClick={props.goForward}></i>
         )}  
       </>
-      }
     </div>
   );
 };

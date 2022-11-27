@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   OptionTypes,
+  RequestMessageTypes,
   WordTypes,
 } from '../../profile_components/types/profilePageTypes';
 import { QuestionPageTypes } from '../question_intro/question_intro';
@@ -42,7 +43,7 @@ export interface QuestionContextTypes {
   questionPage: QuestionPageTypes;
   setQuestionPage: React.Dispatch<{
     type: string;
-    value?: string | DeckResponseTypes | boolean;}>;
+    value?: string | DeckResponseTypes | RequestMessageTypes | boolean;}>;
   reRender: number;
 }
 

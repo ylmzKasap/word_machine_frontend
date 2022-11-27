@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   NavbarContext, 
   NavbarContextTypes } from '../../navbar/layout_with_navbar';
-import { ErrorInfo } from '../../profile_components/profile_page/other_components';
+import { RequestInfo } from '../../profile_components/profile_page/other_components';
 import { ChangeEmailOverlay } from './overlays/change_email';
 import { ChangePasswordOverlay } from './overlays/change_password';
 import { EmailSettings } from './setting_sections/email_settings';
@@ -52,7 +52,8 @@ export const UserSettings: React.FC = () => {
           {userSettings.showChangeEmailOverlay && <ChangeEmailOverlay />}
           {userSettings.showChangePasswordOverlay && <ChangePasswordOverlay />}
           {userSettings.requestError 
-            && <ErrorInfo 
+            && <RequestInfo
+              className="request-error" 
               description={userSettings.requestError}
               exitHandler={() => setUserSettings({type: 'requestError', value: ''})} />}
         </div>

@@ -1507,15 +1507,12 @@ menu[title]::before {
   color: #d84400;
 }
 
-.error-box {
-  animation-name: shake;
-  animation-duration: 0.2s;
+.request-box {
   display: flex;
   position: fixed;
-  bottom: min(10vh, 200px);
+  bottom: 10vh;
   right: 20px;
   min-height: 50px;
-  width: min(50vw, 400px);
   text-align: center;
   overflow: hidden;
   background-color: white;
@@ -1524,25 +1521,47 @@ menu[title]::before {
   font-size: 1.3rem;
   z-index: 2000;
 }
-
-.error-text {
-  width: 93%;
-  padding: 2% 2% 2% 2%;
+.request-box.request-error {
+  animation-name: shake;
+  animation-duration: 0.2s;
+  width: max(24vw, 250px);
+}
+.request-box.request-error > .request-text {
+  padding: 8px;
+}
+.request-box.request-message {
+  width: max(20vw, 200px);
 }
 
-.error-exit-button {
+.request-text {
+  display: flex;
+  width: 93%;
+}
+.request-text > .submitting {
+  transform: scale(0.5);
+}
+.request-text > h5:first-child {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.request-link {
+  margin-top: 5px;
+}
+
+.request-exit-button {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: auto;
-  min-width: 35px;
+  width: min(35px, 10vw);
   font-weight: bold;
   color: white;
   background-color: black;
   border-left: solid black;
   cursor: pointer;
 }
-.error-exit-button:hover {
+.request-exit-button:hover {
   background-color: #ec4c12;
   border-color: red;
 }
@@ -2739,7 +2758,7 @@ input.space-bottom {
     border: none;
   }
 
-  .profile-error-box, #settings-error {
+  .profile-request-box, #settings-error {
     width: 70vw;
   }
 

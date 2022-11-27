@@ -16,7 +16,7 @@ import scroll_div, {
 } from '../common/functions/scroll_div';
 import find_closest_element from '../common/functions/find_closest_element';
 
-import { DragClone, ErrorInfo } from './other_components';
+import { DragClone, RequestInfo } from './other_components';
 import { CardContainer } from './card_container';
 import {
   create_context_menu,
@@ -78,6 +78,9 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
   const [fetchError, setFetchError] = useState(false);
   const [requestError, setRequestError] = useState<types.RequestErrorTypes>(
     defaults.requestErrorDefault
+  );
+  const [requestMessage, setRequestMessage] = useState<types.RequestMessageTypes>(
+    defaults.requestMessageDefault
   );
   
   const [scrolling, setScrolling] = useState<ScrollingTypes>(scrollingDefault);
@@ -356,6 +359,8 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
         fetchError: fetchError,
         requestError: requestError,
         setRequestError: setRequestError,
+        requestMessage: requestMessage,
+        setRequestMessage: setRequestMessage,
         drag: drag,
         setDrag: setDrag,
         resetDragWithTimeout: resetDragWithTimeout,
@@ -384,7 +389,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
           {directoryLoaded && (
             <div className="profile-content">
               {directoryInfo.item_type && <SideBar />}
-              {contextMenu.exists && <ItemContextMenu />}
+              {contextMenu.exists && <ItemContextMenu username={currentUserInfo.username} />}
               <Outlet />
               {!params.dirId && <CardContainer />}
             </div>
@@ -395,9 +400,18 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
             draggedElement={drag.cloneElement.draggedElement}
           />}
           {editImageOverlay.display && <EditImageOverlay />}
-          {requestError.exists && <ErrorInfo 
+          {requestError.exists && <RequestInfo
+            className="request-error"
             description={requestError.description}
             exitHandler={() => setRequestError({ exists: false, description: '' })} />}
+          {requestMessage.description && <RequestInfo 
+            className="request-message"
+            loading={requestMessage.loading}
+            link={requestMessage.link}
+            linkDescription={requestMessage.linkDescription}
+            description={requestMessage.description}
+            exitHandler={() => setRequestMessage(defaults.requestMessageDefault)}
+          />}
           {fetchError && <NotFound />}
         </div>
       </div>

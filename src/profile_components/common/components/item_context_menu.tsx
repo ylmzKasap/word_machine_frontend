@@ -5,8 +5,9 @@ import { ProfileContextTypes } from '../../types/profilePageTypes';
 import delete_item from '../functions/delete_item';
 import { extract_int } from '../utils';
 import { isProduction, serverUrl } from '../../../constants';
+import { requestMessageDefault } from '../../types/profilePageDefaults';
 
-const ItemContextMenu: React.FC = () => {
+const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
   const {
     directory,
     setReRender,
@@ -16,6 +17,7 @@ const ItemContextMenu: React.FC = () => {
     directoryInfo,
     setClipboard,
     setRequestError,
+    setRequestMessage,
   } = useContext(ProfileContext) as ProfileContextTypes;
 
   const { contextOpenedElem, contextMenuStyle, contextOptions } = contextMenu;
@@ -101,6 +103,22 @@ const ItemContextMenu: React.FC = () => {
             description: err.response.data.errDesc,
           })
         );
+    } else if (action === 'clone') {
+      setRequestMessage({loading: true, description: 'Cloning...'});
+      axios.post('/clone', {
+        item_id: extract_int(contextOpenedElem.id!)
+      }).then((res) => {
+        const deck_id = res.data.deck_id as string;
+        setRequestMessage({
+          loading: false,
+          description: 'Done!',
+          link: `/deck/${username}/${deck_id}`,
+          linkDescription: 'Click to see'
+        });
+      }).catch((err) => {
+        setRequestMessage(requestMessageDefault);
+        setRequestError(err.response.data);
+      });
     }
     setContextMenu({type: 'reset'});
   };

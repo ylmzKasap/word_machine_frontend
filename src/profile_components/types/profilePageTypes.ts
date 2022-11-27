@@ -38,6 +38,13 @@ export interface RequestErrorTypes {
   description: string;
 }
 
+export interface RequestMessageTypes {
+  loading: boolean;
+  link?: string;
+  linkDescription?: string;
+  description: string;
+}
+
 export interface CloneStyleTypes {
   width?: string;
   height?: string;
@@ -151,6 +158,8 @@ export interface ProfileContextTypes {
   fetchError: boolean;
   requestError: { exists: boolean; description: string | undefined };
   setRequestError: React.Dispatch<React.SetStateAction<RequestErrorTypes>>;
+  requestMessage: RequestMessageTypes;
+  setRequestMessage: React.Dispatch<React.SetStateAction<RequestMessageTypes>>;
   contextMenu: ContextMenuTypes,
   setContextMenu: React.Dispatch<ContextReducerActionTypes>,
   drag: dragTypes,

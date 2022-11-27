@@ -3,19 +3,26 @@ import {
   DraggedElementTypes,
 } from '../types/profilePageTypes';
 import Cards from '../../assets/svg/cards';
+import LoadingIcon from '../../assets/animations/loading_icon';
 
-export const ErrorInfo: React.FC<ErrorInfoTypes> = ({
+export const RequestInfo: React.FC<RequestInfoTypes> = ({
   description,
+  link,
+  linkDescription,
   exitHandler,
-  className
+  className,
+  loading=false
 }) => {
 
   return (
-    <label className={`error-box${className ? ` ${className}` : ''}`}>
-      <div className="error-text">
-        <h5>{description}</h5>
+    <label className={`request-box${className ? ` ${className}` : ''}`}>
+      <div className="request-text">
+        {loading && <LoadingIcon elementClass="submitting" />}
+        <h5>{description}{link && 
+          <div className="request-link"><a href={link}> {linkDescription}</a></div>}</h5>
+        <span></span>
       </div>
-      <div className="error-exit-button" onClick={exitHandler}>
+      <div className="request-exit-button" onClick={exitHandler}>
         <span className="fa-solid fa-xmark"></span>
       </div>
     </label>
@@ -54,8 +61,11 @@ interface DragCloneTypes {
   draggedElement: DraggedElementTypes;
 }
 
-interface ErrorInfoTypes {
+interface RequestInfoTypes {
   description: string;
   exitHandler: () => void;
+  link?: string;
+  linkDescription?: string;
   className?: string;
+  loading?: boolean;
 }

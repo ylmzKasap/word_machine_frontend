@@ -1,4 +1,5 @@
 import { useContext, useEffect } from 'react'; 
+import axios from 'axios';
 import { WordTypes } from '../../../profile_components/types/profilePageTypes';
 import { QuestionContextTypes } from '../../types/QuestionPageTypes';
 import { QuestionContext } from '../question_intro';
@@ -6,13 +7,18 @@ import { QuestionContext } from '../question_intro';
 import { useState } from 'react';
 import { format_date } from '../../common/utils';
 import { Link, useParams } from 'react-router-dom';
+import { requestMessageDefault } from '../../../profile_components/types/profilePageDefaults';
 
 export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
   const params = useParams();
-  const { questionPage, reRender } = useContext(QuestionContext) as QuestionContextTypes;
+  const { 
+    questionPage,
+    setQuestionPage,
+    reRender } = useContext(QuestionContext) as QuestionContextTypes;
 
   const [sortType, setSortType] = useState({column: '', descending: false});
   const [wordStats, setWordstats] = useState<WordStatsTypes[]>([]);
+  const [deckCloned, setDeckCloned] = useState(false);
   const allHeaders = ['#', 'Word', 'Success', 'Revisions', 'Last revision'];
   
   // Calculate success breakdown and sort rows
@@ -85,6 +91,27 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
     } else {
       setSortType({column: element.textContent!, descending: false});
     }
+  };;
+
+  const handleCloneClick = () => {
+    setQuestionPage({type: 'requestMessage', value: {loading: true, description: 'Cloning...'}} );
+    setDeckCloned(true);
+    axios.post('/clone', {
+      item_id: questionPage.wordInfo.words[0].deck_id
+        ? questionPage.wordInfo.words[0].deck_id
+        : window.location.pathname.split('/')[3]
+    }).then((res) => {
+      const deck_id = res.data.deck_id as string;
+      setQuestionPage({type: 'requestMessage', value: {
+        loading: false,
+        description: 'Done!',
+        link: `/deck/${questionPage.deckInfo.logged_in_user}/${deck_id}`,
+        linkDescription: 'Click to see'
+      }});
+    }).catch((err) => {
+      setDeckCloned(false);
+      setQuestionPage({type: 'requestMessage', value: requestMessageDefault});
+    });
   };
 
   const createHeaders = () => {
@@ -107,8 +134,30 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
       <div id="deck-name-intro">
         {title}
       </div>
+      {logged_in_user !== null && !logged_in_user &&
+          <div id="please-login-deck-stats">
+            <Link
+              to="/login"
+              className="switch-form-button"
+              state={{
+                next: `/deck/${params.username}/${params.deckId}`}}
+            >Log in</Link> to save your progress
+          </div>
+      }
+      {logged_in_user && logged_in_user !== username &&
+          <div id="please-login-deck-stats">
+            {!deckCloned 
+              ? <>
+                <span 
+                  className="switch-form-button"
+                  onClick={handleCloneClick}>Clone</span> this deck to save your progress
+              </>
+              : <span>Cloned!</span> 
+            }
+            
+          </div>
+      }
       <div id="deck-table-container">
-        {logged_in_user && logged_in_user === username &&
         <table id="deck-stats-table">
           <colgroup>
             <col className="word-index" />	
@@ -147,22 +196,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
               );
             })}
           </tbody>
-        </table>}
-        {logged_in_user !== null && !logged_in_user &&
-          <div id="please-login-deck-stats">
-            <Link
-              to="/login"
-              className="switch-form-button"
-              state={{
-                next: `/deck/${params.username}/${params.deckId}`}}
-            >Log in</Link> to save your progress
-          </div>
-        }
-        {logged_in_user !== null && logged_in_user !== username &&
-          <div id="please-login-deck-stats">
-            <span className="switch-form-button">Clone</span> this deck to save your progress
-          </div>
-        }
+        </table>
       </div>
     </div>
   );
