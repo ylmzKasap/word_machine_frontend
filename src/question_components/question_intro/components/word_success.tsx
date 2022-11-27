@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { format_date } from '../../common/utils';
 import { Link, useParams } from 'react-router-dom';
 import { requestMessageDefault } from '../../../profile_components/types/profilePageDefaults';
+import { isProduction, serverUrl } from '../../../constants';
 
 export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
   const params = useParams();
@@ -96,7 +97,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
   const handleCloneClick = () => {
     setQuestionPage({type: 'requestMessage', value: {loading: true, description: 'Cloning...'}} );
     setDeckCloned(true);
-    axios.post('/clone', {
+    axios.post(`${isProduction ? serverUrl : ''}/clone`, {
       item_id: questionPage.wordInfo.words[0].deck_id
         ? questionPage.wordInfo.words[0].deck_id
         : window.location.pathname.split('/')[3]

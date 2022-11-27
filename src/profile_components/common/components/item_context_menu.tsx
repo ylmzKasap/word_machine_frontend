@@ -105,7 +105,7 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
         );
     } else if (action === 'clone') {
       setRequestMessage({loading: true, description: 'Cloning...'});
-      axios.post('/clone', {
+      axios.post(`${isProduction ? serverUrl : ''}/clone`, {
         item_id: extract_int(contextOpenedElem.id!)
       }).then((res) => {
         const deck_id = res.data.deck_id as string;
