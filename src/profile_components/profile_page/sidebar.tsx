@@ -30,7 +30,7 @@ export const SideBar: React.FC = () => {
 
   const navigate = useNavigate();
   const [backDisplay, setBackDisplay] = useState(false);
-  const userAtHome = currentUserInfo.username === directoryUsername;
+  const userAtHome = currentUserInfo.username.toLowerCase() === directoryUsername?.toLowerCase();
   const isThematic = directoryInfo.item_type === 'thematic_folder';
   const canSendBack = userAtHome && directoryLoaded && drag.isDragging 
   && drag.draggedElement.type !== 'category' && ![rootDirectory, 'home', ''].includes(directory);
@@ -86,7 +86,7 @@ export const SideBar: React.FC = () => {
 
   return (
     <div className="sidebar-container">
-      { directoryLoaded && currentUserInfo.username !== directoryUsername &&
+      { directoryLoaded && !userAtHome &&
         <div className="sidebar-image-container" >
           {directoryPicture && 
           <img className="sidebar-user-image" 

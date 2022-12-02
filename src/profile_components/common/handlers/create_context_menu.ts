@@ -53,7 +53,7 @@ export function create_context_menu(
         contextMenuInfo.ops = ['cut', 'delete'];
       } else {
         // Someone elses directory
-        contextMenuInfo.ops = closestItem.className === 'thematic-folder' ? ['clone'] : [];
+        contextMenuInfo.ops = /* closestItem.className === 'thematic-folder' ? ['clone'] :  */ [];
       }
     }
   }

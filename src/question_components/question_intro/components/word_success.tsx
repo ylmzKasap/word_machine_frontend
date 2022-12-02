@@ -107,7 +107,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
         loading: false,
         description: 'Done!',
         link: `/deck/${questionPage.deckInfo.logged_in_user}/${deck_id}`,
-        linkDescription: 'Click to see'
+        linkDescription: 'View deck'
       }});
     }).catch((err) => {
       setDeckCloned(false);

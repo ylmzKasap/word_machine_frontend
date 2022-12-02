@@ -113,7 +113,7 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
           loading: false,
           description: 'Done!',
           link: `/deck/${username}/${deck_id}`,
-          linkDescription: 'Click to see'
+          linkDescription: 'View deck'
         });
       }).catch((err) => {
         setRequestMessage(requestMessageDefault);
