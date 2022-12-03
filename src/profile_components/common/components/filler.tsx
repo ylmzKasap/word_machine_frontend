@@ -10,7 +10,7 @@ export const Filler: React.FC<FillerTypes> = (props) => {
   // Rendered by "../PageItems"
   const { currentUserInfo } = useContext(NavbarContext) as NavbarContextTypes;
   const {
-    directoryUsername,
+    directoryInfo,
     drag,
     setDrag,
     resetDragWithTimeout,
@@ -21,7 +21,7 @@ export const Filler: React.FC<FillerTypes> = (props) => {
   // Style the filler on hovering.
   const handleFillerHover = (event: React.MouseEvent) => {
     // Check authentication
-    if (currentUserInfo.username !== directoryUsername) {
+    if (currentUserInfo.username !== directoryInfo.owner) {
       return;
     }
     
@@ -54,7 +54,7 @@ export const Filler: React.FC<FillerTypes> = (props) => {
 
   const handleFillerUp = (event: React.MouseEvent) => {
     // Check authentication
-    if (currentUserInfo.username !== directoryUsername) {
+    if (currentUserInfo.username !== directoryInfo.owner) {
       return;
     }
 

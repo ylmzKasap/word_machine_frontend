@@ -145,7 +145,6 @@ export type SetDeckOverlayType = React.Dispatch<{
 
 export interface ProfileContextTypes {
   directoryPicture: string;
-  directoryUsername: string | undefined;
   rootDirectory: string;
   directory: string;
   directoryInfo: DirInfoTypes;

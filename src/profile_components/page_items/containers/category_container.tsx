@@ -7,7 +7,7 @@ import { ItemContext, PageItemContextTypes } from '../page_item';
 
 const CategoryContainer = () => {
   const { currentUserInfo } = useContext(NavbarContext) as NavbarContextTypes;
-  const { directoryUsername, drag, setDeckOverlay } = useContext(
+  const { directoryInfo, drag, setDeckOverlay } = useContext(
     ProfileContext
   ) as ProfileContextTypes;
 
@@ -54,7 +54,7 @@ const CategoryContainer = () => {
     >
       <div className="category-header">
         <p className={`${parentProps.type}-navbar-description`}>{parentProps.name}</p>
-        {currentUserInfo.username === directoryUsername &&
+        {currentUserInfo.username === directoryInfo.owner &&
          <i className="fas fa-plus-circle category-circle" onClick={addItem}></i>}
       </div>
       {parentProps.children}

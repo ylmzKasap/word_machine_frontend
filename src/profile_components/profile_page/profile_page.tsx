@@ -55,7 +55,6 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
   // Rendered by main.
   const params = useParams();
 
-  const directoryUsername = params.username;
   const dirId = params.dirId;
   
   const { currentUserInfo } = useContext(NavbarContext) as NavbarContextTypes;
@@ -125,11 +124,11 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
   useEffect(() => {
     const currentDir = dirId ? dirId : dir;
     axios
-      .get(`${isProduction ? serverUrl : ''}/u/${directoryUsername}/${currentDir}`)
+      .get(`${isProduction ? serverUrl : ''}/u/${params.username}/${currentDir}`)
       .then((response) => {
         const [dirItems, dirInfo] = response.data as types.userResponse;
         const rootDirectory = dirInfo.root_id;
-        setItems(generate_directory(dirInfo, dirItems, directoryUsername!));
+        setItems(generate_directory(dirInfo, dirItems, dirInfo.owner));
         setRawItems(dirItems);
         setDirectoryInfo(dirInfo);
         setRootDirectory(rootDirectory);
@@ -177,7 +176,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
       setDrag({ type: 'reset' });
       setContextMenu({type: 'reset'});
     };
-  }, [dirId, directoryUsername, reRender]);
+  }, [dirId, params.username, reRender]);
 
   // Update clone position.
   useEffect(() => {
@@ -319,7 +318,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
       '.category-container',
     ]);
     const contextMenuInfo = create_context_menu(
-      event, closestItem, currentUserInfo.username, directoryUsername);
+      event, closestItem, currentUserInfo.username, directoryInfo.owner);
       
     setContextMenu({
       type: 'view',
@@ -346,7 +345,6 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
     <ProfileContext.Provider
       value={{
         directoryPicture: directoryInfo.user_picture,
-        directoryUsername: directoryUsername,
         rootDirectory: rootDirectory,
         directory: directory,
         directoryInfo: directoryInfo,

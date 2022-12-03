@@ -15,7 +15,9 @@ export function LayoutsWithNavbar() {
   useEffect(() => {
     axios.get(`${isProduction ? serverUrl : ''}/logged_in_user`)
       .then(res => {
-        setCurrentUserInfo(res.data);
+        if (!res.data.errDesc) {
+          setCurrentUserInfo(res.data);
+        }
         setSessionChecked(true);
       })
       .catch(() => {

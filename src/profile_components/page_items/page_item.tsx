@@ -35,7 +35,6 @@ export const PageItem: React.FC<PageItemPropTypes> = (props) => {
 
   const { currentUserInfo } = useContext(NavbarContext) as NavbarContextTypes;
   const {
-    directoryUsername,
     setReRender,
     directoryInfo,
     columnNumber,
@@ -88,14 +87,14 @@ export const PageItem: React.FC<PageItemPropTypes> = (props) => {
   // Change directory after double clicking on a folder.
   const handleDoubleClick = () => {
     if (['folder', 'thematic-folder'].includes(props.type)) {
-      navigate(`/user/${directoryUsername}/${extract_int(props.id)}`);
+      navigate(`/user/${directoryInfo.owner}/${extract_int(props.id)}`);
     }
   };
 
   // Set the properties of the 'to be dragged' element on mouse click.
   const handleMouseDown = (event: React.MouseEvent) => {
     // Only left click
-    if (event.button !== 0 || drag.isDragging || currentUserInfo.username !== directoryUsername) {
+    if (event.button !== 0 || drag.isDragging || currentUserInfo.username !== directoryInfo.owner) {
       return;
     }
     var targetElem = event.target as HTMLElement;
@@ -126,7 +125,7 @@ export const PageItem: React.FC<PageItemPropTypes> = (props) => {
 
   const handleMouseUp = (event: React.MouseEvent) => {
     // Check authentication
-    if (currentUserInfo.username !== directoryUsername) {
+    if (currentUserInfo.username !== directoryInfo.owner) {
       return;
     }
 
@@ -185,7 +184,7 @@ export const PageItem: React.FC<PageItemPropTypes> = (props) => {
     }
 
     if (targetElem.className === 'deck' && !drag.isDragging) {
-      navigate(`/deck/${directoryUsername}/${extract_int(targetElem.id)}`);
+      navigate(`/deck/${directoryInfo.owner}/${extract_int(targetElem.id)}`);
     }
   };
 
