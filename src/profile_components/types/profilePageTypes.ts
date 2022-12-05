@@ -1,6 +1,9 @@
 import React from 'react';
 import { WordInfoTypes } from '../../question_components/types/QuestionPageTypes';
 import { ContextMenuTypes, ContextReducerActionTypes } from '../common/reducers/contextMenuReducer';
+import { EditCategoryActionTypes } from '../common/reducers/createCategoryReducer';
+import { EditDeckActionTypes } from '../common/reducers/createDeckReducer';
+import { EditFolderActionTypes } from '../common/reducers/createFolderReducer';
 import { dragActionTypes, dragTypes } from '../common/reducers/dragReducer';
 import { ImageOverlayReducerTypes } from '../overlays/image_overlay/addImageReducer';
 import { EditImagesTypes } from '../overlays/image_overlay/edit_image/edit_image_overlay';
@@ -130,17 +133,23 @@ export interface CategoryInfoTypes {
   purpose: string | undefined;
 }
 
-export type SetOverlayType = React.Dispatch<{
+export type SetFolderOverlayType = React.Dispatch<{
   type: string;
-  value: string;
+  value: string | EditFolderActionTypes;
   innerType?: string;
 }>;
 
 export type SetDeckOverlayType = React.Dispatch<{
   type: string;
-  value: string;
+  value: string | EditDeckActionTypes;
   innerType?: string;
   categoryInfo?: CategoryInfoTypes;
+}>;
+
+export type SetCategoryOverlayType = React.Dispatch<{
+  type: string;
+  value: string | EditCategoryActionTypes;
+  innerType?: string;
 }>;
 
 export interface ProfileContextTypes {
@@ -170,9 +179,9 @@ export interface ProfileContextTypes {
   deckOverlay: DeckOverlayTypes;
   setDeckOverlay: SetDeckOverlayType;
   folderOverlay: FolderOverlayTypes;
-  setFolderOverlay: SetOverlayType;
+  setFolderOverlay: SetFolderOverlayType;
   categoryOverlay: CategoryOverlayTypes;
-  setCategoryOverlay: SetOverlayType;
+  setCategoryOverlay: SetCategoryOverlayType;
   editImageOverlay: EditImagesTypes;
   setEditImageOverlay: React.Dispatch<ImageOverlayReducerTypes>;
 }

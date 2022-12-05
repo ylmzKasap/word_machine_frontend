@@ -50,33 +50,25 @@ export const CreateFolderOverlay: React.FC = () => {
 
     event.preventDefault();
 
-    if (folderOverlay.folderName === '') {
-      setFolderOverlay({
-        type: 'errors',
-        innerType: 'form',
-        value: 'Enter a folder name',
-      });
-    } else if (folderOverlay.errors.nameError) {
+    if (folderOverlay.errors.nameError) {
       setFolderOverlay({
         type: 'errors',
         innerType: 'form',
         value: 'Fix the problem above',
       });
-    } else {
+      return;
+    }
+
+    if (folderOverlay.editing) {
       setSubmitRequest(true);
-      let serverFolderType = folderOverlay.folderType.toLowerCase().replace(' ', '_');
       axios
-        .post(`${isProduction ? serverUrl : ''}/folder`, {
-          folder_name: folderOverlay.folderName,
-          folder_type:
-            serverFolderType === 'regular_folder'
-              ? 'folder'
-              : serverFolderType,
-          parent_id: `${directory}`,
+        .put(`${isProduction ? serverUrl : ''}/edit_folder`, {
+          item_id: folderOverlay.folderId,
+          item_name: folderOverlay.folderName
         })
         .then(() => {
-          setFolderOverlay({ type: 'clear', value: '' });
           setSubmitRequest(false);
+          setFolderOverlay(({type: 'view', value: 'hide'}));
           setReRender();
         })
         .catch((err) => {
@@ -87,19 +79,45 @@ export const CreateFolderOverlay: React.FC = () => {
             value: err.response.data.errDesc,
           });
         });
+      return;
     }
+
+    setSubmitRequest(true);
+    let serverFolderType = folderOverlay.folderType.toLowerCase().replace(' ', '_');
+    axios
+      .post(`${isProduction ? serverUrl : ''}/folder`, {
+        folder_name: folderOverlay.folderName,
+        folder_type:
+          serverFolderType === 'regular_folder'
+            ? 'folder'
+            : serverFolderType,
+        parent_id: `${directory}`,
+      })
+      .then(() => {
+        setFolderOverlay({ type: 'clear', value: '' });
+        setSubmitRequest(false);
+        setReRender();
+      })
+      .catch((err) => {
+        setSubmitRequest(false);
+        setFolderOverlay({
+          type: 'errors',
+          innerType: 'form',
+          value: err.response.data.errDesc,
+        });
+      });
   };
 
   return (
     <div className="input-overlay" onClick={handleOverlayExitByFocus}>
       <form
-        className="create-item-info"
+        className={`create-item-info${folderOverlay.editing ? ' short' : ''}`}
         onSubmit={handleSubmit}
         onKeyDown={handleSubmit}
       >
         <OverlayNavbar
           setOverlay={setFolderOverlay}
-          description="Create a new folder"
+          description={folderOverlay.editing ? 'Edit folder' : 'Create a new folder'}
         />
         <div className="form-content">
           {/* Folder name */}
@@ -110,18 +128,19 @@ export const CreateFolderOverlay: React.FC = () => {
             handler={handleNameChange}
             placeholder="Enter a folder name"
           />
-          <DoubleChoice
+          {!folderOverlay.editing && <DoubleChoice
             description="Folder Type:"
             choice_one="Regular folder"
             choice_two="Thematic folder"
             chosen={folderOverlay.folderType}
             handler={handleFolderType}
-          />
+          />} 
           {/* Submit & Error */}
           <SubmitForm
-            description="Create Folder"
+            description={folderOverlay.editing ? 'Save' : 'Create folder'}
             formError={folderOverlay.errors.formError}
             submitting={submitRequest}
+            buttonClass={folderOverlay.editing ? 'green' : ''}
           />
         </div>
       </form>

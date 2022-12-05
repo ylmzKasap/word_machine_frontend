@@ -18,6 +18,11 @@
   height: min(80vh, 600px);
   width: min(82vw, 600px);
   box-shadow: rgb(155, 155, 155) -1px 1px 5px 1px;
+  border-radius: 12px;
+  overflow: hidden;
+  &.short {
+    height: auto;
+  }
 }
 
 .form-content {

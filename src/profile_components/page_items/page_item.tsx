@@ -84,6 +84,12 @@ export const PageItem: React.FC<PageItemPropTypes> = (props) => {
     }
   }, [drag.isDragging, drag.draggedElement, props.name, props.type, props.order, props.id]);
 
+  // Update category color after editing.
+  useEffect(() => {
+    if (props.type !== 'category') return;
+    setItemStyle(item => ({...item, backgroundColor: props.color!}));
+  }, [props.color, props.type]);
+
   // Change directory after double clicking on a folder.
   const handleDoubleClick = () => {
     if (['folder', 'thematic-folder'].includes(props.type)) {

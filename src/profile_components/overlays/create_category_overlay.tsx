@@ -66,6 +66,39 @@ export const CreateCategoryOverlay: React.FC = () => {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
 
+    if (categoryOverlay.errors.nameError) {
+      setCategoryOverlay({
+        type: 'errors',
+        innerType: 'form',
+        value: 'Fix the problem above',
+      });
+      return;
+    }
+
+    if (categoryOverlay.editing) {
+      setSubmitRequest(true);
+      axios
+        .put(`${isProduction ? serverUrl : ''}/edit_category`, {
+          item_id: categoryOverlay.categoryId,
+          item_name: categoryOverlay.categoryName,
+          color: categoryOverlay.color
+        })
+        .then(() => {
+          setSubmitRequest(false);
+          setCategoryOverlay(({type: 'view', value: 'hide'}));
+          setReRender();
+        })
+        .catch((err) => {
+          setSubmitRequest(false);
+          setCategoryOverlay({
+            type: 'errors',
+            innerType: 'form',
+            value: err.response.data.errDesc,
+          });
+        });
+      return;
+    }
+
     if (!categoryOverlay.language.targetLanguage) {
       setCategoryOverlay({
         type: 'errors',
@@ -82,18 +115,6 @@ export const CreateCategoryOverlay: React.FC = () => {
         type: 'errors',
         innerType: 'form',
         value: 'Pick a source language',
-      });
-    } else if (categoryOverlay.categoryName === '') {
-      setCategoryOverlay({
-        type: 'errors',
-        innerType: 'form',
-        value: 'Enter a category name',
-      });
-    } else if (categoryOverlay.errors.nameError) {
-      setCategoryOverlay({
-        type: 'errors',
-        innerType: 'form',
-        value: 'Fix the problem above',
       });
     } else {
       setSubmitRequest(true);
@@ -128,10 +149,12 @@ export const CreateCategoryOverlay: React.FC = () => {
 
   return (
     <div className="input-overlay" onClick={handleOverlayExitByFocus}>
-      <form className="create-item-info" onSubmit={handleSubmit}>
+      <form 
+        className={`create-item-info${categoryOverlay.editing ? ' short' : ''}`}
+        onSubmit={handleSubmit}>
         <OverlayNavbar
           setOverlay={setCategoryOverlay}
-          description="Create a new category"
+          description={categoryOverlay.editing ? 'Edit category' : 'Create a new category'}
         />
         <div className="form-content">
           {/* Category name */}
@@ -143,13 +166,13 @@ export const CreateCategoryOverlay: React.FC = () => {
             placeholder="Enter a category name"
           />
           {/* Purpose */}
-          <DoubleChoice
+          {!categoryOverlay.editing && <DoubleChoice
             description="I want to..."
             choice_one="learn"
             choice_two="study"
             chosen={categoryOverlay.purpose}
             handler={handlePurpose}
-          />
+          />}
           {categoryOverlay.purpose && (
             <DropDown
               description=""
@@ -204,9 +227,10 @@ export const CreateCategoryOverlay: React.FC = () => {
           </label>
           {/* Submit & Error */}
           <SubmitForm
-            description="Create Category"
+            description={categoryOverlay.editing ? 'Save' : 'Create category'}
             formError={categoryOverlay.errors.formError}
             submitting={submitRequest}
+            buttonClass={categoryOverlay.editing ? 'green' : ''}
           />
         </div>
       </form>

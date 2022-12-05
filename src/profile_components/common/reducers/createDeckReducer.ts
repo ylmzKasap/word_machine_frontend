@@ -8,7 +8,7 @@ export const handleDeckOverlay = (
   state: DeckOverlayTypes,
   action: {
     type: string;
-    value: string;
+    value: string | EditDeckActionTypes;
     innerType?: string;
     categoryInfo?: CategoryInfoTypes;
   }
@@ -17,13 +17,13 @@ export const handleDeckOverlay = (
     case 'deckName':
       return {
         ...state,
-        deckName: action.value,
+        deckName: action.value as string,
       };
 
     case 'words':
       return {
         ...state,
-        words: action.value,
+        words: action.value as string,
         errors: {
           ...state.errors,
           formError: '',
@@ -34,7 +34,7 @@ export const handleDeckOverlay = (
       return {
         ...state,
         includeTranslation: false,
-        purpose: action.value,
+        purpose: action.value as string,
         language: {
           ...state.language,
           sourceLanguage: undefined,
@@ -60,6 +60,7 @@ export const handleDeckOverlay = (
       };
 
     case 'errors':
+      const error = action.value as string;
       switch (action.innerType) {
         case 'name':
           return {
@@ -67,7 +68,7 @@ export const handleDeckOverlay = (
             errors: {
               ...state.errors,
               formError: '',
-              nameError: action.value ? action.value : '',
+              nameError: error ? error : '',
             },
           };
         case 'word':
@@ -76,7 +77,7 @@ export const handleDeckOverlay = (
             errors: {
               ...state.errors,
               formError: '',
-              wordError: action.value ? action.value : '',
+              wordError: error ? error : '',
             },
           };
         case 'form':
@@ -84,8 +85,8 @@ export const handleDeckOverlay = (
             ...state,
             errors: {
               ...state.errors,
-              formError: action.value
-                ? action.value
+              formError: error
+                ? error
                 : '',
             },
           };
@@ -95,13 +96,14 @@ export const handleDeckOverlay = (
       }
 
     case 'language':
+      const language = action.value as string;
       switch (action.innerType) {
         case 'target_language':
           return {
             ...state,
             language: {
               ...state.language,
-              targetLanguage: action.value?.toLowerCase()
+              targetLanguage: language.toLowerCase()
             },
           };
         case 'source_language':
@@ -109,7 +111,7 @@ export const handleDeckOverlay = (
             ...state,
             language: {
               ...state.language,
-              sourceLanguage: action.value?.toLowerCase()
+              sourceLanguage: language?.toLowerCase()
             },
           };
         default:
@@ -137,10 +139,26 @@ export const handleDeckOverlay = (
       };
 
     case 'view':
-      const returnObj = action.value === 'reset' ? deckOverlayDefaults : state;
+      const returnObj =  (action.value === 'reset' || state.editing) ? deckOverlayDefaults : state;
       return {
         ...returnObj,
         display: action.value === 'show',
+      };
+
+    case 'edit':
+      const editingData = action.value as EditDeckActionTypes;
+      return {
+        ...state,
+        display: true,
+        editing: true,
+        deckName: editingData.itemName,
+        purpose: editingData.purpose,
+        language: {
+          targetLanguage: editingData.targetLanguage,
+          sourceLanguage: editingData.sourceLanguage
+        },
+        includeTranslation: editingData.includeTranslation,
+        deckId: editingData.deckId
       };
 
     case 'clear':
@@ -151,3 +169,12 @@ export const handleDeckOverlay = (
       return state;
   }
 };
+
+export interface EditDeckActionTypes {
+  itemName: string;
+  purpose: string;
+  targetLanguage: string;
+  sourceLanguage?: string;
+  includeTranslation: boolean;
+  deckId?: string;
+}

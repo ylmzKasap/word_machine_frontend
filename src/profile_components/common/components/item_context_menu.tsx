@@ -15,7 +15,11 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
     setContextMenu,
     clipboard,
     directoryInfo,
+    rawItems,
     setClipboard,
+    setDeckOverlay,
+    setFolderOverlay,
+    setCategoryOverlay,
     setRequestError,
     setRequestMessage,
   } = useContext(ProfileContext) as ProfileContextTypes;
@@ -77,6 +81,32 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
       });
     } else if (action === 'delete') {
       delete_item(contextOpenedElem, setReRender, setRequestError);
+    } else if (action === 'edit' || action === 'rename') {
+      const itemToEdit = rawItems.filter(
+        item => item.item_id === extract_int(contextOpenedElem.id!))[0];
+
+      if (itemToEdit.item_type === 'deck') {
+        setDeckOverlay({ type: 'edit', value: {
+          itemName: itemToEdit.item_name,
+          purpose: itemToEdit.purpose!,
+          targetLanguage: itemToEdit.target_language!,
+          sourceLanguage: itemToEdit.source_language,
+          includeTranslation: itemToEdit.show_translation!,
+          deckId: itemToEdit.item_id
+        }});
+      } else if (['folder', 'thematic_folder'].includes(itemToEdit.item_type)) {
+        setFolderOverlay({ type: 'edit', value: {
+          itemName: itemToEdit.item_name,
+          itemId: itemToEdit.item_id
+        }});
+      } else if (itemToEdit.item_type === 'category') {
+        setCategoryOverlay({ type: 'edit', value: {
+          itemName: itemToEdit.item_name,
+          itemId: itemToEdit.item_id,
+          color: itemToEdit.color!
+        }});
+      }
+    
     } else if (action === 'paste') {
       // Type guard
       if (!clipboard.id) throw Error;

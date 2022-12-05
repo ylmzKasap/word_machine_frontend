@@ -1,7 +1,9 @@
 import {
   SetDeckOverlayType,
-  SetOverlayType,
+  SetFolderOverlayType,
+  SetCategoryOverlayType
 } from '../../../types/profilePageTypes';
+import { ImageOverlayReducerTypes } from '../../image_overlay/addImageReducer';
 
 const OverlayNavbar: React.FC<OverlayNavbarTypes> = ({
   setOverlay,
@@ -37,7 +39,10 @@ const OverlayNavbar: React.FC<OverlayNavbarTypes> = ({
 };
 
 interface OverlayNavbarTypes {
-  setOverlay: SetDeckOverlayType | SetOverlayType;
+  setOverlay: SetDeckOverlayType
+   | SetFolderOverlayType
+   | SetCategoryOverlayType
+   | React.Dispatch<ImageOverlayReducerTypes>;
   description: string;
   specialClass?: string;
   extra?: string;

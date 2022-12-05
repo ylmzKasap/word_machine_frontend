@@ -28,6 +28,7 @@ export const languageDefault = {
 
 export const deckOverlayDefaults = {
   deckName: '',
+  deckId: '',
   words: '',
   purpose: '',
   includeTranslation: false,
@@ -35,23 +36,28 @@ export const deckOverlayDefaults = {
   language: languageDefault,
   categoryInfo: categoryInfoDefault,
   display: false,
+  editing: false
 };
 
 export const folderOverlayDefaults = {
   folderName: '',
+  folderId: '',
   folderType: 'Regular folder',
   errors: folderErrorDefault,
   display: false,
+  editing: false
 };
 
 export const categoryOverlayDefaults = {
   categoryName: '',
+  categoryId: '',
   purpose: '',
   includeTranslation: false,
   color: '#bbbbbb',
   language: languageDefault,
   errors: categoryErrorDefault,
   display: false,
+  editing: false
 };
 
 export const get_row_default = (deckOverlay: DeckOverlayTypes) => ({

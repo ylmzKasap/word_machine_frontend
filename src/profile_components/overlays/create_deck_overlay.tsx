@@ -86,6 +86,7 @@ export const CreateDeckOverlay: React.FC = () => {
 
   const handleOverlayExitByFocus = (event: React.MouseEvent) => {
     const element = event.target as HTMLDivElement;
+    
     if (element.className === 'input-overlay') {
       setDeckOverlay(({type: 'view', value: 'hide'}));
     }
@@ -93,6 +94,40 @@ export const CreateDeckOverlay: React.FC = () => {
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
+
+    if (deckOverlay.errors.nameError) {
+      setDeckOverlay({
+        type: 'errors',
+        innerType: 'form',
+        value: 'Fix the problem above',
+      });
+      return;
+    }
+
+    if (deckOverlay.editing) {
+      setSubmitRequest(true);
+      axios
+        .put(`${isProduction ? serverUrl : ''}/edit_deck`, {
+          item_id: deckOverlay.deckId,
+          item_name: deckOverlay.deckName,
+          show_translation: deckOverlay.includeTranslation
+        })
+        .then(() => {
+          setSubmitRequest(false);
+          setDeckOverlay(({type: 'view', value: 'hide'}));
+          setReRender();
+        })
+        .catch((err) => {
+          setSubmitRequest(false);
+          setDeckOverlay({
+            type: 'errors',
+            innerType: 'form',
+            value: err.response.data.errDesc,
+          });
+          scrollToFormError();  
+        });
+      return;
+    }
 
     let allWords = deckOverlay.words
       .split('\n')
@@ -119,7 +154,7 @@ export const CreateDeckOverlay: React.FC = () => {
         value: 'Pick a source language',
       });
       scrollToFormError();
-    } else if (deckOverlay.errors.nameError || deckOverlay.errors.wordError) {
+    } else if (deckOverlay.errors.wordError) {
       setDeckOverlay({
         type: 'errors',
         innerType: 'form',
@@ -162,6 +197,11 @@ export const CreateDeckOverlay: React.FC = () => {
         })
         .catch((err) => {
           setSubmitRequest(false);
+          setDeckOverlay({
+            type: 'errors',
+            innerType: 'form',
+            value: err.response.data.errDesc,
+          });
           scrollToFormError();  
         });
     }
@@ -172,10 +212,11 @@ export const CreateDeckOverlay: React.FC = () => {
   // Children: OverlayNavbar.
   return (
     <div className="input-overlay" onClick={handleOverlayExitByFocus}>
-      <form className="create-item-info" onSubmit={handleSubmit}>
+      <form className={`create-item-info${deckOverlay.editing ? ' short' : ''}`}
+        onSubmit={handleSubmit}>
         <OverlayNavbar
           setOverlay={setDeckOverlay}
-          description="Create a new deck"
+          description={deckOverlay.editing ? 'Edit deck' : 'Create a new deck'}
         />
         <div className="form-content">
           {/* Deck name */}
@@ -187,7 +228,7 @@ export const CreateDeckOverlay: React.FC = () => {
             placeholder="Enter a deck name"
           />
           {/* Purpose */}
-          {!deckOverlay.categoryInfo.id && (
+          {!deckOverlay.categoryInfo.id && !deckOverlay.editing && (
             <DoubleChoice
               description="I want to..."
               choice_one="learn"
@@ -196,7 +237,7 @@ export const CreateDeckOverlay: React.FC = () => {
               handler={handlePurpose}
             />
           )}
-          {!deckOverlay.categoryInfo.id && deckOverlay.purpose && (
+          {!deckOverlay.categoryInfo.id && deckOverlay.purpose && !deckOverlay.editing && (
             <DropDown
               description=""
               handler={handleLanguageChange}
@@ -209,7 +250,8 @@ export const CreateDeckOverlay: React.FC = () => {
             />
           )}
           {/* Source language for learning */}
-          {!deckOverlay.categoryInfo.id && deckOverlay.purpose === 'learn' && (
+          {!deckOverlay.categoryInfo.id && deckOverlay.purpose === 'learn'
+           && !deckOverlay.editing && (
             <DropDown
               description="My language is"
               handler={handleLanguageChange}
@@ -224,7 +266,7 @@ export const CreateDeckOverlay: React.FC = () => {
           {/* Words */}
           {((deckOverlay.purpose === 'study' && targetLanguage) ||
             (deckOverlay.purpose === 'learn' && sourceLanguage && targetLanguage) ||
-            deckOverlay.categoryInfo.id) && (
+            deckOverlay.categoryInfo.id) && !deckOverlay.editing && (
             <label className="input-label">
               <div className="input-info">
                 {deckOverlay.purpose === 'study'
@@ -260,7 +302,8 @@ export const CreateDeckOverlay: React.FC = () => {
           )}
           {!deckOverlay.categoryInfo.id &&
             deckOverlay.purpose === 'study' &&
-            deckOverlay.includeTranslation && (
+            deckOverlay.includeTranslation &&
+            !deckOverlay.editing && (
             <DropDown
               description=""
               handler={handleLanguageChange}
@@ -274,10 +317,11 @@ export const CreateDeckOverlay: React.FC = () => {
           )}
           {/* Submit & Error */}
           <SubmitForm
-            description="Search pictures"
+            description={deckOverlay.editing ? 'Save' : 'Search pictures'}
             formError={deckOverlay.errors.formError}
             submitting={submitRequest}
             errorRef={submitErrorRef}
+            buttonClass={deckOverlay.editing ? 'green' : ''}
           />
         </div>
       </form>

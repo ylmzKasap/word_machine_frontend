@@ -18,20 +18,25 @@ export interface DeckOverlayTypes {
   language: LanguageTypes;
   categoryInfo: CategoryInfoTypes;
   display: boolean;
+  editing: boolean;
+  deckId?: string;
 }
 
 export interface FolderOverlayTypes {
   folderName: string;
+  folderId?: string;
   folderType: string;
   errors: {
     nameError: string;
     formError: string;
   };
   display: boolean;
+  editing: boolean;
 }
 
 export interface CategoryOverlayTypes {
   categoryName: string;
+  categoryId: string;
   purpose: string;
   includeTranslation: boolean;
   color: string;
@@ -41,4 +46,5 @@ export interface CategoryOverlayTypes {
     formError: string;
   };
   display: boolean;
+  editing: boolean;
 }

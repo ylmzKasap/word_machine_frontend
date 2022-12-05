@@ -5,22 +5,26 @@ import { FolderOverlayTypes } from '../../types/overlayTypes';
 
 export const handleFolderOverlay = (
   state: FolderOverlayTypes,
-  action: { type: string; value: string; innerType?: string }
+  action: { 
+    type: string;
+    value: string | EditFolderActionTypes;
+    innerType?: string }
 ): FolderOverlayTypes => {
   switch (action.type) {
     case 'folderName':
       return {
         ...state,
-        folderName: action.value,
+        folderName: action.value as string,
       };
 
     case 'folderType':
       return {
         ...state,
-        folderType: action.value,
+        folderType: action.value as string,
       };
 
     case 'errors':
+      const error = action.value as string;
       switch (action.innerType) {
         case 'name':
           return {
@@ -28,7 +32,7 @@ export const handleFolderOverlay = (
             errors: {
               ...state.errors,
               formError: '',
-              nameError: action.value ? action.value : '',
+              nameError: error ? error : '',
             },
           };
         case 'form':
@@ -36,8 +40,8 @@ export const handleFolderOverlay = (
             ...state,
             errors: {
               ...state.errors,
-              formError: action.value
-                ? action.value
+              formError: error
+                ? error
                 : '',
             },
           };
@@ -47,9 +51,22 @@ export const handleFolderOverlay = (
       }
 
     case 'view':
+      const returnObj =  (action.value === 'reset' || state.editing) 
+        ? folderOverlayDefaults : state;
+
+      return {
+        ...returnObj,
+        display: action.value === 'show',
+      };
+
+    case 'edit':
+      const editingData = action.value as EditFolderActionTypes;
       return {
         ...state,
-        display: action.value === 'show' ? true : false,
+        display: true,
+        editing: true,
+        folderName: editingData.itemName,
+        folderId: editingData.itemId
       };
 
     case 'clear':
@@ -60,3 +77,8 @@ export const handleFolderOverlay = (
       return state;
   }
 };
+
+export interface EditFolderActionTypes {
+  itemName: string;
+  itemId: string;
+}

@@ -302,8 +302,15 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
   };
 
   const handleContextMenu = (event: React.MouseEvent): void => {
-    event.preventDefault();
+    const element = event.target as HTMLDivElement;
+    if (!element.closest('.input-overlay')) {
+      event.preventDefault();
+    }
+
     if (drag.isDragging) {
+      return;
+    }
+    if (deckOverlay.display || folderOverlay.display || categoryOverlay.display) {
       return;
     }
     setContextMenu({type: 'reset'});
@@ -317,6 +324,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
       '.card-container',
       '.category-container',
     ]);
+
     const contextMenuInfo = create_context_menu(
       event, closestItem, currentUserInfo.username, directoryInfo.owner);
       

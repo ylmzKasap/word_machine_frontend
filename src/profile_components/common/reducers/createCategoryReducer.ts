@@ -5,20 +5,23 @@ import { CategoryOverlayTypes } from '../../types/overlayTypes';
 
 export const handleCategoryOverlay = (
   state: CategoryOverlayTypes,
-  action: { type: string; value: string; innerType?: string }
+  action: { 
+    type: string;
+    value: string | EditCategoryActionTypes;
+    innerType?: string }
 ): CategoryOverlayTypes => {
   switch (action.type) {
     case 'categoryName':
       return {
         ...state,
-        categoryName: action.value,
+        categoryName: action.value as string,
       };
 
     case 'purpose':
       return {
         ...state,
         includeTranslation: false,
-        purpose: action.value,
+        purpose: action.value as string,
         language: {
           ...state.language,
           sourceLanguage: undefined,
@@ -45,10 +48,11 @@ export const handleCategoryOverlay = (
     case 'color':
       return {
         ...state,
-        color: action.value,
+        color: action.value as string,
       };
 
     case 'errors':
+      const error = action.value as string;
       switch (action.innerType) {
         case 'name':
           return {
@@ -56,7 +60,7 @@ export const handleCategoryOverlay = (
             errors: {
               ...state.errors,
               formError: '',
-              nameError: action.value ? action.value : '',
+              nameError: error ? error : '',
             },
           };
         case 'form':
@@ -64,9 +68,7 @@ export const handleCategoryOverlay = (
             ...state,
             errors: {
               ...state.errors,
-              formError: action.value
-                ? action.value
-                : '',
+              formError: error ? error : '',
             },
           };
         default:
@@ -81,7 +83,7 @@ export const handleCategoryOverlay = (
             ...state,
             language: {
               ...state.language,
-              targetLanguage: action.value,
+              targetLanguage: action.value as string,
             },
           };
         case 'source_language':
@@ -89,7 +91,7 @@ export const handleCategoryOverlay = (
             ...state,
             language: {
               ...state.language,
-              sourceLanguage: action.value,
+              sourceLanguage: action.value as string,
             },
           };
         default:
@@ -98,9 +100,23 @@ export const handleCategoryOverlay = (
       }
 
     case 'view':
+      const returnObj =  (action.value === 'reset' || state.editing) 
+        ? categoryOverlayDefaults : state;
+
+      return {
+        ...returnObj,
+        display: action.value === 'show'
+      };
+
+    case 'edit':
+      const editingData = action.value as EditCategoryActionTypes;
       return {
         ...state,
-        display: action.value === 'show' ? true : false,
+        display: true,
+        editing: true,
+        categoryName: editingData.itemName,
+        categoryId: editingData.itemId,
+        color: editingData.color
       };
 
     case 'clear':
@@ -111,3 +127,9 @@ export const handleCategoryOverlay = (
       return state;
   }
 };
+
+export interface EditCategoryActionTypes {
+  itemName: string;
+  itemId: string;
+  color: string;
+}

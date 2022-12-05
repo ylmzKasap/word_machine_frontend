@@ -37,6 +37,11 @@ body {
   height: min(80vh, 600px);
   width: min(82vw, 600px);
   box-shadow: #9b9b9b -1px 1px 5px 1px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.create-item-info.short {
+  height: auto;
 }
 
 .form-content {
