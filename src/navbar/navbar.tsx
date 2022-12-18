@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { LoginButton } from '../account/login/login_button';
+import { AppLogo } from './app_logo';
 import { CurrentUserTypes } from './layout_with_navbar';
 import { UserDropdown } from './user_dropdown';
 
@@ -18,6 +19,7 @@ sessionChecked: boolean;}> = ({ userInfo, sessionChecked }) => {
 
   return (
     <div className="profile-navbar">
+      <AppLogo />
       {userInfo.username && 
         <UserDropdown 
           username={userInfo.username}

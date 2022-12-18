@@ -20,7 +20,7 @@
   position: absolute;
   flex-direction: column;
   height: max(450px, calc(100% - $navbar-height));
-  width: max(100px, 8%);
+  width: calc((max(2vw, 16px) * 2) + 75px);
   background: linear-gradient(-180deg, #3f3c3c, rgb(94, 94, 94));
   z-index: 101;
   overflow: hidden;
@@ -170,6 +170,7 @@
 .card-container {
   position: relative;
   display: grid;
+  background-color: #ededed;
   grid-template-columns: repeat(auto-fill, 180px);
   grid-template-rows: repeat(auto-fill, 140px);
   row-gap: 30px;
@@ -180,7 +181,7 @@
   height: auto;
   min-height: max(450px, calc(100% - $navbar-height));
   width: 100%;
-  margin-left: max(100px, 8%);
+  margin-left: calc((max(2vw, 16px) * 2) + 75px);
   overflow-y: auto;
   overflow-x: auto;
   user-select: none;
@@ -193,7 +194,7 @@
   height: auto;
   min-height: calc(100% - 120px);
   width: 100%;
-  margin-left: max(100px, 8%);
+  margin-left: calc((max(2vw, 16px) * 2) + 75px);
   overflow-y: auto;
   overflow-x: hidden;
   user-select: none;
@@ -325,4 +326,26 @@ menu {
     background-color: rgb(236, 76, 18);
     border-color: red;
   }
+}
+
+#app-logo {
+  @include flexit();
+  cursor: pointer;
+  height: 100%;
+  background-color: #3F4E4F;
+  width: 75px;
+  user-select: none;
+  font-family: 'Coda', cursive;
+  color: white;
+  text-decoration: underline rgb(225, 214, 9);
+  text-underline-offset: 2px;
+  padding: 0 max(2vw, 16px) 0 max(2vw, 16px);
+  &:hover {
+    background-color: #4a5b5d;
+  }
+}
+
+#app-logo-text {
+  font-size: 1.26rem;
+  letter-spacing: 0.05rem;
 }

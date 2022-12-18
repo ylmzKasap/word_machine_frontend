@@ -81,6 +81,7 @@
   .create-item-info {
     height: 100%;
     width: 100%;
+    border-radius: 0;
   }
 
   .exit-sign {
@@ -90,12 +91,21 @@
   .submit-form {
     margin-bottom: 70px;
   }
+
+  #app-logo {
+    background-color: transparent;
+  }
+
+  #app-logo-text {
+    font-size: 1.16rem;
+  }
 }
 
 @media (max-height: 450px) {
   .create-item-info {
     height: 100%;
     width: 100%;
+    border-radius: 0;
   }
   .card-container {
     row-gap: 15px;

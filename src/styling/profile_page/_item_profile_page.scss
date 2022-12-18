@@ -19,6 +19,7 @@
 
 .folder {
   @extend .deck;
+  background-color: rgb(246, 246, 246);
   box-shadow: rgb(223, 223, 223) 0px 0px 5px 1px;
   &:focus {
     box-shadow: rgb(211, 210, 210) 0px 0px 5px 3px;
