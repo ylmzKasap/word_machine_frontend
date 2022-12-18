@@ -742,6 +742,10 @@ input[type=radio] {
 .study-button:hover {
   background-color: #0ecc6d;
 }
+.study-button.disabled {
+  cursor: default;
+  background-color: #989898;
+}
 
 .word-column {
   width: 30%;

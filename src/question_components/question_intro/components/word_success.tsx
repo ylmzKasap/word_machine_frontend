@@ -105,7 +105,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
       const deck_id = res.data.deck_id as string;
       setQuestionPage({type: 'requestMessage', value: {
         loading: false,
-        description: 'Done!',
+        description: ' ',
         link: `/deck/${questionPage.deckInfo.logged_in_user}/${deck_id}`,
         linkDescription: 'View deck'
       }});
@@ -176,23 +176,28 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
             {wordStats.map((word, i) => {
               return (
                 <tr className="word-stats-row" key={`${word.word}-${i}`}>
-                  <td>{i + 1}</td>
-                  <td>{word.word}</td>
-                  <td>
-                    {word.successRate.toFixed(1)}%
-                    <div className="word-success-bar">
-                      <div 
-                        className="green-success-bar"
-                        style={{'width': `${word.successRate}%`}}></div>
-                      <div 
-                        className="red-success-bar"
-                        style={word.lastReview
-                          ? {'width': `${100 - word.successRate}%`}
-                          : {}}></div>
-                    </div>
-                  </td>
-                  <td>{word.correctAnswer + word.incorrectAnswer}</td>
-                  <td>{word.lastReview ? format_date(word.lastReview) : 'Not yet studied'}</td>
+                  {word.word ?
+                    <>
+                      <td>{i + 1}</td>
+                      <td>{word.word}</td>
+                      <td>
+                        {word.successRate.toFixed(1)}%
+                        <div className="word-success-bar">
+                          <div 
+                            className="green-success-bar"
+                            style={{'width': `${word.successRate}%`}}></div>
+                          <div 
+                            className="red-success-bar"
+                            style={word.lastReview
+                              ? {'width': `${100 - word.successRate}%`}
+                              : {}}></div>
+                        </div>
+                      </td>
+                      <td>{word.correctAnswer + word.incorrectAnswer}</td>
+                      <td>{word.lastReview ? format_date(word.lastReview) : 'Not yet studied'}</td>
+                    </>
+                    : <td colSpan={6}>This deck has no words yet</td>}
+                  
                 </tr>
               );
             })}

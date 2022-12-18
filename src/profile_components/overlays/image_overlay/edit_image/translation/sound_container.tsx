@@ -17,8 +17,20 @@ export const SoundContainer: React.FC<{
 
   const [requestExists, setRequestExists] = useState(false);
 
-  function generate_sound() {
+  async function generate_sound() {
     setRequestExists(true);
+
+    let sound_id = '';
+    if (editImageOverlay.deckInfo.editing) {
+      const currentRow = editImageOverlay.imageInfo[order];
+      await axios
+        .post(`${isProduction ? serverUrl : ''}/word_sound_search`, {
+          word_id: currentRow.imageRow[0].word_id
+        }).then((res) => {
+          sound_id = res.data.sound_id;
+        }).catch(() => null);
+    }
+
     axios
       .post(`${isProduction ? serverUrl : ''}/sound_generation`, {
         text: word,
@@ -26,13 +38,27 @@ export const SoundContainer: React.FC<{
       })
       .then((res) => {
         const sound_urls = res.data.sounds;
+        let selectedSound = 0;
         if (sound_urls) {
+          if (editImageOverlay.deckInfo.editing) {
+            if (!sound_id) {
+              sound_id = sound_urls[0].sound_id;
+            }
+            for (let i = 0; i < sound_urls.length; i++) {
+              if (sound_urls[i].sound_id === sound_id) {
+                selectedSound = i;
+                break;
+              }
+            }
+          }
+          
           setEditImageOverlay({
             type: 'updateSounds',
             value: sound_urls,
             index: order,
+            extraValue: selectedSound
           });
-          audioMixer.src = sound_urls[0].sound_path;
+          audioMixer.src = sound_urls[selectedSound].sound_path;
         } else {
           if (res.data.errDesc) {
             setRequestError({exists: true, description: res.data.errDesc});
@@ -76,8 +102,30 @@ export const SoundContainer: React.FC<{
     const selectedIndex =
       editImageOverlay.imageInfo[order].soundRow.selectedIndex;
     const newSoundIndex = (selectedIndex + 1) % audioLinks.length;
-    audioMixer.src = audioLinks[newSoundIndex].sound_path;
-    setEditImageOverlay({ type: 'incrementSoundIndex', value: newSoundIndex, index: order });
+     
+    const incrementIndex = () => setEditImageOverlay(
+      { type: 'incrementSoundIndex', value: newSoundIndex, index: order });
+
+    if (editImageOverlay.deckInfo.editing) {
+      const currentRow = editImageOverlay.imageInfo[order];
+      const newSoundId = currentRow.soundRow.allSounds[newSoundIndex].sound_id;
+      axios
+        .put(`${isProduction ? serverUrl : ''}/sound_change`, {
+          word_id: currentRow.imageRow[0].word_id,
+          sound_id: newSoundId,
+        })
+        .then(() => {
+          audioMixer.src = audioLinks[newSoundIndex].sound_path;
+          incrementIndex();
+        })
+        .catch((err) =>  setRequestError({
+          exists: true,
+          description: err.response.data.errDesc,
+        }));
+    } else {
+      audioMixer.src = audioLinks[newSoundIndex].sound_path;
+      incrementIndex();
+    }
   };
 
   const soundRow = editImageOverlay.imageInfo[order].soundRow;

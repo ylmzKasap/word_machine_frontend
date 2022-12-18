@@ -355,6 +355,10 @@
   &:hover {
     background-color: rgb(14, 204, 109);
   }
+  &.disabled {
+    cursor: default;
+    background-color: rgb(152, 152, 152);
+  }
 }
 
 .word-column {

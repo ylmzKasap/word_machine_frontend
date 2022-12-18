@@ -1,4 +1,3 @@
-import { DeckOverlayTypes } from './overlayTypes';
 import { categoryInfoDefault } from './profilePageDefaults';
 
 export const deckErrorDefault = {
@@ -60,13 +59,14 @@ export const categoryOverlayDefaults = {
   editing: false
 };
 
-export const get_row_default = (deckOverlay: DeckOverlayTypes) => ({
+export const get_row_default = (targetLanguage: string, sourceLanguage?: string | null) => ({
   artist_content_id: null,
   image_id: null,
   translation_id: null,
   image_path: null,
-  [deckOverlay.language.targetLanguage!]: null,
-  [deckOverlay.language.sourceLanguage!]: null,
+  [targetLanguage]: null,
+  [sourceLanguage ? sourceLanguage : 'source_language']: null,
+  times_selected: '0',
   selected: true,
   submitter: null,
 });

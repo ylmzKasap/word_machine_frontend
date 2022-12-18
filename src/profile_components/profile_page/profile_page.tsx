@@ -405,7 +405,9 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
             cloneStyle={drag.cloneElement.cloneStyle}
             draggedElement={drag.cloneElement.draggedElement}
           />}
-          {editImageOverlay.display && <EditImageOverlay />}
+          {editImageOverlay.display && <EditImageOverlay
+            exitHandler={() => setDeckOverlay({ type: 'view', value: 'reset' })}
+          />}
           {requestError.exists && <RequestInfo
             className="request-error"
             description={requestError.description}

@@ -9,7 +9,7 @@ import {
 } from '../add_sound/add_sound';
 import EditAddImageContent from './edit_add_image_content';
 
-const EditImageOverlay: React.FC = () => {
+const EditImageOverlay: React.FC<EditImageOverlayPropTypes> = ({exitHandler}) => {
   // Rendered by "../../../profile_page" -> "ProfilePage"
   // Renders "../../../common/components/OverlayNavbar" and "EditImageContent"
 
@@ -38,18 +38,29 @@ const EditImageOverlay: React.FC = () => {
       <OverlayNavbar
         setOverlay={setEditImageOverlay}
         specialClass={'edit-image'}
-        description="Image control panel"
+        description={editImageOverlay.deckInfo.editing 
+          ? `Edit ${editImageOverlay.deckInfo.name}`
+          : 'Image control panel'}
       />
-      <EditAddImageContent imageInfo={editImageOverlay.imageInfo} />
+      <EditAddImageContent 
+        imageInfo={editImageOverlay.imageInfo}
+        exitHandler={exitHandler}
+      />
     </div>
   );
 };
 
+export interface EditImageOverlayPropTypes {
+  exitHandler: () => void;
+}
+
+export interface WordSoundTypes {
+  sound_id: string;
+  sound_path: string;
+}
+
 export interface SoundRowTypes {
-  allSounds: {
-    sound_id: string;
-    sound_path: string;
-  }[];
+  allSounds: WordSoundTypes[];
   selectedIndex: number;
 }
 
@@ -60,7 +71,8 @@ export interface ImageRowTypes {
   image_path: string | null;
   selected: boolean | null;
   submitter: string | null;
-  [x: string]: boolean | string | null | number;
+  times_selected: string;
+  [x: string]: boolean | string | null;
 }
 
 export interface RowTypes {
@@ -68,12 +80,41 @@ export interface RowTypes {
   soundRow: SoundRowTypes;
 }
 
+export interface EditImageDeckTypes {
+  id: string;
+  name: string;
+  targetLanguage: string;
+  sourceLanguage?: string | null;
+  purpose: string;
+  includeTranslation: boolean;
+  editing?: boolean;
+}
+
+export const editImageDeckDefaults = {
+  id: '',
+  name: '',
+  targetLanguage: '',
+  sourceLanguage: '',
+  purpose: '',
+  includeTranslation: false,
+  editing: false
+};
+
+export const editImageCategoryDefaults = {
+  id: '',
+  targetLanguage: '',
+  sourceLanguage: '',
+  purpose: ''
+};
+
 export const editImagesDefaults = {
   display: false,
   editedId: '',
   imageOverlay: addImageDefaults,
   soundOverlay: soundOverlayDefaults,
-  imageInfo: [],
+  deckInfo: editImageDeckDefaults,
+  categoryInfo: editImageCategoryDefaults,
+  imageInfo: []
 };
 
 export interface EditImagesTypes {
@@ -81,6 +122,13 @@ export interface EditImagesTypes {
   editedId: string;
   imageOverlay: AddImageTypes;
   soundOverlay: SoundOverlayTypes;
+  deckInfo: EditImageDeckTypes;
+  categoryInfo: {
+    id: string;
+    targetLanguage: string;
+    sourceLanguage: string | null;
+    purpose: string;
+  }
   imageInfo: RowTypes[];
 }
 

@@ -82,6 +82,7 @@ export interface DirInfoTypes {
 export interface WordTypes {
   translation_id: string;
   deck_id: string;
+  word_id: string;
   image_path: string;
   image_id: string;
   english_us?: string;
@@ -126,11 +127,11 @@ export interface serverItemTypes {
 }
 
 export interface CategoryInfoTypes {
-  id: string | undefined;
-  name: string | undefined;
-  targetLanguage: string | undefined;
-  sourceLanguage: string | undefined;
-  purpose: string | undefined;
+  id?: string;
+  name?: string;
+  targetLanguage?: string;
+  sourceLanguage?: string;
+  purpose?: string;
 }
 
 export type SetFolderOverlayType = React.Dispatch<{

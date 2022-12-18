@@ -18,8 +18,6 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
   const {
     editImageOverlay,
     setEditImageOverlay,
-    deckOverlay,
-    setDeckOverlay,
     requestError,
     setRequestError,
     directory,
@@ -30,6 +28,10 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
   const [errorIndex, setErrorIndex] = useState(-1);
   const [showDownArrow, setShowDownArrow] = useState(false);
   const [submitRequest, setSubmitRequest] = useState(false);
+  
+  const { name, targetLanguage, sourceLanguage,
+    purpose, includeTranslation } = editImageOverlay.deckInfo;
+  const categoryInfo = editImageOverlay.categoryInfo;
 
   let audioMixer = new Audio();
   audioMixer.addEventListener('canplaythrough', () => {
@@ -50,7 +52,7 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
   const addImageRow = () => {
     if (editImageOverlay.imageInfo.length >= limits.image_row) return;
 
-    const rowDefault = get_row_default(deckOverlay);
+    const rowDefault = get_row_default(targetLanguage, sourceLanguage);
     setEditImageOverlay({
       type: 'addRow',
       value: {
@@ -103,7 +105,7 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
     if (editImageOverlay.imageInfo.length === 0) {
       setRequestError({
         exists: true,
-        description: `Include at least one word to ${deckOverlay.purpose}`
+        description: `Include at least one word to ${purpose}`
       });
       return;
     }
@@ -116,11 +118,10 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
       selectedImage['sound_id'] = selectedSound ? selectedSound : 'default';
       if (!selectedImage.image_path) {
         problem = 'Image missing';
-      } else if (!selectedImage[deckOverlay.language.targetLanguage!]) {
+      } else if (!selectedImage[targetLanguage]) {
         problem = 'Target language translation missing';
       } else if (
-        deckOverlay.language.sourceLanguage &&
-        !selectedImage[deckOverlay.language.sourceLanguage]
+        sourceLanguage && !selectedImage[sourceLanguage]
       ) {
         problem = 'Source language translation missing';
       }
@@ -148,36 +149,39 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
       selectedImages.push(selectedImage);
     }
 
+    if (editImageOverlay.deckInfo.editing) {
+      setEditImageOverlay({ type: 'view-edit-image', value: 'reset' });
+      return;
+    }
+
     setSubmitRequest(true);
     axios
       .post(`${isProduction ? serverUrl : ''}/deck`, {
-        deck_name: deckOverlay.deckName,
+        deck_name: name,
         selected_ids: selectedImages.map((i) => ({
           image_id: i.image_id,
           translation_id: i.translation_id,
           sound_id: i.sound_id,
-          text: i[deckOverlay.language.targetLanguage!],
+          text: i[targetLanguage!],
         })),
         parent_id: directory,
-        category_id: deckOverlay.categoryInfo.id
-          ? deckOverlay.categoryInfo.id
-          : null,
-        target_language: deckOverlay.categoryInfo.id
-          ? deckOverlay.categoryInfo.targetLanguage
-          : deckOverlay.language.targetLanguage!.toLowerCase(),
-        source_language: deckOverlay.categoryInfo.id
-          ? deckOverlay.categoryInfo.sourceLanguage
-            ? deckOverlay.categoryInfo.sourceLanguage!.toLocaleLowerCase()
+        category_id: categoryInfo.id ? categoryInfo.id : null,
+        target_language: categoryInfo.id 
+          ? categoryInfo.targetLanguage
+          : targetLanguage.toLowerCase(),
+        source_language: categoryInfo.id
+          ? categoryInfo.sourceLanguage
+            ? categoryInfo.sourceLanguage.toLocaleLowerCase()
             : null
-          : deckOverlay.language.sourceLanguage
-            ? deckOverlay.language.sourceLanguage.toLowerCase()
+          : sourceLanguage
+            ? sourceLanguage.toLowerCase()
             : null,
-        show_translation: deckOverlay.includeTranslation,
-        purpose: deckOverlay.purpose,
+        show_translation: includeTranslation,
+        purpose: purpose,
       })
       .then(() => {
         setEditImageOverlay({ type: 'view-edit-image', value: 'reset' });
-        setDeckOverlay({ type: 'view', value: 'reset' });
+        props.exitHandler();
         setReRender();
       })
       .catch((err) => {
@@ -221,7 +225,9 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
         onClick={handleSubmit}
       >
         {!submitRequest && (
-          <div className="submit-description">Create deck</div>
+          <div className="submit-description">
+            {editImageOverlay.deckInfo.editing ? 'Done' : 'Create deck'}
+          </div>
         )}
         {submitRequest && <LoadingIcon elementClass="submitting" />}
       </button>
@@ -239,6 +245,7 @@ const EditAddImageContent: React.FC<EditAddImageContentTypes> = (props) => {
 
 interface EditAddImageContentTypes {
   imageInfo: RowTypes[];
+  exitHandler: () => void;
 }
 
 export default EditAddImageContent;

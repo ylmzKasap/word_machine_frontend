@@ -56,7 +56,14 @@ export const handleDeckOverlay = (
         errors: {
           ...state.errors,
           formError: '',
-        },
+        }
+      };
+
+    case 'switchIncludeTranslation':
+      // For changing it while editing.
+      return {
+        ...state,
+        includeTranslation: !state.includeTranslation
       };
 
     case 'errors':

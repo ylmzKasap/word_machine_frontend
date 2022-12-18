@@ -8,7 +8,7 @@ import ImageNotFound from './image_not_found';
 const MainImage: React.FC<MainImagePropTypes> = (props) => {
   // Rendered by "../image_info" -> ImageInfo
 
-  const { deckOverlay } = useContext(ProfileContext) as ProfileContextTypes;
+  const { editImageOverlay } = useContext(ProfileContext) as ProfileContextTypes;
 
   useEffect(() => {
     if (!props.word.image_path) return;
@@ -28,7 +28,7 @@ const MainImage: React.FC<MainImagePropTypes> = (props) => {
       {props.word.image_path ? (
         <img
           src={props.word.image_path as string}
-          alt={props.word[deckOverlay.language.targetLanguage!] as string}
+          alt={props.word[editImageOverlay.deckInfo.targetLanguage!] as string}
         />
       ) : (
         !props.requestExists && (

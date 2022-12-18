@@ -18,14 +18,15 @@ const ImageTranslation: React.FC<ImageTranslationTypes> = ({
   // Renders two "./translation" -> Translation components
   // One as the target and one as the source language.
 
-  const { deckOverlay } = useContext(ProfileContext) as ProfileContextTypes;
+  const { editImageOverlay } = useContext(ProfileContext) as ProfileContextTypes;
+  const { targetLanguage, sourceLanguage, purpose } = editImageOverlay.deckInfo;
 
   return (
     <div id={`image-translation-box-${order}`}>
       {requestExists && <LoadingIcon elementClass="image-request" />}
-      {(deckOverlay.purpose === 'study' ||
-        (deckOverlay.purpose === 'learn' &&
-          word[deckOverlay.language.sourceLanguage!])) && (
+      {(purpose === 'study' ||
+        (purpose === 'learn' &&
+          word[sourceLanguage!])) && (
         <Translation
           word={word}
           order={order}
@@ -33,34 +34,33 @@ const ImageTranslation: React.FC<ImageTranslationTypes> = ({
           setRequestExists={setRequestExists}
           setImagesToDisplay={setImagesToDisplay}
           elementClass={
-            word[deckOverlay.language.targetLanguage!] ? undefined : 'not-found'
+            word[targetLanguage] ? undefined : 'not-found'
           }
         />
       )}
-      {word[deckOverlay.language.targetLanguage!] && (
+      {word[targetLanguage] && (
         <SoundContainer
-          word={word[deckOverlay.language.targetLanguage!] as string}
+          word={word[targetLanguage] as string}
           order={order}
-          language={deckOverlay.language.targetLanguage!}
+          language={targetLanguage}
           audioMixer={audioMixer}
         />
       )}
 
-      {(deckOverlay.purpose === 'learn' ||
-        (deckOverlay.purpose === 'study' &&
-          word[deckOverlay.language.targetLanguage!] &&
-          deckOverlay.language.sourceLanguage)) && (
-        <Translation
-          word={word}
-          order={order}
-          type="sourceLanguage"
-          setRequestExists={setRequestExists}
-          setImagesToDisplay={setImagesToDisplay}
-          elementClass={
-            word[deckOverlay.language.sourceLanguage!] ? undefined : 'not-found'
-          }
-        />
-      )}
+      {(purpose === 'learn' ||
+        (purpose === 'study' && word[targetLanguage] && sourceLanguage))
+        && (
+          <Translation
+            word={word}
+            order={order}
+            type="sourceLanguage"
+            setRequestExists={setRequestExists}
+            setImagesToDisplay={setImagesToDisplay}
+            elementClass={
+              word[sourceLanguage!] ? undefined : 'not-found'
+            }
+          />
+        )}
     </div>
   );
 };

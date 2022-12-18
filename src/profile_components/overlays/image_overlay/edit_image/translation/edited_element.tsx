@@ -23,12 +23,13 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
 
   const { currentUserInfo } = useContext(NavbarContext) as NavbarContextTypes;
   const {
-    deckOverlay,
     editImageOverlay,
     setEditImageOverlay,
     requestError,
     setRequestError,
   } = useContext(ProfileContext) as ProfileContextTypes;
+
+  const { targetLanguage, sourceLanguage, purpose } = editImageOverlay.deckInfo;
 
   // Get the input saved by the reducer.
   const savedInput = editImageOverlay.imageInfo[order].imageRow.filter(
@@ -60,10 +61,9 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
     handleForbidden(element.value);
   };
 
-  const focusOut = () => {
+  const focusOut = async () => {
     // Save the input and make an http request to get input info if necessary.
 
-    const { targetLanguage, sourceLanguage } = deckOverlay.language;
     const trimmedInput = inputValue.trim();
 
     // Reject forbidden values.
@@ -89,13 +89,13 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
     // Reset the images when the input is blank.
     if (
       !trimmedInput &&
-      ((type === 'targetLanguage' && deckOverlay.purpose === 'study') ||
-        (type === 'sourceLanguage' && deckOverlay.purpose === 'learn'))
+      ((type === 'targetLanguage' && purpose === 'study') ||
+        (type === 'sourceLanguage' && purpose === 'learn'))
     ) {
       setImagesToDisplay(3);
       setEditImageOverlay({
         type: 'changeImages',
-        value: [get_row_default(deckOverlay)],
+        value: [get_row_default(targetLanguage, sourceLanguage)],
         index: order,
       });
       return;
@@ -103,15 +103,32 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
 
     // Get the image objects form the server
     if (
-      (type === 'targetLanguage' && deckOverlay.purpose === 'study') ||
-      (type === 'sourceLanguage' && deckOverlay.purpose === 'learn')
+      (type === 'targetLanguage' && purpose === 'study') ||
+      (type === 'sourceLanguage' && purpose === 'learn')
     ) {
+      let wordId = '';
       setRequestExists(true);
+      if (editImageOverlay.deckInfo.editing) {
+        await axios
+          .put(`${isProduction ? serverUrl : ''}/word_change`, {
+            new_word: trimmedInput,
+            word_id: word.word_id ? word.word_id : null,
+            deck_id: editImageOverlay.deckInfo.id
+          })
+          .then(res => {
+            if (res.data.word_id) {
+              wordId = res.data.word_id;
+            }
+          })
+          .catch(err => setRequestError({
+            exists: true,
+            description: err.response.data.errDesc,
+          }));
+      }
       axios
         .post(`${isProduction ? serverUrl : ''}/image_search`, {
           word_array: [trimmedInput],
-          search:
-            deckOverlay.purpose === 'learn' ? sourceLanguage : targetLanguage,
+          search: purpose === 'learn' ? sourceLanguage : targetLanguage,
           target: targetLanguage,
           source: sourceLanguage ? sourceLanguage : null,
         })
@@ -123,6 +140,7 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
           setEditImageOverlay({
             type: 'changeImages',
             value: res.data[0].imageRow,
+            extraValue: wordId,
             index: order,
           });
         })
@@ -142,8 +160,8 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
     } else if (
       trimmedInput &&
       trimmedInput !== savedInput &&
-      ((type === 'sourceLanguage' && deckOverlay.purpose === 'study') ||
-        (type === 'targetLanguage' && deckOverlay.purpose === 'learn'))
+      ((type === 'sourceLanguage' && purpose === 'study') ||
+        (type === 'targetLanguage' && purpose === 'learn'))
     ) {
       if (!word.image_path) return;
       axios
@@ -151,8 +169,8 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
           translation_id: word.translation_id,
           language:
             type === 'sourceLanguage'
-              ? deckOverlay.language.sourceLanguage
-              : deckOverlay.language.targetLanguage,
+              ? sourceLanguage
+              : targetLanguage,
           translation: trimmedInput,
         })
         .then(() => {
@@ -160,8 +178,8 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
             type: 'changeValue',
             value: currentUserInfo.username!,
             key: type === 'sourceLanguage'
-              ? `${deckOverlay.language.sourceLanguage}_submitter`
-              : `${deckOverlay.language.targetLanguage}_submitter`,
+              ? `${sourceLanguage}_submitter`
+              : `${targetLanguage}_submitter`,
             index: order,
           });
         })
@@ -205,7 +223,7 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
         setEditImageOverlay({
           type: 'addRow',
           value: {
-            imageRow: [get_row_default(deckOverlay)],
+            imageRow: [get_row_default(targetLanguage, sourceLanguage)],
             soundRow: {
               allSounds: [],
               selectedIndex: 0,

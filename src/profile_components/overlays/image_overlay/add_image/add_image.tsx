@@ -29,7 +29,6 @@ export const AddImageOverlay = () => {
   const {
     editImageOverlay,
     setEditImageOverlay,
-    deckOverlay,
     setRequestError,
   } = useContext(ProfileContext) as ProfileContextTypes;
 
@@ -37,6 +36,8 @@ export const AddImageOverlay = () => {
   const [submitRequest, setSubmitRequest] = useState(false);
   const addMoreRef = useRef<null | HTMLDivElement>(null);
   const submitErrorRef = useRef<null | HTMLDivElement>(null);
+
+  const { targetLanguage, sourceLanguage, purpose } = editImageOverlay.deckInfo;
 
   const scrollToFormError = () => {
     setTimeout(() => {
@@ -71,10 +72,10 @@ export const AddImageOverlay = () => {
       imageOverlay.imageFile &&
       !imageOverlay.target.error &&
       imageOverlay.target.value &&
-      (Boolean(deckOverlay.language.sourceLanguage)
+      (Boolean(sourceLanguage)
         ? !imageOverlay.source.error
         : true) &&
-      (Boolean(deckOverlay.language.sourceLanguage)
+      (Boolean(sourceLanguage)
         ? imageOverlay.source.value
         : true) &&
       !imageOverlay.artist.error &&
@@ -185,7 +186,7 @@ export const AddImageOverlay = () => {
     }
   };
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  const handleSubmit =  (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     const imageOverlay = editImageOverlay.imageOverlay;
@@ -215,49 +216,67 @@ export const AddImageOverlay = () => {
     }
 
     let translation_object = {
-      [deckOverlay.language.targetLanguage!]: imageOverlay.target.value,
+      [targetLanguage!]: imageOverlay.target.value,
       fileName: imageOverlay.target.value,
     };
 
-    if (deckOverlay.language.sourceLanguage) {
-      translation_object[deckOverlay.language.sourceLanguage!] =
+    if (sourceLanguage) {
+      translation_object[sourceLanguage!] =
         imageOverlay.source.value;
     }
 
     const reader = new FileReader();
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       setSubmitRequest(true);
 
-      const { targetLanguage, sourceLanguage } = deckOverlay.language;
-
-      axios
+      await axios
         .post(`${isProduction ? serverUrl : ''}/image_upload`, {
           artist_name: imageOverlay.artist.value.toLowerCase(),
           references: imageOverlay.references.map((x) => x.value),
           image: reader.result,
           extension: imageOverlay.extension.toLowerCase(),
           translation_object: translation_object,
-        })
-        .then(() => {
+        }).then(async () => {
+          let wordId = '';
+          if (editImageOverlay.deckInfo.editing) {
+            const index = editImageOverlay.imageOverlay.displayedIndex;
+            const currentImages = editImageOverlay.imageInfo[index as number].imageRow;
+            if (!currentImages[0].image_path) {
+              await axios
+                .put(`${isProduction ? serverUrl : ''}/word_change`, {
+                  new_word: translation_object[targetLanguage],
+                  word_id: currentImages[0].word_id ? currentImages[0].word_id : null,
+                  deck_id: editImageOverlay.deckInfo.id
+                })
+                .then(res => {
+                  if (res.data.word_id) {
+                    wordId = res.data.word_id;
+                  }
+                })
+                .catch(err => setRequestError({
+                  exists: true,
+                  description: err.response.data.errDesc,
+                }));
+            }
+          }
           axios
             .post(`${isProduction ? serverUrl : ''}/image_search`, {
               word_array:
-                deckOverlay.purpose === 'learn'
+                purpose === 'learn'
                   ? [imageOverlay.source.value]
                   : [imageOverlay.target.value],
               search:
-                deckOverlay.purpose === 'learn'
+                purpose === 'learn'
                   ? sourceLanguage
                   : targetLanguage,
               target: targetLanguage,
-              source: sourceLanguage
-                ? deckOverlay.language.sourceLanguage
-                : null,
+              source: sourceLanguage || null
             })
             .then((res) => {
               setEditImageOverlay({
                 type: 'changeImages',
                 value: res.data[0].imageRow,
+                extraValue: wordId,
                 index: editImageOverlay.imageOverlay.displayedIndex as number,
               });
               setEditImageOverlay({
@@ -265,8 +284,7 @@ export const AddImageOverlay = () => {
                 value: 'reset',
               });
             });
-        })
-        .catch((err) => {
+        }).catch(err => {
           const errMessage = err.response.status === 401
             ? 'Please log in to continue' : err.response.data.errDesc;
           setRequestError({
@@ -301,15 +319,15 @@ export const AddImageOverlay = () => {
           <ImageUploader scrollToFormError={scrollToFormError} />
           <div id="add-image-info">
             <InputField
-              description={seperate_language_region(deckOverlay.language.targetLanguage!)}
+              description={seperate_language_region(targetLanguage)}
               error={editImageOverlay.imageOverlay.target.error}
               value={editImageOverlay.imageOverlay.target.value}
               handler={handleTargetChange}
               placeholder=""
             />
-            {deckOverlay.language.sourceLanguage && (
+            {sourceLanguage && (
               <InputField
-                description={seperate_language_region(deckOverlay.language.sourceLanguage!)}
+                description={seperate_language_region(sourceLanguage)}
                 error={editImageOverlay.imageOverlay.source.error}
                 value={editImageOverlay.imageOverlay.source.value}
                 handler={handleSourceChange}

@@ -16,7 +16,6 @@ export const AddSoundOverlay: React.FC = () => {
 
   const {
     editImageOverlay,
-    deckOverlay,
     setRequestError,
     setEditImageOverlay,
   } = useContext(ProfileContext) as ProfileContextTypes;
@@ -83,7 +82,7 @@ export const AddSoundOverlay: React.FC = () => {
       axios
         .post(`${isProduction ? serverUrl : ''}/sound_upload`, {
           text: editImageOverlay.soundOverlay.soundText,
-          language: deckOverlay.language.targetLanguage,
+          language: editImageOverlay.deckInfo.targetLanguage,
           sound_file: reader.result,
         })
         .then(() => {
@@ -94,15 +93,19 @@ export const AddSoundOverlay: React.FC = () => {
           axios
             .post(`${isProduction ? serverUrl : ''}/sound_generation`, {
               text: editImageOverlay.soundOverlay.soundText,
-              language: deckOverlay.language.targetLanguage,
+              language: editImageOverlay.deckInfo.targetLanguage,
             })
             .then((res) => {
               const sound_urls = res.data.sounds;
+              const soundIndex = parseInt(editImageOverlay.soundOverlay.soundToReload);
               if (sound_urls) {
                 setEditImageOverlay({
                   type: 'updateSounds',
                   value: sound_urls,
-                  index: parseInt(editImageOverlay.soundOverlay.soundToReload),
+                  index: soundIndex,
+                  extraValue: editImageOverlay.deckInfo.editing
+                    ? editImageOverlay.imageInfo[soundIndex].soundRow.selectedIndex
+                    : 0
                 });
               } else {
                 if (res.data.errDesc) {
@@ -149,7 +152,7 @@ export const AddSoundOverlay: React.FC = () => {
         />
         <div className="form-box">
           <div className="form-box-info">
-            {seperate_language_region(deckOverlay.language.targetLanguage!)}:
+            {seperate_language_region(editImageOverlay.deckInfo.targetLanguage)}:
             <span className="form-box-value">
               {editImageOverlay.soundOverlay.soundText}
             </span>

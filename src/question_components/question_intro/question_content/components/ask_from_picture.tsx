@@ -113,11 +113,11 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
 
       setQuestionPage({type: 'correctFound', value: 'true'});
       setOptionStyle({ type: 'text', answer: 'correct' });
-
+      
       if (currentPage.answered || username !== logged_in_user) return;
       setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
-        translation_id: props.translation_id,
+        word_id: props.word_id,
         deck_id: props.deck_id,
         is_correct: true
       });
@@ -131,7 +131,7 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       if (currentPage.answered || username !== logged_in_user) return;
       setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
-        translation_id: currentPage.word.translation_id,
+        word_id: currentPage.word.word_id,
         deck_id: currentPage.word.deck_id,
         is_correct: false
       });

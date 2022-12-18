@@ -20,6 +20,7 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
     setDeckOverlay,
     setFolderOverlay,
     setCategoryOverlay,
+    setEditImageOverlay,
     setRequestError,
     setRequestMessage,
   } = useContext(ProfileContext) as ProfileContextTypes;
@@ -106,8 +107,48 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
           color: itemToEdit.color!
         }});
       }
-    
-    } else if (action === 'paste') {
+    } else if (action === 'set words') {
+      const itemToEdit = rawItems.filter(
+        item => item.item_id === extract_int(contextOpenedElem.id!))[0];
+      
+      axios
+        .post(`${isProduction ? serverUrl : ''}/deck_image_search`, {
+          deck_id: itemToEdit.item_id
+        })
+        .then((res) => {
+          let imageFound = false;
+          try {
+            if (res.data[0].imageRow[0].image_path) {
+              imageFound = true;
+            }
+          } catch {
+            setRequestError({
+              exists: true,
+              description: 'Could not fetch images',
+            });
+            return;
+          }
+          
+          setEditImageOverlay({ type: 'setImages', 
+            value: imageFound ? res.data : [],
+            extraValue: {
+              deckInfo: {
+                id: itemToEdit.item_id,
+                name: itemToEdit.item_name,
+                targetLanguage: itemToEdit.target_language!,
+                sourceLanguage: itemToEdit.source_language,
+                purpose: itemToEdit.purpose!,
+                includeTranslation: itemToEdit.show_translation!,
+                editing: true
+              }
+            }});
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    } 
+    else if (action === 'paste') {
       // Type guard
       if (!clipboard.id) throw Error;
 
@@ -141,7 +182,7 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
         const deck_id = res.data.deck_id as string;
         setRequestMessage({
           loading: false,
-          description: 'Done!',
+          description: ' ',
           link: `/deck/${username}/${deck_id}`,
           linkDescription: 'View deck'
         });

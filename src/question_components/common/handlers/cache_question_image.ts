@@ -8,10 +8,14 @@ export function cache_question_image(
   for (let i = 0; i < pagesToCache; i++) {
     if (pages[pageNumber + i]) {
       let preCachedImage = new Image();
-      preCachedImage.src = pages[pageNumber + i].word.image_path as string;
+      const imagePath = pages[pageNumber + i].word.image_path;
+      if (!imagePath) continue;
+
+      preCachedImage.src = imagePath as string;
       if (pages[pageNumber + i].options[0]) {
         for (let option of pages[pageNumber + i].options) {
           let preCachedImage = new Image();
+          if (!option.image_path) continue;
           preCachedImage.src = option.image_path as string;
         }
       }

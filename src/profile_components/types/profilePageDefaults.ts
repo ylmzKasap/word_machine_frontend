@@ -42,6 +42,7 @@ export const wordDefault = [
   {
     translation_id: '',
     deck_id: '',
+    word_id: '',
     image_id: '',
     image_path: '',
     sound_path: '',
@@ -54,11 +55,11 @@ export const wordDefault = [
 ];
 
 export const categoryInfoDefault = {
-  id: undefined,
-  name: undefined,
-  purpose: undefined,
-  targetLanguage: undefined,
-  sourceLanguage: undefined,
+  id: '',
+  name: '',
+  purpose: '',
+  targetLanguage: '',
+  sourceLanguage: '',
 };
 
 export const serverItemDefault = {

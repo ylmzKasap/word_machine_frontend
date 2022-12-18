@@ -18,8 +18,10 @@ const Translation: React.FC<TranslationTypes> = ({
   // Renders translation divs and "EditedElement" if it exists.
 
   const { currentUserInfo } = useContext(NavbarContext) as NavbarContextTypes;
-  const { editImageOverlay, setEditImageOverlay, deckOverlay } =
+  const { editImageOverlay, setEditImageOverlay } =
     useContext(ProfileContext) as ProfileContextTypes;
+
+  const { sourceLanguage, targetLanguage, purpose } = editImageOverlay.deckInfo;
 
   // Id depends on the type of the translation box.
   const componentId =
@@ -33,13 +35,13 @@ const Translation: React.FC<TranslationTypes> = ({
     componentClass = 'image-info-edited';
   } else if (
     type === 'sourceLanguage' &&
-    deckOverlay.purpose === 'learn' &&
+    purpose === 'learn' &&
     elementClass !== 'not-found'
   ) {
     componentClass = 'editable';
   } else if (
     type === 'targetLanguage' &&
-    deckOverlay.purpose === 'study' &&
+    purpose === 'study' &&
     elementClass !== 'not-found'
   ) {
     componentClass = 'editable';
@@ -51,24 +53,24 @@ const Translation: React.FC<TranslationTypes> = ({
     // Discard edited element when non-editable source is clicked.
     if (
       type === 'targetLanguage' &&
-      deckOverlay.purpose !== 'study' &&
+      purpose !== 'study' &&
       word.image_path
     ) {
       if (
-        word[`${deckOverlay.language.targetLanguage}_submitter`] !== currentUserInfo.username &&
-        word[deckOverlay.language.targetLanguage!]
+        word[`${targetLanguage}_submitter`] !== currentUserInfo.username &&
+        word[targetLanguage]
       ) {
         setEditImageOverlay({ type: 'changeEdited', value: '' });
         return;
       }
     } else if (
       type === 'sourceLanguage' &&
-      deckOverlay.purpose !== 'learn' &&
+      purpose !== 'learn' &&
       word.image_path
     ) {
       if (
-        word[`${deckOverlay.language.sourceLanguage}_submitter`] !== currentUserInfo.username &&
-        word[deckOverlay.language.sourceLanguage!]
+        word[`${sourceLanguage}_submitter`] !== currentUserInfo.username &&
+        word[sourceLanguage!]
       ) {
         setEditImageOverlay({ type: 'changeEdited', value: '' });
         return;
@@ -77,7 +79,7 @@ const Translation: React.FC<TranslationTypes> = ({
     setEditImageOverlay({ type: 'changeEdited', value: componentId });
   };
 
-  const languageBase = deckOverlay.language[type as keyof LanguageTypes]?.split('_');
+  const languageBase = editImageOverlay.deckInfo[type as keyof LanguageTypes]?.split('_');
 
   return (
     <div id={componentId} className={componentClass} onClick={handleClick}>
@@ -87,14 +89,14 @@ const Translation: React.FC<TranslationTypes> = ({
           word={word}
           order={order}
           type={type}
-          language={deckOverlay.language[type as keyof LanguageTypes]!}
+          language={editImageOverlay.deckInfo[type as keyof LanguageTypes]!}
           setRequestExists={setRequestExists}
           setImagesToDisplay={setImagesToDisplay}
         />
       ) : componentClass === 'not-found' ? (
         'add translation'
       ) : (
-        word[deckOverlay.language[type as keyof LanguageTypes]!]
+        word[editImageOverlay.deckInfo[type as keyof LanguageTypes]!]
       )}
       {componentClass === 'not-found' &&
       editImageOverlay.editedId !== componentId ? (

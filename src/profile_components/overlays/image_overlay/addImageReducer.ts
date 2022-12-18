@@ -1,10 +1,12 @@
 import { specialCharacterRegex } from '../../common/regex';
 import { addImageDefaults } from './add_image/add_image';
 import {
+  editImageCategoryDefaults,
   editImagesDefaults,
   EditImagesTypes,
   RowTypes,
   SoundRowTypes,
+  WordSoundTypes,
 } from './edit_image/edit_image_overlay';
 import { ImageRowTypes } from './edit_image/edit_image_overlay';
 import { changeUploadedImageTypes } from './functions/validate_image';
@@ -16,8 +18,10 @@ export const handleEditImageOverlay = (
 ): EditImagesTypes => {
   switch (action.type) {
     case 'view-edit-image':
-      const overlayReturnObj =
-        action.value === 'reset' ? editImagesDefaults : state;
+      const resetOverlay = action.value === 'reset'
+       || (state.deckInfo.editing && action.value === 'hide'); 
+
+      const overlayReturnObj = resetOverlay ? editImagesDefaults : state;
       // Show or hide image editing overlay.
       return {
         ...overlayReturnObj,
@@ -96,19 +100,12 @@ export const handleEditImageOverlay = (
       if (action.index === undefined) return state;
       let newImageInfo = [...state.imageInfo];
       let updatedArray = state.imageInfo[action.index].imageRow;
-      updatedArray = updatedArray.map((row) => {
-        if (row.translation_id === action.value) {
-          return {
-            ...row,
-            selected: true,
-          };
-        } else {
-          return {
-            ...row,
-            selected: false,
-          };
-        }
-      });
+
+      updatedArray = updatedArray.map((row) => ({
+        ...row,
+        selected: row.translation_id === action.value
+      }));
+
       newImageInfo[action.index].imageRow = updatedArray;
 
       return {
@@ -150,9 +147,24 @@ export const handleEditImageOverlay = (
 
     case 'changeImages':
       // Replace an array of image objects with a new one.
+      if (!state.display) return state;
+      
       let imageArray = state.imageInfo;
-      imageArray[action.index as number].imageRow =
-        action.value as ImageRowTypes[];
+      const newImages = action.value as ImageRowTypes[];
+
+      if (!imageArray[action.index as number]) {
+        return state;
+      }
+
+      const wordId = imageArray[action.index as number].imageRow[0].word_id 
+      || action.extraValue as string;
+
+      const imagesWithWordId = newImages.map(image => ({
+        ...image,
+        word_id: wordId
+      }));
+
+      imageArray[action.index as number].imageRow = imagesWithWordId;
       imageArray[action.index as number].soundRow = {
         allSounds: [],
         selectedIndex: 0,
@@ -164,9 +176,12 @@ export const handleEditImageOverlay = (
       };
 
     case 'setImages':
+      const languageInfo = action.extraValue as OverlayLanguageTypes;
       return {
         ...state,
         display: true,
+        deckInfo: languageInfo.deckInfo,
+        categoryInfo: languageInfo.categoryInfo || editImageCategoryDefaults,
         imageInfo: action.value as RowTypes[],
       };
 
@@ -365,9 +380,11 @@ export const handleEditImageOverlay = (
 
     case 'updateSounds':
       let arrayToUpdate = [...state.imageInfo];
+      const allSounds = action.value as WordSoundTypes[];
+
       arrayToUpdate[action.index!].soundRow = {
-        allSounds: action.value,
-        selectedIndex: 0,
+        allSounds: allSounds,
+        selectedIndex: action.extraValue as number,
       } as SoundRowTypes;
 
       return {
@@ -401,6 +418,24 @@ interface LanguageTypes {
   source: string;
 }
 
+interface OverlayLanguageTypes {
+  deckInfo: {
+    id: string;
+    name: string;
+    targetLanguage: string;
+    sourceLanguage?: string | null;
+    purpose: string;
+    includeTranslation: boolean;
+    editing?: boolean;
+  },
+  categoryInfo?: {
+    id: string;
+    targetLanguage: string;
+    sourceLanguage: string;
+    purpose: string;
+  }
+}
+
 export interface ImageOverlayReducerTypes {
   type: string;
   value:
@@ -414,7 +449,7 @@ export interface ImageOverlayReducerTypes {
     | File
     | changeUploadedImageTypes
     | ValueWithError;
-  extraValue?: LanguageTypes | string;
+  extraValue?: LanguageTypes | OverlayLanguageTypes | string | number;
   key?: string;
   index?: number;
 }

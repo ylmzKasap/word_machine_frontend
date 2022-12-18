@@ -7,11 +7,12 @@ export const DeckInfo = () => {
   const { questionPage, setQuestionPage } = useContext(QuestionContext) as QuestionContextTypes;
 
   const handleStudy = () => {
+    if (totalWords === 0) return;
     setQuestionPage({type: 'startQuestion'});
   };
 
-  const { target_language, source_language } = questionPage.wordInfo;
-  const totalWords = questionPage.wordInfo.words.length;
+  const { target_language, source_language, words } = questionPage.wordInfo;
+  const totalWords = words[0].image_id ? words.length : 0;
   return (
     <div id="deck-info-intro">
       <div id="deck-name-intro">
@@ -28,7 +29,7 @@ export const DeckInfo = () => {
       />
       <button 
         type="button"
-        className="study-button"
+        className={`study-button${totalWords === 0 ? ' disabled' : ''}`}
         onClick={handleStudy}>
           Study
       </button>

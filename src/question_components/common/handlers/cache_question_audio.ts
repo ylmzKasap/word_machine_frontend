@@ -8,8 +8,9 @@ export function cache_question_audio(
   for (let i = 0; i < pagesToCache; i++) {
     if (pages[pageNumber + pagesToCache]) {
       let preCachedAudio = new Audio();
-      preCachedAudio.src = pages[pageNumber + pagesToCache].word
-        .sound_path as string;
+      const audioUrl = pages[pageNumber + pagesToCache].word.sound_path as string;
+      if (!audioUrl) continue;
+      preCachedAudio.src = audioUrl as string;
     }
   }
 }

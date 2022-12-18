@@ -1,11 +1,11 @@
-import { useContext, useState } from 'react';
-import { ProfileContextTypes } from '../../../types/profilePageTypes';
+import { useContext, useState, useEffect } from 'react';
 import LeftNumber from './left_number';
 import ImageTranslation from './translation/image_translation';
 import MainImage from './main_image/main_image';
 import OtherImageContainer from './other_images/other_image_container';
-import { ProfileContext } from '../../../profile_page/profile_page';
 import { ImageRowTypes, RowTypes } from './edit_image_overlay';
+import { ProfileContext } from '../../../profile_page/profile_page';
+import { ProfileContextTypes } from '../../../types/profilePageTypes';
 
 const ImageInfo: React.FC<ImageInfoTypes> = (props) => {
   // Rendered by "./edit_image_content" -> EditImageContent
@@ -15,11 +15,12 @@ const ImageInfo: React.FC<ImageInfoTypes> = (props) => {
   // "./main_image/main_image" -> MainImage
   // "./other_images/other_image_container" -> OtherImageContainer
 
-  const { deckOverlay, setEditImageOverlay } = useContext(
-    ProfileContext
-  ) as ProfileContextTypes;
+  const { 
+    editImageOverlay, setEditImageOverlay } = useContext(ProfileContext) as ProfileContextTypes;
   const [requestExists, setRequestExists] = useState(false);
   const [imagesToDisplay, setImagesToDisplay] = useState(3);
+
+  const { targetLanguage, sourceLanguage, purpose } = editImageOverlay.deckInfo;
 
   const getSelectedImage = (imageArray: ImageRowTypes[]) => {
     // Takes an array of image objects
@@ -43,18 +44,14 @@ const ImageInfo: React.FC<ImageInfoTypes> = (props) => {
 
   const handleAddImage = () => {
     if (!selectedImage) return;
-    const targetLanguage = selectedImage[
-      deckOverlay.language.targetLanguage!
-    ] as string;
-    const sourceLanguage = selectedImage[
-      deckOverlay.language.sourceLanguage!
-    ] as string;
+    const target = selectedImage[targetLanguage] as string;
+    const source = selectedImage[sourceLanguage!] as string;
     setEditImageOverlay({
       type: 'view-add-image',
       value: 'show',
       extraValue: {
-        target: targetLanguage ? targetLanguage : '',
-        source: sourceLanguage ? sourceLanguage : '',
+        target: target ? target : '',
+        source: source ? source : '',
       },
       index: props.order,
     });
@@ -66,7 +63,10 @@ const ImageInfo: React.FC<ImageInfoTypes> = (props) => {
 
   return (
     <div id={`edit-image-box-${props.order}`}>
-      <LeftNumber order={props.order} errorIndex={props.errorIndex} />
+      <LeftNumber 
+        order={props.order}
+        wordInfo={editImageOverlay.imageInfo}
+        errorIndex={props.errorIndex} />
       <div className="image-box-content">
         <ImageTranslation
           word={selectedImage}
@@ -77,10 +77,10 @@ const ImageInfo: React.FC<ImageInfoTypes> = (props) => {
           audioMixer={props.audioMixer}
         />
         {/* Render image upload section when a translation is entered */}
-        {((deckOverlay.purpose === 'study' &&
-          selectedImage[deckOverlay.language.targetLanguage!]) ||
-          (deckOverlay.purpose === 'learn' &&
-            selectedImage[deckOverlay.language.sourceLanguage!])) && (
+        {((purpose === 'study' &&
+          selectedImage[targetLanguage]) ||
+          (purpose === 'learn' &&
+            selectedImage[sourceLanguage!])) && (
           <MainImage
             word={selectedImage}
             order={props.order}

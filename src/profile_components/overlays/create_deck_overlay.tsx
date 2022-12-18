@@ -71,7 +71,11 @@ export const CreateDeckOverlay: React.FC = () => {
   };
 
   const handleTranslationDecision = () => {
-    setDeckOverlay({ type: 'includeTranslation', value: '' });
+    if (deckOverlay.editing) {
+      setDeckOverlay({ type: 'switchIncludeTranslation', value: '' });
+    } else {
+      setDeckOverlay({ type: 'includeTranslation', value: '' });
+    }
   };
 
   const scrollToFormError = () => {
@@ -104,13 +108,16 @@ export const CreateDeckOverlay: React.FC = () => {
       return;
     }
 
+    const { deckId, deckName, words, purpose, categoryInfo, includeTranslation } = deckOverlay;
+    const { targetLanguage, sourceLanguage } = deckOverlay.language;
+
     if (deckOverlay.editing) {
       setSubmitRequest(true);
       axios
         .put(`${isProduction ? serverUrl : ''}/edit_deck`, {
-          item_id: deckOverlay.deckId,
-          item_name: deckOverlay.deckName,
-          show_translation: deckOverlay.includeTranslation
+          item_id: deckId,
+          item_name: deckName,
+          show_translation: includeTranslation
         })
         .then(() => {
           setSubmitRequest(false);
@@ -129,13 +136,13 @@ export const CreateDeckOverlay: React.FC = () => {
       return;
     }
 
-    let allWords = deckOverlay.words
+    let allWords = words
       .split('\n')
       .map((x) => x.trim())
       .filter((word) => word !== '')
       .filter((word) => !word.match(/^[\s]+$/));
 
-    if (!deckOverlay.language.targetLanguage && !deckOverlay.categoryInfo.id) {
+    if (!targetLanguage && !categoryInfo.id) {
       setDeckOverlay({
         type: 'errors',
         innerType: 'form',
@@ -143,10 +150,8 @@ export const CreateDeckOverlay: React.FC = () => {
       });
       scrollToFormError();
     } else if (
-      (deckOverlay.purpose === 'learn' &&
-        !deckOverlay.language.sourceLanguage &&
-        !deckOverlay.categoryInfo.id) ||
-      (deckOverlay.includeTranslation && !deckOverlay.language.sourceLanguage)
+      (purpose === 'learn' && !sourceLanguage && !categoryInfo.id)
+      || (includeTranslation && !sourceLanguage)
     ) {
       setDeckOverlay({
         type: 'errors',
@@ -168,7 +173,7 @@ export const CreateDeckOverlay: React.FC = () => {
         value: 'Enter at least one word',
       });
       scrollToFormError();
-    } else if (deckOverlay.words === '') {
+    } else if (words === '') {
       setDeckOverlay({
         type: 'errors',
         innerType: 'form',
@@ -181,17 +186,30 @@ export const CreateDeckOverlay: React.FC = () => {
       axios
         .post(`${isProduction ? serverUrl : ''}/image_search`, {
           word_array: allWords,
-          search:
-            deckOverlay.purpose === 'study'
-              ? deckOverlay.language.targetLanguage
-              : deckOverlay.language.sourceLanguage,
-          target: deckOverlay.language.targetLanguage,
-          source: deckOverlay.language.sourceLanguage
-            ? deckOverlay.language.sourceLanguage
-            : null,
+          search: purpose === 'study' ? targetLanguage : sourceLanguage,
+          target: targetLanguage,
+          source: sourceLanguage ? sourceLanguage : null,
         })
         .then((res) => {
-          setEditImageOverlay({ type: 'setImages', value: res.data });
+          setEditImageOverlay({
+            type: 'setImages',
+            value: res.data,
+            extraValue: {
+              deckInfo: {
+                id: deckId!,
+                name: deckName,
+                targetLanguage: targetLanguage!,
+                sourceLanguage: sourceLanguage,
+                purpose: purpose,
+                includeTranslation: includeTranslation
+              },
+              categoryInfo: {
+                id: categoryInfo.id!,
+                targetLanguage: categoryInfo.targetLanguage!,
+                sourceLanguage: categoryInfo.sourceLanguage!,
+                purpose: categoryInfo.purpose!
+              }
+            }});
           setSubmitRequest(false);
           setReRender();
         })
@@ -291,9 +309,11 @@ export const CreateDeckOverlay: React.FC = () => {
               />
             </label>
           )}
-          {((deckOverlay.purpose === 'study' &&
+          {((!deckOverlay.editing && ((deckOverlay.purpose === 'study' &&
             (deckOverlay.categoryInfo.id ? sourceLanguage : true)) ||
-            (deckOverlay.purpose === 'learn' && sourceLanguage)) && (
+            (deckOverlay.purpose === 'learn' && sourceLanguage)))
+          || (deckOverlay.editing && deckOverlay.language.sourceLanguage)  
+          ) && (
             <Checkbox
               description="Show translations on pictures"
               handler={handleTranslationDecision}
