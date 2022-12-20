@@ -19,13 +19,13 @@ sessionChecked: boolean;}> = ({ userInfo, sessionChecked }) => {
 
   return (
     <div className="profile-navbar">
-      <AppLogo />
-      {userInfo.username && 
+      <AppLogo username={userInfo.username} />
+      {userInfo.username &&
         <UserDropdown 
           username={userInfo.username}
           userPicture={userInfo.user_picture} />}
       {!userInfo.username && sessionChecked &&
-      location.pathname !== '/login' && <LoginButton />}
+      !['/login', '/signup', '/'].includes(location.pathname) && <LoginButton />}
     </div>
   );
 };

@@ -1,14 +1,15 @@
 import { useState, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { NavbarContext, NavbarContextTypes } from './layout_with_navbar';
+import { NavbarContext, NavbarContextTypes, currentUserDefault } from './layout_with_navbar';
 import { isProduction, serverUrl } from '../constants';
 
 export const UserDropdown: React.FC<UserDropdownPropTypes> = (props) => {
   const navigate = useNavigate();
   const inputElement = useRef<null | HTMLDivElement>(null);
 
-  const { 
+  const {
+    setCurrentUserInfo,
     setReRender,
     sessionChecked,
     setSessionChecked,
@@ -54,10 +55,12 @@ export const UserDropdown: React.FC<UserDropdownPropTypes> = (props) => {
       axios.post(`${isProduction ? serverUrl : ''}/logout`, {
         username: props.username
       }).then(() => {
+        navigate('/');
+        setCurrentUserInfo(currentUserDefault);
         setReRender();
-        navigate('/login');
       }).catch(() => {
-        navigate('/login');
+        navigate('/');
+        setReRender();
       });
     } else if (selected.title === 'Home') {
       navigate(`/user/${props.username}`);
@@ -78,7 +81,7 @@ export const UserDropdown: React.FC<UserDropdownPropTypes> = (props) => {
       </div>}
       {showDropdown && <div id="user-dropdown-container" style={{
         top: inputElement.current?.offsetTop! + inputElement.current?.clientHeight! - 1,
-        right: 0
+        right: 8
       }}>
         {userDropdown.options.map((item, index) => 
           <a className="user-dropdown-item"

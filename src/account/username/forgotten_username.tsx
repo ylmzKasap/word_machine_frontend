@@ -46,7 +46,7 @@ export const ForgottenUsername: React.FC<{handleExit: () => void}> = ({ handleEx
 
   const handleOverlayExitByFocus = (event: React.MouseEvent) => {
     const element = event.target as HTMLDivElement;
-    if (element.className === 'input-overlay') {
+    if (element.className.includes('input-overlay')) {
       handleExit();
     }
   };
@@ -81,7 +81,7 @@ export const ForgottenUsername: React.FC<{handleExit: () => void}> = ({ handleEx
   };
 
   return (
-    <section className="input-overlay" onClick={handleOverlayExitByFocus}>
+    <section className="input-overlay transparent" onClick={handleOverlayExitByFocus}>
       <div id="form-body" className="medium-form-body">
         <div className="overlay-nav">
           <header className="overlay-description">Forgotten username</header>

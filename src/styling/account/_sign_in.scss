@@ -8,7 +8,11 @@ form {
 #form-prompt {
   @include flexit();
   height: 100%;
-  background: radial-gradient(circle, rgb(255, 255, 255) 21%, rgb(236, 236, 236) 100%);
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  z-index: 1002;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 21%, rgba(236, 236, 236, 0.6) 100%);
 }
 
 #form-body {
@@ -18,7 +22,7 @@ form {
   height: max(600px, 60vh);
   width: max(400px, 30vw);
   min-width: (250px);
-  box-shadow: 0px 6px 10px 5px rgb(206, 206, 206);
+  box-shadow: 0px 6px 6px rgb(70, 67, 67);
   border-radius: 10px;
   overflow: hidden;
   &.medium-form-body {
@@ -66,9 +70,11 @@ hr.margin-top {
 
 #form-header {
   display: flex;
-  padding: 20px;
+  align-items: center;
   font-weight: 200;
+  min-height: 64px;
   font-size: 1.2rem;
+  padding-left: 24px;
   background-color: rgb(39, 39, 39);
   color: white;
 }
@@ -133,7 +139,7 @@ hr.margin-top {
   background-color: #ffffff;
   margin-left: auto;
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   margin-right: max(1vw, 10px);
   border: none;
   &:active {
@@ -189,4 +195,25 @@ hr.margin-top {
 
 .center-content {
   @include flexit();
+}
+
+.sign-in-exit {
+  cursor: pointer;
+  height: 100%;
+  min-width: 30px;
+  font-size: 1.1rem;
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+  .fa-xmark {
+    margin: 0 24px 0 24px;
+  }
+  &:hover {
+    .fa-xmark {
+      transform: scale(1.1);
+    }
+  }
+  &:active {
+    opacity: 0.9;
+  }
 }

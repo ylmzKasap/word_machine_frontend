@@ -7,6 +7,9 @@
   margin: 0px;
   inset: 0px;
   z-index: 1001;
+  &.transparent {
+    background-color: transparent;
+  }
 }
 
 .create-item-info {

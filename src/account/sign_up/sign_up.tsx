@@ -1,30 +1,32 @@
 import axios from 'axios';
-import { ChangeEvent, useReducer, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isProduction, serverUrl } from '../../constants';
+import { NavbarContext, NavbarContextTypes } from '../../navbar/layout_with_navbar';
 import SubmitForm from '../../profile_components/common/form_components/submit_form';
 import { TogglePasswordVisibility } from '../password/reset_password/toggle_password_visibility';
 import { validate_email } from '../validators/validate_email';
-import { validate_username } from '../validators/validate_username';
 import { checkEmailExists, checkUsernameExists } from './control_functions';
-import { handleSignUpForm } from './sign_up_reducer';
 
-export const SignUpForm: React.FC = () => {
+export const SignUpForm: React.FC<SignUpPropTypes> = (
+  {handleOverlayChange, signUpForm, setSignUpForm}) => {
   const navigate = useNavigate();
   const formErrorRef = useRef<null | HTMLDivElement>(null);
 
-  const [signUpForm, setSignUpForm] = useReducer(handleSignUpForm, signUpFormDefault);
   const [showPassword, setShowPassword] = useState(false);
+  const { setReRender, setSessionChecked } = useContext(NavbarContext) as NavbarContextTypes;
 
   useEffect(() => {
     axios.get(`${isProduction ? serverUrl : ''}/is_logged_in`)
       .then(res => {
         if (res.data.is_logged_in) {
+          setSessionChecked(false);
           if (res.data.username) {
             navigate(`/user/${res.data.username}`);
           }
         }
         setSignUpForm({type: 'setSessionCheck', value: 'true'});
+        setReRender();
       });
   }, [navigate]);
 
@@ -128,8 +130,10 @@ export const SignUpForm: React.FC = () => {
       password: signUpForm.password.value
     }).then(
       res => {
+        setSessionChecked(false);
         setSignUpForm({type: 'setSubmitting', value: 'false'});
         navigate(`/user/${res.data.username}`);
+        setReRender();
       }
     ).catch(
       err => {
@@ -151,7 +155,15 @@ export const SignUpForm: React.FC = () => {
   return (
     <section id="form-prompt">
       {signUpForm.sessionIsChecked && <div id="form-body">
-        <header id="form-header">Sign up</header>
+        <header id="form-header">
+          Sign up
+          <button 
+            type="button"
+            className="sign-in-exit"
+            onClick={() => handleOverlayChange('', '/')}>
+            <span className="fa-solid fa-xmark" />
+          </button>
+        </header>
         <form id="form-content" onSubmit={handleSubmit}>
           
           {/* Username */}
@@ -254,7 +266,10 @@ export const SignUpForm: React.FC = () => {
           {/* Switch login */}
           <hr className="margin-top" />
           <section className="form-help">
-            Already have an account? <a className="switch-form-button" href="/login">Log in</a>
+            Already have an account? <span 
+              className="switch-form-button"
+              onClick={() => handleOverlayChange('login', '/login')}
+            >Log in</span>
           </section>
         </form>
       </div>}
@@ -262,7 +277,7 @@ export const SignUpForm: React.FC = () => {
   );
 };
 
-const signUpFormDefault = {
+export const signUpFormDefault = {
   username: {
     value: '',
     existsInDatabase: null,
@@ -306,3 +321,12 @@ export interface SignUpFormTypes {
   formError: string,
   submitting: boolean
 }
+
+export interface SignUpPropTypes {
+  handleOverlayChange: (overlayName: string, route: string) => void;
+  signUpForm: SignUpFormTypes;
+  setSignUpForm: React.Dispatch<{ 
+    type: string;
+    value: string;
+    innerType?: string }>
+};

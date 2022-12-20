@@ -1,27 +1,31 @@
 import axios from 'axios';
-import { ChangeEvent, useReducer, useEffect } from 'react';
+import { ChangeEvent, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { serverUrl, isProduction } from '../../constants';
+import { NavbarContext, NavbarContextTypes } from '../../navbar/layout_with_navbar';
 import SubmitForm from '../../profile_components/common/form_components/submit_form';
 import { ForgottenPassword } from '../password/forgotten_password/forgotten_password';
 import { ForgottenUsername } from '../username/forgotten_username';
-import { loginReducer } from './login_reducer';
 
-export const LoginForm: React.FC = () => {
+export const LoginForm: React.FC<LoginPropTypes> = (
+  {handleOverlayChange, loginForm, setLoginForm}
+) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [loginForm, setLoginForm] = useReducer(loginReducer, loginDefaults);
+  const { setReRender, setSessionChecked } = useContext(NavbarContext) as NavbarContextTypes;
   
   useEffect(() => {
     axios.get(`${isProduction ? serverUrl : ''}/is_logged_in`)
       .then(res => {
         if (res.data.is_logged_in) {
+          setSessionChecked(false);
           if (res.data.username) {
             navigate(`/user/${res.data.username}`);
           }
         }
         setLoginForm({type: 'sessionChecked', value: 'true'});
+        setReRender();
       });
   }, []);
 
@@ -44,12 +48,14 @@ export const LoginForm: React.FC = () => {
       username: loginForm.username,
       password: loginForm.password
     }).then(res => {
+      setSessionChecked(false);
       setLoginForm({type: 'submitting', value: 'false'});
       if (location.state) {
         navigate(location.state.next);
       } else {
         navigate(`/user/${res.data.username}`);
       }
+      setReRender();
     }).catch(err => {
       if (err.response.status === 401) {
         setLoginForm({type: 'formError', value: 'Incorrect username or password'});
@@ -62,7 +68,15 @@ export const LoginForm: React.FC = () => {
   return (
     <section id="form-prompt">
       {loginForm.sessionChecked && <div id="form-body" className="medium-form-body">
-        <header id="form-header">Log in</header>
+        <header id="form-header">
+          Log in
+          <button
+            type="button"
+            className="sign-in-exit"
+            onClick={() => handleOverlayChange('', '/')}>
+            <span className="fa-solid fa-xmark" />
+          </button>
+        </header>
         <form id="form-content" onSubmit={handleSubmit}>
           <section className="form-section">
             <label className="form-label" htmlFor="username">Username</label>
@@ -108,7 +122,10 @@ export const LoginForm: React.FC = () => {
           </section>
           <hr />
           <section className="form-help">Don't have an account?
-            <a href="/signup" className="switch-form-button"> Sign up</a>
+            <span 
+              className="switch-form-button"
+              onClick={() => handleOverlayChange('signup', '/signup')}
+            > Sign up</span>
           </section>
         </form>
       </div>}
@@ -140,4 +157,13 @@ export const loginDefaults = {
   sessionChecked: false,
   showForgottenPassword: false,
   showForgottenUsername: false
+};
+
+export interface LoginPropTypes {
+  handleOverlayChange: (overlayName: string, route: string) => void;
+  loginForm: LoginTypes;
+  setLoginForm: React.Dispatch<{ 
+    type: string;
+    value: string;
+    innerType?: string }>
 };

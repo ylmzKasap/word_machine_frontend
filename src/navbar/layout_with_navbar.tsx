@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createContext, useEffect, useReducer, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { isProduction, serverUrl } from '../constants';
 import { NavBar } from './navbar';
 
@@ -11,6 +11,7 @@ export function LayoutsWithNavbar() {
   const [reRender, setReRender] = useReducer(x => x + 1, 0);
   const [sessionChecked, setSessionChecked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     axios.get(`${isProduction ? serverUrl : ''}/logged_in_user`)
@@ -36,15 +37,19 @@ export function LayoutsWithNavbar() {
   return (
     <NavbarContext.Provider
       value={{
-        currentUserInfo: currentUserInfo,
-        sessionChecked: sessionChecked,
-        setSessionChecked: setSessionChecked,
-        setReRender: setReRender,
-        showDropdown: showDropdown,
-        setShowDropdown: setShowDropdown
+        currentUserInfo,
+        setCurrentUserInfo,
+        sessionChecked,
+        setSessionChecked,
+        setReRender,
+        showDropdown,
+        setShowDropdown
       }}
     >
-      <div id="app-wrapper" onClick={handleClick}>
+      <div
+        id="app-wrapper"
+        className={location.pathname === '/' ? 'homepage' : undefined}
+        onClick={handleClick}>
         <NavBar 
           userInfo={currentUserInfo}
           sessionChecked={sessionChecked} />
@@ -54,7 +59,7 @@ export function LayoutsWithNavbar() {
   );
 }
 
-const currentUserDefault = {
+export const currentUserDefault = {
   username : '',
   email: '',
   user_picture: '',
@@ -72,6 +77,7 @@ export interface CurrentUserTypes {
 
 export interface NavbarContextTypes {
   currentUserInfo: CurrentUserTypes;
+  setCurrentUserInfo: React.Dispatch<React.SetStateAction<CurrentUserTypes>>;
   sessionChecked: boolean;
   setSessionChecked: React.Dispatch<React.SetStateAction<boolean>>;
   setReRender: React.DispatchWithoutAction;

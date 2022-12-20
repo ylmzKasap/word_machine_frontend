@@ -3,13 +3,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Coda&display=swap");
 html,
 body,
-#main-app,
+#app,
 #app-wrapper {
   height: 100%;
   width: 100%;
   margin: 0;
   font-size: 16px;
   font-family: "Roboto", sans-serif;
+}
+html.homepage,
+body.homepage,
+#app.homepage,
+#app-wrapper.homepage {
+  overflow-y: auto;
 }
 
 body {
@@ -27,6 +33,9 @@ body {
   margin: 0px;
   inset: 0px;
   z-index: 1001;
+}
+.input-overlay.transparent {
+  background-color: transparent;
 }
 
 .create-item-info {
@@ -370,7 +379,7 @@ input[type=radio] {
   background-color: #3f3c3c;
   justify-content: space-between;
   width: 100%;
-  height: max(5.5vh, 50px);
+  height: min(7.6vh, 80px);
   min-height: 40px;
   max-height: 15vh;
   position: sticky;
@@ -451,7 +460,7 @@ input[type=radio] {
 }
 
 .main-page {
-  height: calc(100% - max(5.5vh, 50px));
+  height: calc(100% - min(7.6vh, 80px));
 }
 
 .text-intro-box {
@@ -666,7 +675,7 @@ input[type=radio] {
 }
 
 #question-intro {
-  height: calc(100% - max(5.5vh, 50px));
+  height: calc(100% - min(7.6vh, 80px));
   width: 100%;
 }
 
@@ -1076,7 +1085,7 @@ input[type=radio] {
 }
 
 .folder {
-  background-color: #f6f6f6;
+  background-color: white;
   box-shadow: #dfdfdf 0px 0px 5px 1px;
 }
 .folder:focus {
@@ -1240,7 +1249,7 @@ input[type=radio] {
 }
 
 .profile-content {
-  height: calc(100% - max(5.5vh, 50px));
+  height: calc(100% - min(7.6vh, 80px));
   display: flex;
   flex-direction: row;
 }
@@ -1253,7 +1262,7 @@ input[type=radio] {
   display: flex;
   position: absolute;
   flex-direction: column;
-  height: max(450px, 100% - max(5.5vh, 50px));
+  height: max(450px, 100% - min(7.6vh, 80px));
   width: calc(max(2vw, 16px) * 2 + 75px);
   background: linear-gradient(-180deg, #3f3c3c, #5e5e5e);
   z-index: 101;
@@ -1418,7 +1427,7 @@ input[type=radio] {
 .card-container {
   position: relative;
   display: grid;
-  background-color: #ededed;
+  background: linear-gradient(-180deg, #fffffe, #e8e8dd);
   grid-template-columns: repeat(auto-fill, 180px);
   grid-template-rows: repeat(auto-fill, 140px);
   row-gap: 30px;
@@ -1427,7 +1436,7 @@ input[type=radio] {
   justify-content: space-evenly;
   justify-items: center;
   height: auto;
-  min-height: max(450px, 100% - max(5.5vh, 50px));
+  min-height: max(450px, 100% - min(7.6vh, 80px));
   width: 100%;
   margin-left: calc(max(2vw, 16px) * 2 + 75px);
   overflow-y: auto;
@@ -2228,7 +2237,11 @@ form > button {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background: radial-gradient(circle, white 21%, #ececec 100%);
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  z-index: 1002;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 21%, rgba(236, 236, 236, 0.6) 100%);
 }
 
 #form-body {
@@ -2238,7 +2251,7 @@ form > button {
   height: max(600px, 60vh);
   width: max(400px, 30vw);
   min-width: 250px;
-  box-shadow: 0px 6px 10px 5px #cecece;
+  box-shadow: 0px 6px 6px #464343;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -2252,7 +2265,7 @@ form > button {
   box-shadow: 0px 7px 12px 2px #9c9a9a;
 }
 #form-body.navbar-margin {
-  margin-bottom: max(5.5vh, 50px);
+  margin-bottom: min(7.6vh, 80px);
 }
 #form-body * .overlay-description {
   padding: 25px 10px 25px 20px;
@@ -2284,9 +2297,11 @@ hr.margin-top {
 
 #form-header {
   display: flex;
-  padding: 20px;
+  align-items: center;
   font-weight: 200;
+  min-height: 64px;
   font-size: 1.2rem;
+  padding-left: 24px;
   background-color: #272727;
   color: white;
 }
@@ -2351,7 +2366,7 @@ hr.margin-top {
   background-color: #ffffff;
   margin-left: auto;
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   margin-right: max(1vw, 10px);
   border: none;
 }
@@ -2411,6 +2426,25 @@ hr.margin-top {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.sign-in-exit {
+  cursor: pointer;
+  height: 100%;
+  min-width: 30px;
+  font-size: 1.1rem;
+  margin-left: auto;
+  background-color: transparent;
+  border: none;
+}
+.sign-in-exit .fa-xmark {
+  margin: 0 24px 0 24px;
+}
+.sign-in-exit:hover .fa-xmark {
+  transform: scale(1.1);
+}
+.sign-in-exit:active {
+  opacity: 0.9;
 }
 
 .lds-ring {
@@ -2617,7 +2651,7 @@ hr.margin-top {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: calc(100% - max(5.5vh, 50px));
+  height: calc(100% - min(7.6vh, 80px));
   overflow: auto;
 }
 
@@ -2750,6 +2784,66 @@ input.space-bottom {
 .resend-email {
   width: 150px;
   min-height: 40px !important;
+}
+
+#homepage {
+  height: calc(100% - min(7.6vh, 80px));
+}
+
+.homepage-section {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+.homepage-section.greeting {
+  background: linear-gradient(-180deg, #78330e, #bf5d20);
+}
+
+#homepage-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 25% 75%;
+}
+
+#homepage-greeting {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: max(160px, 20vh);
+  left: min(34px, 5vw);
+  color: white;
+  width: max(300px, 30vw);
+}
+
+#homepage-header {
+  font-size: calc(1.5rem + 0.7vw);
+  text-align: center;
+  letter-spacing: 0.07rem;
+}
+
+#homepage-sign-up-button {
+  cursor: pointer;
+  color: white;
+  background-color: #16b56b;
+  border: none;
+  width: 60%;
+  padding: 10px;
+  margin-top: 12px;
+  font-size: calc(1.1rem + 0.4vw);
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.06rem;
+  border-radius: 4px;
+  box-shadow: -3px 5px 9px #464242;
+}
+#homepage-sign-up-button:hover {
+  background-color: #18aa66;
+}
+#homepage-sign-up-button:active {
+  opacity: 0.9;
 }
 
 /* @media (max-height: 600px) {

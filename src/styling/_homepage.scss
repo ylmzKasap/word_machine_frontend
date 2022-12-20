@@ -1,0 +1,57 @@
+#homepage {
+  height: calc(100% - $navbar-height);
+}
+
+.homepage-section {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  &.greeting {
+    background: linear-gradient(-180deg,rgb(120, 51, 14), rgb(191, 93, 32));
+  }
+}
+
+#homepage-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 25% 75%;
+}
+
+#homepage-greeting {
+  @include flexit();
+  flex-direction: column;
+  position: absolute;
+  top: max(160px, 20vh);
+  left: min(34px, 5vw);
+  color: white;
+  width: max(300px, 30vw);
+}
+
+#homepage-header {
+  font-size: calc(1.5rem + 0.7vw);
+  text-align: center;
+  letter-spacing: 0.07rem;
+}
+
+#homepage-sign-up-button {
+  cursor: pointer;
+  color: white;
+  background-color: rgb(22, 181, 107);
+  border: none;
+  width: 60%;
+  padding: 10px;
+  margin-top: 12px;
+  font-size: calc(1.1rem + 0.4vw);
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.06rem;
+  border-radius: 4px;
+  box-shadow: -3px 5px 9px rgb(70, 66, 66);
+  &:hover {
+    background-color: rgb(24, 170, 102);
+  }
+  &:active {
+    opacity: 0.9;
+  }
+}
