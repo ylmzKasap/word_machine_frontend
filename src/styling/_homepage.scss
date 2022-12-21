@@ -1,14 +1,13 @@
 #homepage {
   height: calc(100% - $navbar-height);
+  background: linear-gradient(-180deg,rgb(243, 154, 107), rgb(72, 31, 5))
+
 }
 
 .homepage-section {
   position: relative;
   height: 100%;
   overflow: hidden;
-  &.greeting {
-    background: linear-gradient(-180deg,rgb(120, 51, 14), rgb(191, 93, 32));
-  }
 }
 
 #homepage-cover {
@@ -55,3 +54,52 @@
     opacity: 0.9;
   }
 }
+
+@media (max-width: 1368px) {
+  #homepage-cover {
+    object-position: right;
+    object-fit: cover;
+  }
+
+  .homepage-section.greeting {
+    height: 70vw;
+  }
+
+  #homepage-greeting {
+    top: min(25px, 2vw);
+    left: auto;
+    width: 100%;
+    flex-direction: row;
+    > #homepage-sign-up-button {
+      flex-basis: 20%;
+      margin-top: 0;
+    }
+    > #homepage-header {
+      display: flex;
+      justify-content: center;
+      margin-right: min(40px, 5vw);
+      margin-left: min(100px, 5vw);
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  #homepage-header {
+    font-size: calc(1rem + 0.7vw);
+  }
+
+  #homepage-sign-up-button {
+    font-size: calc(0.6rem + 0.4vw);
+  }
+}
+
+@media (max-width: 440px) {
+  #homepage-header {
+    font-size: calc(0.7rem + 0.5vw);
+  }
+
+  #homepage-sign-up-button {
+    font-size: calc(0.4rem + 0.4vw);
+  }
+}
+

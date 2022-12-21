@@ -379,7 +379,7 @@ input[type=radio] {
   background-color: #3f3c3c;
   justify-content: space-between;
   width: 100%;
-  height: min(7.6vh, 80px);
+  height: max(2.5vw + 3vh, 50px);
   min-height: 40px;
   max-height: 15vh;
   position: sticky;
@@ -460,7 +460,7 @@ input[type=radio] {
 }
 
 .main-page {
-  height: calc(100% - min(7.6vh, 80px));
+  height: calc(100% - max(2.5vw + 3vh, 50px));
 }
 
 .text-intro-box {
@@ -675,7 +675,7 @@ input[type=radio] {
 }
 
 #question-intro {
-  height: calc(100% - min(7.6vh, 80px));
+  height: calc(100% - max(2.5vw + 3vh, 50px));
   width: 100%;
 }
 
@@ -1249,7 +1249,7 @@ input[type=radio] {
 }
 
 .profile-content {
-  height: calc(100% - min(7.6vh, 80px));
+  height: calc(100% - max(2.5vw + 3vh, 50px));
   display: flex;
   flex-direction: row;
 }
@@ -1262,7 +1262,7 @@ input[type=radio] {
   display: flex;
   position: absolute;
   flex-direction: column;
-  height: max(450px, 100% - min(7.6vh, 80px));
+  height: max(450px, 100% - max(2.5vw + 3vh, 50px));
   width: calc(max(2vw, 16px) * 2 + 75px);
   background: linear-gradient(-180deg, #3f3c3c, #5e5e5e);
   z-index: 101;
@@ -1436,7 +1436,7 @@ input[type=radio] {
   justify-content: space-evenly;
   justify-items: center;
   height: auto;
-  min-height: max(450px, 100% - min(7.6vh, 80px));
+  min-height: max(450px, 100% - max(2.5vw + 3vh, 50px));
   width: 100%;
   margin-left: calc(max(2vw, 16px) * 2 + 75px);
   overflow-y: auto;
@@ -2248,7 +2248,7 @@ form > button {
   display: flex;
   background-color: white;
   flex-direction: column;
-  height: max(600px, 60vh);
+  height: max(600px, 50vh);
   width: max(400px, 30vw);
   min-width: 250px;
   box-shadow: 0px 6px 6px #464343;
@@ -2265,7 +2265,7 @@ form > button {
   box-shadow: 0px 7px 12px 2px #9c9a9a;
 }
 #form-body.navbar-margin {
-  margin-bottom: min(7.6vh, 80px);
+  margin-bottom: max(2.5vw + 3vh, 50px);
 }
 #form-body * .overlay-description {
   padding: 25px 10px 25px 20px;
@@ -2651,7 +2651,7 @@ hr.margin-top {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: calc(100% - min(7.6vh, 80px));
+  height: calc(100% - max(2.5vw + 3vh, 50px));
   overflow: auto;
 }
 
@@ -2787,16 +2787,14 @@ input.space-bottom {
 }
 
 #homepage {
-  height: calc(100% - min(7.6vh, 80px));
+  height: calc(100% - max(2.5vw + 3vh, 50px));
+  background: linear-gradient(-180deg, #f39a6b, #481f05);
 }
 
 .homepage-section {
   position: relative;
   height: 100%;
   overflow: hidden;
-}
-.homepage-section.greeting {
-  background: linear-gradient(-180deg, #78330e, #bf5d20);
 }
 
 #homepage-cover {
@@ -2846,6 +2844,51 @@ input.space-bottom {
   opacity: 0.9;
 }
 
+@media (max-width: 1368px) {
+  #homepage-cover {
+    object-position: right;
+    object-fit: cover;
+  }
+
+  .homepage-section.greeting {
+    height: 70vw;
+  }
+
+  #homepage-greeting {
+    top: min(25px, 2vw);
+    left: auto;
+    width: 100%;
+    flex-direction: row;
+  }
+  #homepage-greeting > #homepage-sign-up-button {
+    flex-basis: 20%;
+    margin-top: 0;
+  }
+  #homepage-greeting > #homepage-header {
+    display: flex;
+    justify-content: center;
+    margin-right: min(40px, 5vw);
+    margin-left: min(100px, 5vw);
+  }
+}
+@media (max-width: 700px) {
+  #homepage-header {
+    font-size: calc(1rem + 0.7vw);
+  }
+
+  #homepage-sign-up-button {
+    font-size: calc(0.6rem + 0.4vw);
+  }
+}
+@media (max-width: 440px) {
+  #homepage-header {
+    font-size: calc(0.7rem + 0.5vw);
+  }
+
+  #homepage-sign-up-button {
+    font-size: calc(0.4rem + 0.4vw);
+  }
+}
 /* @media (max-height: 600px) {
 } */
 /* @media (max-height: 500px) {
