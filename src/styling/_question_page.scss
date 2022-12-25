@@ -23,6 +23,9 @@
   background-color: #ffffff;
   justify-content: space-evenly;
   flex-direction: row;
+  &.revise {
+    flex-direction: column;
+  }
 }
 
 .intro-text {
@@ -92,6 +95,11 @@
   font-size: calc(0.5rem + 1vh);
   color: gray;
   opacity: 0.7;
+  text-align: center;
+  &:only-child {
+    font-size: calc(0.7rem + 1vh);
+    margin-top: 50px;
+  }
 }
 
 .continue-icon {
@@ -109,6 +117,11 @@
   width: max(50vw, 200px);
   >.word-translation {
     height: max(6vh, 30px);
+  }
+  &.revise {
+    height: max(55vh, 200px);
+    width: max(40vw, 200px);
+    margin-top: max(2vh, 20px);
   }
 }
 
@@ -182,6 +195,10 @@
   margin-top: max(4vh, 30px);
   border-color: gray;
   height: max(12vh, 60px);
+}
+
+.revise-text {
+  @extend .intro-text;
 }
 
 .image-options {
@@ -279,6 +296,11 @@
 
 .emphasize {
   animation-name: emphasis;
+  animation-duration: 0.7s;
+}
+
+.text-pop-up {
+  animation-name: slideTextIn;
   animation-duration: 0.7s;
 }
 
@@ -446,4 +468,52 @@
   padding: 20px;
   text-align: center;
   background-color: rgb(240, 240, 240);
+}
+
+#revise-text-container {
+  display: flex;
+  align-items: center;
+}
+
+.thumbs-container {
+  position: relative;
+  cursor: pointer;
+  padding: 10px;
+  font-size: calc(3rem + 2vw);
+  border-radius: 20px;
+  &:active {
+    opacity: 0.8;
+    transform: scale(0.95);
+  }
+  animation-name: slideUp;
+  animation-duration: 1s;
+  
+}
+
+#thumbs-up {
+  margin-right: max(1vw, 10px);
+  color: rgb(103, 223, 121);
+  &.selected {
+    cursor: default;
+    color: white;
+    background-color: rgb(12, 119, 41);
+  }
+  &.unselected {
+    cursor: default;
+    opacity: 0.4 !important;
+  }
+}
+
+#thumbs-down {
+  margin-left: max(1vw, 10px);
+  color: rgb(219, 219, 23);
+  &.selected {
+    cursor: default;
+    color: white;
+    background-color: rgb(205, 19, 19);
+  }
+  &.unselected {
+    cursor: default;
+    opacity: 0.4 !important;
+  }
 }

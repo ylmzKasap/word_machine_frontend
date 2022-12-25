@@ -25,7 +25,7 @@ sessionChecked: boolean;}> = ({ userInfo, sessionChecked }) => {
           username={userInfo.username}
           userPicture={userInfo.user_picture} />}
       {!userInfo.username && sessionChecked &&
-      !['/login', '/signup', '/'].includes(location.pathname) && <LoginButton />}
+      !['/login', '/signup'].includes(location.pathname) && <LoginButton />}
     </div>
   );
 };

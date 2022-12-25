@@ -25,17 +25,8 @@ export const AskFromPicture: React.FC<types.QuestionComponentPropTypes> = ({
   const [layout] = useState(Math.random());
   const [shuffledOptions] = useState(() => shuffle(options));
 
-  const { questionPage, setQuestionPage } =
+  const { questionPage } =
     useContext(QuestionContext) as types.QuestionContextTypes;
-
-  const useMountEffect = () =>
-    useEffect(() => {
-      if (questionPage.correctFound) {
-        setQuestionPage({type: 'correctFound', value: 'false'});
-      }
-    }, []);
-
-  useMountEffect();
 
   function animateImage() {
     setImageAnimtion('emphasize');
@@ -78,12 +69,13 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
     optionStyleDefaults
   );
 
-  const { goForward, handleIncorrect, questionPage, setQuestionPage } =
+  const { goForward, questionPage, setQuestionPage } =
     useContext(QuestionContext) as types.QuestionContextTypes;
+
+  const [answered, setAnswered] = useState(false);
 
   // Handle timeouts for the correct answer
   useEffect(() => {
-    if (!questionPage.correctFound) return;
     if (!props.isCorrect) return;
     if (optionStyle.animation === '') return;
 
@@ -99,7 +91,7 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       window.clearTimeout(soundTimeout);
       window.clearTimeout(forwardTimeout);      
     };
-  }, [questionPage.correctFound]);
+  }, [answered]);
 
   function handleClick() {
     // The answer is previously clicked
@@ -111,11 +103,11 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       // Correct answer
       audioMixer.src = questionPage.deckInfo.correct_sound;
 
-      setQuestionPage({type: 'correctFound', value: 'true'});
+      setAnswered(true);
       setOptionStyle({ type: 'text', answer: 'correct' });
+      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
       
       if (currentPage.answered || username !== logged_in_user) return;
-      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
         word_id: props.word_id,
         deck_id: props.deck_id,
@@ -126,10 +118,9 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       audioMixer.src = questionPage.deckInfo.incorrect_sound;
 
       setOptionStyle({ type: 'text', answer: 'incorrect' });
-      handleIncorrect();
+      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
 
       if (currentPage.answered || username !== logged_in_user) return;
-      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
         word_id: currentPage.word.word_id,
         deck_id: currentPage.word.deck_id,

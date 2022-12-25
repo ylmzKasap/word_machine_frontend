@@ -28,6 +28,9 @@ export interface PageContent {
   order: number;
   answered: boolean;
   answeredCorrectly: null | boolean;
+  showText?: boolean;
+  showThumbs?: boolean;
+  clickedThumbs?: string;
 }
 export type PageTypes = PageContent[];
 
@@ -39,11 +42,12 @@ export interface QuestionComponentPropTypes {
 
 export interface QuestionContextTypes {
   goForward: () => void;
-  handleIncorrect: () => void;
   questionPage: QuestionPageTypes;
   setQuestionPage: React.Dispatch<{
     type: string;
-    value?: string | DeckResponseTypes | RequestMessageTypes | boolean;}>;
+    value?: string | number | DeckResponseTypes | RequestMessageTypes | boolean;
+    index?: number;
+  }>;
   reRender: number;
 }
 

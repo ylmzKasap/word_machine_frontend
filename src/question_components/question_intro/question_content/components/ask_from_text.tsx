@@ -24,15 +24,6 @@ export const AskFromText: React.FC<types.QuestionComponentPropTypes> = ({
   const { questionPage, setQuestionPage } =
     useContext(QuestionContext) as types.QuestionContextTypes;
 
-  const useMountEffect = () =>
-    useEffect(() => {
-      if (questionPage.correctFound) {
-        setQuestionPage({type: 'correctFound', value: 'false'});
-      }
-    }, []);
-
-  useMountEffect();
-
   function animateText() {
     setTextAnimation('emphasize');
   }
@@ -46,6 +37,7 @@ export const AskFromText: React.FC<types.QuestionComponentPropTypes> = ({
         type="ask-from"
         animation={textAnimation}
         answeredCorrectly={questionPage.pages[questionPage.pageNumber].answeredCorrectly}
+        showText={true}
       />
       <div className="image-options">
         {shuffledOptions.map((opt, index) => (
@@ -70,12 +62,13 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
     defaults.optionStyleDefaults
   );
 
-  const { goForward, handleIncorrect, questionPage, setQuestionPage } =
+  const [answered, setAnswered] = useState(false);
+
+  const { goForward, questionPage, setQuestionPage } =
     useContext(QuestionContext) as types.QuestionContextTypes;
 
   // Handle timeouts for the correct answer
   useEffect(() => {
-    if (!questionPage.correctFound) return;
     if (!props.isCorrect) return;
     if (optionStyle.animation === '') return;
 
@@ -91,7 +84,7 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       window.clearTimeout(soundTimeout);
       window.clearTimeout(forwardTimeout);      
     };
-  }, [questionPage.correctFound]);
+  }, [answered]);
 
   function handleClick() {
     // The answer is previously clicked
@@ -103,11 +96,11 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       // Correct answer
       audioMixer.src = questionPage.deckInfo.correct_sound;
 
-      setQuestionPage({type: 'correctFound', value: 'true'});
+      setAnswered(true);
       setOptionStyle({ type: 'image', answer: 'correct' });
+      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
 
       if (currentPage.answered || username !== logged_in_user) return;
-      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
         word_id: props.word_id,
         deck_id: props.deck_id,
@@ -118,10 +111,9 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       audioMixer.src = questionPage.deckInfo.incorrect_sound;
 
       setOptionStyle({ type: 'image', answer: 'incorrect' });
-      handleIncorrect();
+      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
 
       if (currentPage.answered || username !== logged_in_user) return;
-      setQuestionPage({type: 'questionAnswered', value: props.isCorrect});
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
         word_id: currentPage.word.word_id,
         deck_id: currentPage.word.deck_id,

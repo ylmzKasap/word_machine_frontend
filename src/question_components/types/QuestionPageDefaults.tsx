@@ -9,7 +9,7 @@ export const pageDefault = [
     order: 0,
     answered: false,
     answeredCorrectly: null
-  },
+  }
 ];
 
 export const optionStyleDefaults = {

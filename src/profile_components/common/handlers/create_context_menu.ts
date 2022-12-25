@@ -47,7 +47,7 @@ export function create_context_menu(
       contextMenuInfo.ops = userAtHome ? ['cut', 'paste', 'edit', 'delete'] : [];
     } else if (closestItem.className === 'deck') {
       contextMenuInfo.ops = userAtHome 
-        ? ['copy', 'cut', 'edit', 'set words', 'delete']
+        ? ['copy', 'cut', 'edit', 'change words', 'delete']
         : ['clone'];
     } else {
       // Folder or thematic-folder

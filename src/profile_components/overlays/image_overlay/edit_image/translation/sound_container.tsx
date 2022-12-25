@@ -58,7 +58,12 @@ export const SoundContainer: React.FC<{
             index: order,
             extraValue: selectedSound
           });
-          audioMixer.src = sound_urls[selectedSound].sound_path;
+
+          if (sound_urls[selectedSound]) {
+            audioMixer.src = sound_urls[selectedSound].sound_path;
+          } else {
+            setRequestError({exists: true, description: 'Sound fetch failed'});
+          } 
         } else {
           if (res.data.errDesc) {
             setRequestError({exists: true, description: res.data.errDesc});
@@ -67,10 +72,10 @@ export const SoundContainer: React.FC<{
         setRequestExists(false);
       })
       .catch((err) => {
+        setRequestExists(false);
         if (err.response.status === 401) {
           setRequestError({exists: true, description: 'Please log in to continue'});
         }
-        setRequestExists(false);
       });
   }
 

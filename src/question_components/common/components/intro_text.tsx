@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { WordTypes } from '../../../profile_components/types/profilePageTypes';
 import { audioMixer } from '../../question_intro/question_content/question_content';
 import { WordInfoTypes } from '../../types/QuestionPageTypes';
@@ -8,31 +8,33 @@ export const IntroText: React.FC<IntroTextTypes> = (props) => {
   // Shared by IntroduceWord and AskFromText.
 
   const [isAnimated, setIsAnimated] = useState(false);
+  const [reviseAnimation, setReviseAnimation] = useState(false);
   const [isMobile] = useState(is_mobile);
-  const [timeouts, handleTimeouts] = useState(introTextTimeoutDefaults);
 
-  const useMountEffect = () =>
-    useEffect(() => {
-      handleTimeouts({
-        'intro-sound': window.setTimeout(() => playSound(), 200),
-      });
-      setIsAnimated(true);
-    }, []);
-
-  useMountEffect();
-
-  useEffect(() => {
-    return () => {
-      for (let key in timeouts) {
-        window.clearTimeout(
-          timeouts[key as keyof typeof introTextTimeoutDefaults]
-        );
+  useLayoutEffect(() => {
+    let soundDelay = 200;
+    let animationLength = 700;
+    if (props.showText) {
+      if (props.type === 'revise') {
+        setReviseAnimation(true);
+        var slideInTimeout = window.setTimeout(() => setReviseAnimation(false), animationLength);
+        soundDelay += animationLength;
       }
+      var introSoundTimeout = window.setTimeout(() => {
+        playSound();
+        setIsAnimated(true);
+      }, soundDelay);
+    }
+    return () => {
+      window.clearTimeout(introSoundTimeout);
+      window.clearTimeout(slideInTimeout);
     };
-  }, [timeouts]);
+  }, [props.showText]);
 
   function toggleAnimation() {
-    setIsAnimated((animated) => !animated);
+    if (!reviseAnimation) {
+      setIsAnimated((animated) => !animated);
+    }
   }
 
   function playSound() {
@@ -40,13 +42,17 @@ export const IntroText: React.FC<IntroTextTypes> = (props) => {
     play_audio(audioMixer, 'Playback prevented by browser.');
   }
 
-  const pageMessage = isMobile ? 'Tap' : 'Click';
+  const pageMessage = isMobile ? 'tap' : 'click';
   const pageIcon = isMobile ? 'fas fa-fingerprint' : 'fa fa-mouse-pointer';
 
   return (
-    <label className={`text-intro-box ${props.animation}`}>
+    <label className={'text-intro-box'
+      + `${props.animation ? ` ${props.animation}` : ''}`
+      + `${reviseAnimation ? ' text-pop-up' : ''}`}>
+      {props.showText &&
       <p
-        className={`${props.type}-text ${isAnimated ? 'emphasize' : ''}`}
+        className={`${props.type}-text` 
+        + `${isAnimated ? ' emphasize' : ''}`}
         onClick={() => {
           toggleAnimation();
           playSound();
@@ -65,23 +71,22 @@ export const IntroText: React.FC<IntroTextTypes> = (props) => {
           </span> : ''
         }
       </p>
-      {props.type === 'intro' && (
+      }
+      {(props.type === 'intro' || (props.type === 'revise' && !props.showText)) && (
         <div className="continue">
-          <i className={`continue-icon ${pageIcon}`}></i> {pageMessage} anywhere
+          <i className={`continue-icon ${pageIcon}`} />
+          {props.type === 'revise' ? `Guess and ${pageMessage}` : `${pageMessage} anywhere`}
         </div>
       )}
     </label>
   );
 };
 
-const introTextTimeoutDefaults = {
-  'intro-sound': 0,
-};
-
 export interface IntroTextTypes {
   wordInfo: WordInfoTypes;
   word: WordTypes;
   type: string;
+  showText: boolean;
   animation: string;
   answeredCorrectly?: null | boolean;
 }

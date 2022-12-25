@@ -1,22 +1,23 @@
 import { RequestMessageTypes } from '../../profile_components/types/profilePageTypes';
 import { cache_question_audio, cache_question_image, generate_pages } from '../common/handlers';
 import { randint } from '../common/utils';
-import { DeckResponseTypes } from '../types/QuestionPageTypes';
+import { DeckResponseTypes, PageContent } from '../types/QuestionPageTypes';
+import { ReviseWord } from './question_content/components/revise_word';
 import { QuestionPageTypes } from './question_intro';
 
 export const handleQuestionPage = (
   state: QuestionPageTypes,
   action: {
     type: string,
-    value?: string | boolean | DeckResponseTypes | RequestMessageTypes
+    value?: string | boolean | number | DeckResponseTypes | RequestMessageTypes,
+    index?: number
   }
 ): QuestionPageTypes => {
   switch (action.type) {
     case 'view':
       return {
         ...state,
-        view: action.value as string,
-        correctFound: false
+        view: action.value as string
       };
 
     case 'setDeckData':
@@ -48,7 +49,7 @@ export const handleQuestionPage = (
           correct_sound: response.correct_sound,
           incorrect_sound: response.incorrect_sound
         },
-        pages: questionPages
+        pages: questionPages // Set back to questionPages
       };
 
     case 'startQuestion':
@@ -57,8 +58,7 @@ export const handleQuestionPage = (
         view: 'question',
         pageNumber: 0,
         progress: 0,
-        pages: generate_pages(state.wordInfo),
-        correctFound: false
+        pages: generate_pages(state.wordInfo)
       };
 
     case 'goBack':
@@ -66,7 +66,7 @@ export const handleQuestionPage = (
         ...state,
         pageNumber: state.pageNumber - 1,
         childAnimation: state.childAnimation === 'load-page' ? 'load-page-2' : 'load-page',
-        progress: ((state.pageNumber - 1) * 110) / state.pages.length + 5
+        progress: ((state.pageNumber - 1) * 100) / (state.pages.length - 1)
       };
 
     case 'goForward':
@@ -74,7 +74,7 @@ export const handleQuestionPage = (
         ...state,
         pageNumber: state.pageNumber + 1,
         childAnimation: state.childAnimation === 'load-page' ? 'load-page-2' : 'load-page',
-        progress: ((state.pageNumber + 1) * 110) / state.pages.length + 5
+        progress: ((state.pageNumber + 1) * 100) / (state.pages.length - 1)
       };
 
     case 'showLoading':
@@ -86,45 +86,10 @@ export const handleQuestionPage = (
         }
       };
 
-    case 'insertRevision':
-      let restOfPages = state.pages.slice(state.pageNumber + 1);
-      let currentPage = state.pages[state.pageNumber];
-
-      for (let i = 0; i < restOfPages.length; i++) {
-        if (restOfPages[i].word.translation_id === currentPage.word.translation_id) {
-          return state;
-        }
-      }
-
-      let repeatPage = {
-        component: currentPage.component,
-        type: currentPage.type,
-        word: currentPage.word,
-        options: currentPage.options,
-        order: state.pages.length + 1,
-        answered: false,
-        answeredCorrectly: null
-      };
-      let copyPages = [...state.pages];
-
-      copyPages.splice(state.pageNumber + randint(2, 4), 0, repeatPage);
-
-      return {
-        ...state,
-        pages: copyPages,
-        progress: (state.pageNumber - 1) * 110 / state.pages.length
-      };
-
     case 'fetchError':
       return {
         ...state,
         fetchError: action.value === 'true'
-      };
-
-    case 'correctFound':      
-      return {
-        ...state,
-        correctFound: action.value === 'true'
       };
 
     case 'requestMessage':      
@@ -133,21 +98,142 @@ export const handleQuestionPage = (
         requestMessage: action.value as RequestMessageTypes
       };
 
-    case 'questionAnswered':
+    case 'questionAnswered': {
+      const isCorrect = action.value as boolean;
       const pages = state.pages;
+      let pagesToReturn : PageContent[] = [];
+
+      if (pages[state.pageNumber].answered) return state;
+      
       const pagesSoFar = pages.slice(0, state.pageNumber);
       const otherPages = pages.slice(state.pageNumber + 1);
-      const curPage = {
+      const currentPage = {
         ...pages[state.pageNumber],
         answered: true,
-        answeredCorrectly: action.value as boolean
+        answeredCorrectly: isCorrect
       };
+
+      const updatedPages =  [...pagesSoFar, currentPage, ...otherPages];
+      if (isCorrect) {
+        const revisionIndex = state.pageNumber + randint(2, 5);
+  
+        const pagesBeforeRevision = updatedPages.slice(0, revisionIndex);
+        const pagesAfterRevision = updatedPages.slice(revisionIndex);
+        const revision = {
+          component: ReviseWord,
+          type: 'ReviseWord',
+          word: pages[state.pageNumber].word,
+          options: [],
+          order: state.pages.length + 1,  // For unique key
+          answered: false,
+          answeredCorrectly: null,
+          showText: false,
+          showThumbs: false,
+          clickedThumbs: ''
+        };
+        pagesToReturn = [...pagesBeforeRevision, revision, ...pagesAfterRevision];
+      } else {
+        const repeatIndex = state.pageNumber + randint(2, 4);
+
+        const pagesBeforeRepeat = updatedPages.slice(0, repeatIndex);
+        const pagesAfterRepeat = updatedPages.slice(repeatIndex);
+        let repeatPage = {
+          component: currentPage.component,
+          type: currentPage.type,
+          word: currentPage.word,
+          options: currentPage.options,
+          order: state.pages.length + 1,
+          answered: false,
+          answeredCorrectly: null
+        };
+        pagesToReturn = [...pagesBeforeRepeat, repeatPage, ...pagesAfterRepeat];
+      }
 
       return {
         ...state,
-        pages:  [...pagesSoFar, curPage, ...otherPages]
+        pages:  pagesToReturn,
+        progress: !isCorrect ? (state.pageNumber - 1) * 110 / state.pages.length : state.progress
       };
+    }
 
+    case 'showText': {
+      const pages = state.pages;
+      const pageIndex = action.value as number;
+
+      const pagesSoFar = pages.slice(0, pageIndex);
+      const otherPages = pages.slice(pageIndex + 1);
+      const currentPage = {
+        ...pages[pageIndex],
+        showText: true
+      };
+      const pagesToReturn = [...pagesSoFar, currentPage, ...otherPages];
+
+      return {
+        ...state,
+        pages: pagesToReturn
+      };
+    }
+
+    case 'showThumbs': {
+      const pages = state.pages;
+      const pageIndex = action.value as number;
+
+      const pagesSoFar = pages.slice(0, pageIndex);
+      const otherPages = pages.slice(pageIndex + 1);
+      const currentPage = {
+        ...pages[pageIndex],
+        showThumbs: true
+      };
+      const pagesToReturn = [...pagesSoFar, currentPage, ...otherPages];
+
+      return {
+        ...state,
+        pages: pagesToReturn
+      };
+    }
+
+    case 'changeThumbs': {
+      const pages = state.pages;
+      const pageIndex = action.index as number;
+      let pagesToReturn : PageContent[] = [];
+
+      const pagesSoFar = pages.slice(0, pageIndex);
+      const otherPages = pages.slice(pageIndex + 1);
+      const currentPage = {
+        ...pages[pageIndex],
+        clickedThumbs: action.value as string
+      };
+      pagesToReturn = [...pagesSoFar, currentPage, ...otherPages];
+
+      if (action.value === 'down') {
+        const repeatIndex = state.pageNumber + randint(2, 4);
+
+        const pagesBeforeRepeat = pagesToReturn.slice(0, repeatIndex);
+        const pagesAfterRepeat = pagesToReturn.slice(repeatIndex);
+        const pageToRepeat = pagesBeforeRepeat.find(
+          p => p.word.translation_id === currentPage.word.translation_id
+            && p.options.length
+        ) as PageContent;
+        let repeatPage = {
+          component: pageToRepeat.component,
+          type: pageToRepeat.type,
+          word: pageToRepeat.word,
+          options: pageToRepeat.options,
+          order: state.pages.length + 1,
+          answered: false,
+          answeredCorrectly: null
+        };
+        pagesToReturn = [...pagesBeforeRepeat, repeatPage, ...pagesAfterRepeat];
+      }
+
+      return {
+        ...state,
+        pages: pagesToReturn,
+        progress: action.value === 'down' 
+          ? ((state.pageNumber - 1) * 100) / (state.pages.length - 1)
+          : state.progress
+      };
+    }
 
     default:
       console.log(`Unknown action type: ${action.type}`);

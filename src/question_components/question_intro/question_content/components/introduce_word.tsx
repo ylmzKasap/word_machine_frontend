@@ -21,6 +21,7 @@ export const IntroduceWord: React.FC<QuestionComponentPropTypes> = (props) => {
       key={word[wordInfo.target_language as keyof WordTypes] + '-text'}
       type="intro"
       animation=""
+      showText={true}
     />,
     <IntroImage
       wordInfo={wordInfo}

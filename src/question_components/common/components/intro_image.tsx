@@ -7,7 +7,11 @@ export const IntroImage: React.FC<IntroImageTypes> = (props) => {
 
   let imgAnim = props.animation === undefined ? '' : props.animation;
   return (
-    <div className={`intro-img-box ${imgAnim}`} style={props.style}>
+    <div 
+      className={'intro-img-box'
+      + (imgAnim ? ` ${imgAnim}` : '')
+      + (props.className ? ` ${props.className}` : '')}
+      style={props.style}>
       <img
         className="intro-img"
         src={`${props.word.image_path}`}
@@ -41,5 +45,6 @@ export interface IntroImageTypes {
     order: number;
   };
   answeredCorrectly?: null | boolean;
+  className?: string;
 }
 

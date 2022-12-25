@@ -107,7 +107,7 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
           color: itemToEdit.color!
         }});
       }
-    } else if (action === 'set words') {
+    } else if (action === 'change words') {
       const itemToEdit = rawItems.filter(
         item => item.item_id === extract_int(contextOpenedElem.id!))[0];
       
@@ -144,7 +144,12 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
             }});
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401) {
+            setRequestError({
+              exists: true,
+              description: 'You are not logged in',
+            });
+          }
         });
 
     } 

@@ -11,15 +11,7 @@ export var audioMixer = new Audio();
 export const QuestionContent: React.FC = () => {
   // Rendered by '../index.js' -> 'Deck' component.
 
-  const { questionPage, setQuestionPage } = useContext(QuestionContext) as QuestionContextTypes;
-  
-  // Generate pages from words.
-  useEffect(() => {
-    if (questionPage.wordInfo.target_language !== '' 
-    && questionPage.pages[0].component === null) {
-      setQuestionPage({type: 'generatePages'});
-    }
-  }, [questionPage.wordInfo]);
+  const { questionPage } = useContext(QuestionContext) as QuestionContextTypes;
 
   // Cache images
   useEffect(() => {

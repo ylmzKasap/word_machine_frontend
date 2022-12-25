@@ -46,6 +46,18 @@ export const QuestionIntro = () => {
       );
   }, [questionPage.view]);
 
+  useEffect(() => {
+    if (questionPage.pages.length <= 1) return;
+    const dirToGo = deckInfo.directory === deckInfo.root_id || fetchError 
+      ? '' 
+      : `/${deckInfo.directory}`;
+
+    if (questionPage.pageNumber === questionPage.pages.length) {
+      navigate(`/user/${params.username}${dirToGo}`);
+    }
+
+  }, [questionPage.pageNumber]);
+
   function goBack() {
     if (questionPage.pageNumber > 0) {
       setQuestionPage({type: 'goBack'});
@@ -53,22 +65,8 @@ export const QuestionIntro = () => {
   }
 
   function goForward() {
-    const { deckInfo, fetchError, pageNumber, pages } = questionPage;
-    const dirToGo = deckInfo.directory === deckInfo.root_id || fetchError 
-      ? '' 
-      : `/${deckInfo.directory}`;
-
-    if (pageNumber < pages.length) {
+    if (questionPage.pageNumber < questionPage.pages.length) {
       setQuestionPage({type: 'goForward'});
-    }
-    if (pageNumber === pages.length - 1) {
-      navigate(`/user/${params.username}${dirToGo}`);
-    }
-  }
-
-  function handleIncorrect() {
-    if (!questionPage.correctFound) {
-      setQuestionPage({type: 'insertRevision'});
     }
   }
 
@@ -77,7 +75,6 @@ export const QuestionIntro = () => {
     <QuestionContext.Provider
       value={{
         goForward: goForward,
-        handleIncorrect: handleIncorrect,
         questionPage: questionPage,
         setQuestionPage: setQuestionPage,
         reRender: reRender
@@ -115,7 +112,6 @@ export interface QuestionPageTypes {
   pageNumber: number;
   progress: number;
   childAnimation: string;
-  correctFound: boolean;
   fetchError: boolean;
   requestMessage: RequestMessageTypes;
 }
@@ -128,7 +124,6 @@ export const QuestionPageDefaults = {
   pageNumber: 0,
   progress: 0,
   childAnimation: 'load-page',
-  correctFound: false,
   fetchError: false,
   requestMessage: requestMessageDefault
 };

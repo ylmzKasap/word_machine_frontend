@@ -1,3 +1,26 @@
+@mixin thumbs-media-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  place-items: start center;
+  grid-template-areas: "text text" "up down";
+  > .text-intro-box {
+    order: 0;
+    grid-area: text;
+    > .revise-text {
+      margin-bottom: 5px;
+    }
+  }
+  > #thumbs-up {
+    order: 1;
+    grid-area: up;
+  }
+  > #thumbs-down {
+    order: 2;
+    grid-area: down;
+  }
+}
+
 @media (max-aspect-ratio: 1/1) {
   .image-options {
     display: grid;
@@ -21,11 +44,18 @@
   .intro-img-box {
     margin-top: max(3vh, 30px);
     height: max(50vh, 300px);
-    width: max(80vw, 350px);  
+    width: max(80vw, 350px);
+    &.revise {
+      height: max(50vh, 200px);
+      width: max(70vw, 200px);
+    }
   }
   .intro-text {
     height: max(10vh, 70px);
     width: max(60vw, 300px);
+  }
+  .revise-text {
+    width: max(50vw, 250px);
   }
   .text-option {
     width: max(38vw, 200px);
@@ -53,6 +83,12 @@
   #deck-stats-table {
     font-size: 0.8rem;
   }
+  .intro-img-box {
+    &.revise {
+      height: max(40vh, 200px);
+      width: max(70vw, 300px);
+    }
+  }
 }
 
 @media (max-width: $mobile) {
@@ -64,6 +100,9 @@
     font-size: 1.5rem;
     height: max(10vh, 70px);
     width: max(70vw, 200px);
+  }
+  .revise-text {
+    width: max(70vw, 250px);
   }
   .intro-img-box {
     margin-top: max(10px, 0.5vh);
@@ -114,9 +153,11 @@
   .ask-from-text {
     height: max(7vh, 30px);
   }
-
   #word-success {
     margin: 50px 10px 30px 10px;
+  }
+  #revise-text-container {
+    @include thumbs-media-grid
   }
 }
 
@@ -130,6 +171,12 @@
   #deck-stats-table {
     font-size: 0.6rem;
   }
+  .intro-img-box {
+    &.revise {
+      height: 200px;
+      width: 200px;
+    }
+  }
 }
 
 
@@ -142,6 +189,9 @@
     margin-top: 10px;
     height: max(70vh, 200px);
     width: max(45vw, 200px);
+    &.revise {
+      width: max(40vw, 200px);
+    }
   }
   .text-options {
     margin-top: 0px;
@@ -158,6 +208,14 @@
   .ask-from-text {
     margin-top: max(10px, 4vh);
   }
+  .intro-word {
+    &.revise {
+      flex-direction: row;
+      > #revise-text-container {
+        @include thumbs-media-grid
+      }
+    }
+  }
 }
 
 @media (max-height: 300px) {
@@ -165,8 +223,8 @@
     height: max(60vh, 200px);
   }
   .intro-text {
-    font-size: calc(0.7rem + 1vh);
-    height: max(6vh, 15px);
+    font-size: calc(0.8rem + 2vh);
+    height: max(10vh, 25px);
   }
   .text-number-box {
     width: max(10%, 10px);
