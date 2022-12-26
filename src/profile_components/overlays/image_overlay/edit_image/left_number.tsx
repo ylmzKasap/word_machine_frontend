@@ -9,10 +9,11 @@ import { RowTypes } from './edit_image_overlay';
 const LeftNumber: React.FC<{
   order: number;
   wordInfo: RowTypes[];
+  deckId: string;
   errorIndex: number;
 }> = (props) => {
   // Rendered by "./image_info" -> ImageInfo
-  const { setEditImageOverlay, setRequestError } = useContext(
+  const { editImageOverlay, setEditImageOverlay, setRequestError } = useContext(
     ProfileContext
   ) as ProfileContextTypes;
 
@@ -22,7 +23,19 @@ const LeftNumber: React.FC<{
     if (!wordId) {
       // word_id is only present while editing.
       // It will not make an http request while creating a new deck.
-      setEditImageOverlay({ type: 'deleteRow', value: props.order });
+      if (editImageOverlay.deckInfo.editing) {
+        // Reorder the deck to deal with skipping empty rows.
+        axios.put(`${isProduction ? serverUrl : ''}/deck_order`, {
+          deck_id: props.deckId
+        })
+          .then(() => setEditImageOverlay({ type: 'deleteRow', value: props.order }))
+          .catch((err) => setRequestError({
+            exists: true,
+            description: err.response.data.errDesc,
+          }));
+      } else {
+        setEditImageOverlay({ type: 'deleteRow', value: props.order });
+      }
       return;
     };
     axios.delete(`${isProduction ? serverUrl : ''}/word`, {

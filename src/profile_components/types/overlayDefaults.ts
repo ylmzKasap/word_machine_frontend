@@ -60,13 +60,15 @@ export const categoryOverlayDefaults = {
 };
 
 export const get_row_default = (targetLanguage: string, sourceLanguage?: string | null) => ({
-  artist_content_id: null,
-  image_id: null,
-  translation_id: null,
-  image_path: null,
-  [targetLanguage]: null,
-  [sourceLanguage ? sourceLanguage : 'source_language']: null,
-  times_selected: '0',
+  approval_id: '',
+  translation_id: '',
+  artist_content_id: '',
+  image_id: '',
+  image_path: '',
+  image_approved: false,
   selected: true,
-  submitter: null,
+  times_selected: '0',
+  submitted_by: '',   
+  [targetLanguage]: '',
+  [sourceLanguage ? sourceLanguage : 'source_language']: ''
 });

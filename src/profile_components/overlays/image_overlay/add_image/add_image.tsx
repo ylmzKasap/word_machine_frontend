@@ -246,7 +246,8 @@ export const AddImageOverlay = () => {
                 .put(`${isProduction ? serverUrl : ''}/word_change`, {
                   new_word: translation_object[targetLanguage],
                   word_id: currentImages[0].word_id ? currentImages[0].word_id : null,
-                  deck_id: editImageOverlay.deckInfo.id
+                  deck_id: editImageOverlay.deckInfo.id,
+                  word_order: `${index}`
                 })
                 .then(res => {
                   if (res.data.word_id) {

@@ -66,6 +66,7 @@ const ImageInfo: React.FC<ImageInfoTypes> = (props) => {
       <LeftNumber 
         order={props.order}
         wordInfo={editImageOverlay.imageInfo}
+        deckId={editImageOverlay.deckInfo.id}
         errorIndex={props.errorIndex} />
       <div className="image-box-content">
         <ImageTranslation

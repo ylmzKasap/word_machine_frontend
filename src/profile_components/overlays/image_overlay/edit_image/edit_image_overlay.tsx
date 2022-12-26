@@ -65,14 +65,19 @@ export interface SoundRowTypes {
 }
 
 export interface ImageRowTypes {
-  image_id: string | null;
-  translation_id: string | null;
-  artist_content_id: string | null;
-  image_path: string | null;
-  selected: boolean | null;
-  submitter: string | null;
+  approval_id: string;
+  translation_id: string;
+  artist_content_id: string;
+  image_id: string;
+  image_path: string;
+  image_approved: boolean;
+  selected: boolean;
   times_selected: string;
-  [x: string]: boolean | string | null;
+  submitted_by: string;
+  translation_submitter?: string;
+  word_id?: string;
+  word_order?: string;
+  [x: string]: boolean | string | undefined;
 }
 
 export interface RowTypes {

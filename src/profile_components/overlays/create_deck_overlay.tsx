@@ -8,7 +8,7 @@ import Checkbox from '../common/form_components/checkbox';
 import DropDown from '../common/form_components/dropdown';
 import DoubleChoice from '../common/form_components/double_choice';
 import SubmitForm from '../common/form_components/submit_form';
-import allLanguages from '../common/constants/all_languages';
+import { allLanguages } from '../common/constants/all_languages';
 import { ProfileContextTypes } from '../types/profilePageTypes';
 import { itemNameFilter, specialCharacterRegex } from '../common/regex';
 import { handleItemName } from '../common/form_components/handlers/handle_item_name';

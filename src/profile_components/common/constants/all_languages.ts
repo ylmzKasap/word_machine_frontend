@@ -1,4 +1,4 @@
-const allLanguages = [
+export const allLanguages = [
   'english_us',
   'english_uk',
   'turkish',
@@ -7,5 +7,3 @@ const allLanguages = [
   'french',
   'greek',
 ];
-
-export default allLanguages;

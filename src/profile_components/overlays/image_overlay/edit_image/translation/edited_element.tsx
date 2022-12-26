@@ -113,7 +113,8 @@ const EditedElement: React.FC<EditedElementPropTypes> = ({
           .put(`${isProduction ? serverUrl : ''}/word_change`, {
             new_word: trimmedInput,
             word_id: word.word_id ? word.word_id : null,
-            deck_id: editImageOverlay.deckInfo.id
+            deck_id: editImageOverlay.deckInfo.id,
+            word_order: `${order}`
           })
           .then(res => {
             if (res.data.word_id) {

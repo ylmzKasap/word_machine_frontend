@@ -1,4 +1,5 @@
 import { specialCharacterRegex } from '../../common/regex';
+import { get_row_default } from '../../types/overlayDefaults';
 import { addImageDefaults } from './add_image/add_image';
 import {
   editImageCategoryDefaults,
@@ -177,12 +178,35 @@ export const handleEditImageOverlay = (
 
     case 'setImages':
       const languageInfo = action.extraValue as OverlayLanguageTypes;
+      const foundImages = action.value as RowTypes[];
+      let allRows : RowTypes[] = [];
+
+      if (languageInfo.deckInfo.editing) {
+        // Show skipping rows for word_order
+        // May be a problem when the user adds translations while some rows are still empty.
+        let lastWordOrder = 0;
+        const { targetLanguage, sourceLanguage } = languageInfo.deckInfo;
+        for (let image of foundImages) {
+          while (lastWordOrder < Number(image.imageRow[0].word_order)) {
+            allRows.push({
+              imageRow: [get_row_default(targetLanguage, sourceLanguage)], 
+              soundRow: {
+                allSounds: [],
+                selectedIndex: 0
+              }});
+            lastWordOrder++;
+          }
+          allRows.push(image);
+          lastWordOrder++;
+        }
+      }
+      
       return {
         ...state,
         display: true,
         deckInfo: languageInfo.deckInfo,
         categoryInfo: languageInfo.categoryInfo || editImageCategoryDefaults,
-        imageInfo: action.value as RowTypes[],
+        imageInfo: languageInfo.deckInfo.editing ? allRows : foundImages
       };
 
     case 'changeEdited':
@@ -201,12 +225,22 @@ export const handleEditImageOverlay = (
 
     case 'deleteRow':
       const index = action.value as number;
+      let arrayToReturn: RowTypes[] = [];
+      const deletedImgArray = [
+        ...state.imageInfo.slice(0, index),
+        ...state.imageInfo.slice(index + 1)
+      ];
+
+      if (state.deckInfo.editing) {
+        let language = state.deckInfo.purpose === 'study'
+          ? state.deckInfo.targetLanguage
+          : state.deckInfo.sourceLanguage;
+        arrayToReturn = deletedImgArray.filter(i => i.imageRow[0][language!]);
+      }
+
       return {
         ...state,
-        imageInfo: [
-          ...state.imageInfo.slice(0, index),
-          ...state.imageInfo.slice(index + 1),
-        ],
+        imageInfo: state.deckInfo.editing ? arrayToReturn : deletedImgArray,
       };
 
     case 'changeUploadedImage':
