@@ -11,6 +11,11 @@ export const DeckInfo = () => {
     setQuestionPage({type: 'startQuestion'});
   };
 
+  const handleRevise = () => {
+    if (totalWords === 0) return;
+    setQuestionPage({type: 'startRevise'});
+  };
+
   const { target_language, source_language, words } = questionPage.wordInfo;
   const totalWords = words[0].image_id ? words.length : 0;
   return (
@@ -32,6 +37,12 @@ export const DeckInfo = () => {
         className={`study-button${totalWords === 0 ? ' disabled' : ''}`}
         onClick={handleStudy}>
           Study
+      </button>
+      <button 
+        type="button"
+        className={`revise-button${totalWords === 0 ? ' disabled' : ''}`}
+        onClick={handleRevise}>
+          Revise
       </button>
     </div>
   );

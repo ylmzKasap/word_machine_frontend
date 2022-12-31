@@ -32,6 +32,7 @@ export interface PageContent {
   showThumbs?: boolean;
   clickedThumbs?: string;
 }
+
 export type PageTypes = PageContent[];
 
 export interface QuestionComponentPropTypes {

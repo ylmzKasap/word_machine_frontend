@@ -32,6 +32,7 @@ export const AskFromPicture: React.FC<types.QuestionComponentPropTypes> = ({
     setImageAnimtion('emphasize');
   }
 
+  const currentPage = questionPage.pages[questionPage.pageNumber] as types.PageContent;
   // Children: TextOptions, IntroImage.
   return (
     <div className="ask-from-picture">
@@ -55,7 +56,7 @@ export const AskFromPicture: React.FC<types.QuestionComponentPropTypes> = ({
         animation={imageAnimation}
         key={word[wordInfo.target_language as keyof WordTypes] + '-image'}
         style={{ order: 1 }}
-        answeredCorrectly={questionPage.pages[questionPage.pageNumber].answeredCorrectly}
+        answeredCorrectly={currentPage.answeredCorrectly}
       />
     </div>
   );
@@ -98,7 +99,7 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
     if (optionStyle.animation !== '') return;
     const { username, logged_in_user } = questionPage.deckInfo;
 
-    const currentPage = questionPage.pages[questionPage.pageNumber];
+    const currentPage = questionPage.pages[questionPage.pageNumber] as types.PageContent;
     if (props.isCorrect === true) {
       // Correct answer
       audioMixer.src = questionPage.deckInfo.correct_sound;
@@ -109,8 +110,8 @@ const TextOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       
       if (currentPage.answered || username !== logged_in_user) return;
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
-        word_id: props.word_id,
-        deck_id: props.deck_id,
+        word_id: currentPage.word.word_id,
+        deck_id: currentPage.word.deck_id,
         is_correct: true
       });
     } else {

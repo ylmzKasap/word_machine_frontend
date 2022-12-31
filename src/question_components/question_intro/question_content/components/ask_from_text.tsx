@@ -21,13 +21,14 @@ export const AskFromText: React.FC<types.QuestionComponentPropTypes> = ({
   const [textAnimation, setTextAnimation] = useState('');
   const [shuffledOptions] = useState(() => shuffle(options));
 
-  const { questionPage, setQuestionPage } =
+  const { questionPage } =
     useContext(QuestionContext) as types.QuestionContextTypes;
 
   function animateText() {
     setTextAnimation('emphasize');
   }
 
+  const currentPage = questionPage.pages[questionPage.pageNumber] as types.PageContent;
   // Children: ImageOptions, './shared' -> IntroText.
   return (
     <div className={'ask-from-text-box'}>
@@ -36,7 +37,7 @@ export const AskFromText: React.FC<types.QuestionComponentPropTypes> = ({
         word={word}
         type="ask-from"
         animation={textAnimation}
-        answeredCorrectly={questionPage.pages[questionPage.pageNumber].answeredCorrectly}
+        answeredCorrectly={currentPage.answeredCorrectly}
         showText={true}
       />
       <div className="image-options">
@@ -91,7 +92,7 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
     if (optionStyle.animation !== '') return;
     const { username, logged_in_user } = questionPage.deckInfo;
 
-    const currentPage = questionPage.pages[questionPage.pageNumber];
+    const currentPage = questionPage.pages[questionPage.pageNumber] as types.PageContent;
     if (props.isCorrect === true) {
       // Correct answer
       audioMixer.src = questionPage.deckInfo.correct_sound;
@@ -102,8 +103,8 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
 
       if (currentPage.answered || username !== logged_in_user) return;
       axios.put(`${isProduction ? serverUrl : ''}/question_answer`, {
-        word_id: props.word_id,
-        deck_id: props.deck_id,
+        word_id: currentPage.word.word_id,
+        deck_id: currentPage.word.deck_id,
         is_correct: true
       });
     } else {

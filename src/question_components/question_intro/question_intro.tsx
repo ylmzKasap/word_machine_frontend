@@ -9,7 +9,7 @@ import NotFound from '../../profile_components/common/components/not_found';
 import { QuestionIntroContent } from './components/question_intro_content';
 import QuestionContent from './question_content/question_content';
 import { isProduction, serverUrl } from '../../constants';
-import { RequestMessageTypes } from '../../profile_components/types/profilePageTypes';
+import { RequestMessageTypes, WordTypes } from '../../profile_components/types/profilePageTypes';
 import { requestMessageDefault } from '../../profile_components/types/profilePageDefaults';
 import { RequestInfo } from '../../profile_components/profile_page/other_components';
 
@@ -26,7 +26,7 @@ export const QuestionIntro = () => {
 
   // Get the content from state or fetch it.
   useEffect(() => {
-    if (['question'].includes(questionPage.view)) return;
+    if (['question', 'revision'].includes(questionPage.view)) return;
     let deck_id = params.deckId;
 
     // Show laoding icon after half a second
@@ -47,13 +47,10 @@ export const QuestionIntro = () => {
   }, [questionPage.view]);
 
   useEffect(() => {
-    if (questionPage.pages.length <= 1) return;
-    const dirToGo = deckInfo.directory === deckInfo.root_id || fetchError 
-      ? '' 
-      : `/${deckInfo.directory}`;
+    if (questionPage.pages.length < 1) return;
 
     if (questionPage.pageNumber === questionPage.pages.length) {
-      navigate(`/user/${params.username}${dirToGo}`);
+      setQuestionPage({type: 'view', value: 'introduction'});
     }
 
   }, [questionPage.pageNumber]);
@@ -88,7 +85,7 @@ export const QuestionIntro = () => {
         />
         {questionPage.view === 'introduction' && deckInfo.isLoaded 
           && <QuestionIntroContent />}
-        {questionPage.view === 'question' && deckInfo.isLoaded
+        {['question', 'revision'].includes(questionPage.view) && deckInfo.isLoaded
           && <QuestionContent />}
         {requestMessage.description && <RequestInfo 
           className="request-message"
@@ -108,7 +105,7 @@ export interface QuestionPageTypes {
   view: string;
   deckInfo: types.DeckInfoTypes;
   wordInfo: types.WordInfoTypes;
-  pages: types.PageTypes;
+  pages: types.PageTypes | WordTypes[][];
   pageNumber: number;
   progress: number;
   childAnimation: string;

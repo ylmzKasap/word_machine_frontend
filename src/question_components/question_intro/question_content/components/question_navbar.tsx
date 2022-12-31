@@ -17,7 +17,7 @@ export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
   const handleHomeClick = () => {
     if (questionPage.view === 'introduction') {
       navigate(`/user/${props.user}${currentDirectory}`);
-    } else if (questionPage.view === 'question') {
+    } else if (['question', 'revision'].includes(questionPage.view)) {
       setQuestionPage({type: 'view', value: 'introduction'});
     }
   };
@@ -26,7 +26,8 @@ export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
     <div className="navbar">
       <>
         {/* Back Arrow */}
-        {!fetchError && deckInfo.isLoaded && pageNumber > 0 && questionPage.view === 'question'
+        {!fetchError && deckInfo.isLoaded && pageNumber > 0 
+          && ['question', 'revision'].includes(questionPage.view)
         && (
           <i className="fas fa-arrow-left navbar-arrow" onClick={props.goBack} />
         )}
@@ -38,7 +39,8 @@ export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
         }
         
         {/* Forward arrow */}
-        {!fetchError && deckInfo.isLoaded && questionPage.view === 'question' && (
+        {!fetchError && deckInfo.isLoaded
+        && ['question', 'revision'].includes(questionPage.view) && (
           <i className="fas fa-arrow-right navbar-arrow" onClick={props.goForward}></i>
         )}  
       </>

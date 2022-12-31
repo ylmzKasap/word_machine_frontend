@@ -66,6 +66,14 @@
   #answer-sign {
     width: max(40px, 5vw);
   }
+  #revise-words {
+    grid-template-columns: repeat(2, max(350px, 40vw));
+    grid-template-rows:  repeat(2, max(350px, 40vh));
+    justify-content: center;
+  }
+  .revision-picture-container {
+    height: 75%;
+  }
 }
 
 @media (max-width: 850px) {
@@ -88,6 +96,18 @@
       height: max(40vh, 200px);
       width: max(70vw, 300px);
     }
+  }
+  #revise-words {
+    grid-template-columns: repeat(2, max(200px, 36vw));
+    grid-template-rows:  repeat(2, max(200px, 38vh));
+    justify-content: center;
+    row-gap: 15px;
+  }
+  .revision-text {
+    padding: 14px 4px 14px 4px;
+  }
+  .revision-picture-container {
+    height: 75%;
   }
 }
 
@@ -159,6 +179,17 @@
   #revise-text-container {
     @include thumbs-media-grid
   }
+  #revise-words {
+    grid-template-columns: repeat(2, max(150px, 44vw));
+    grid-template-rows:  repeat(2, max(150px, 36vh));
+    row-gap: 15px;
+  }
+  .revision-picture-container {
+    height: 70%;
+  }
+  #revise-header {
+    display: none;
+  }
 }
 
 @media (max-width: 320px) {
@@ -176,6 +207,10 @@
       height: 200px;
       width: 200px;
     }
+  }
+  #revise-words {
+    grid-template-columns: repeat(2, max(100px, 44vw));
+    grid-template-rows:  repeat(2, max(100px, 30vh));
   }
 }
 
@@ -215,6 +250,20 @@
         @include thumbs-media-grid
       }
     }
+  }
+  #revise-header {
+    font-size: 1rem;
+  }
+  #revise-words {
+    margin: 10px;
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    grid-template-rows: 1fr;
+  }
+  .revision-picture-container {
+    height: 150px;
+  }
+  #revise-header {
+    display: none;
   }
 }
 

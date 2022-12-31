@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { IntroImage, IntroText } from '../../../common/components';
 
 import {
+  PageContent,
   QuestionComponentPropTypes,
   QuestionContextTypes,
 } from '../../../types/QuestionPageTypes';
@@ -15,7 +16,8 @@ export const ReviseWord: React.FC<QuestionComponentPropTypes> = (props) => {
   const { wordInfo, word } = props;
   const { questionPage, setQuestionPage } = useContext(QuestionContext) as QuestionContextTypes;
   
-  const { showText, showThumbs } = questionPage.pages[questionPage.pageNumber];
+  const currentPage = questionPage.pages[questionPage.pageNumber] as PageContent;
+  const { showText, showThumbs } = currentPage;
 
   useEffect(() => {
     if (showText) {
@@ -48,7 +50,7 @@ export const ReviseWord: React.FC<QuestionComponentPropTypes> = (props) => {
       <div id="revise-text-container">
         {showThumbs && <Thumbs 
           type="up"
-          clickedThumbs={questionPage.pages[questionPage.pageNumber].clickedThumbs!}
+          clickedThumbs={currentPage.clickedThumbs!}
           wordId={props.word.word_id}
           deckId={props.word.deck_id}
         />}
@@ -58,11 +60,11 @@ export const ReviseWord: React.FC<QuestionComponentPropTypes> = (props) => {
           key={word[wordInfo.target_language as keyof WordTypes] + '-text'}
           type="revise"
           animation=""
-          showText={questionPage.pages[questionPage.pageNumber].showText!}
+          showText={currentPage.showText!}
         />
         {showThumbs && <Thumbs
           type="down"
-          clickedThumbs={questionPage.pages[questionPage.pageNumber].clickedThumbs!}
+          clickedThumbs={currentPage.clickedThumbs!}
           wordId={props.word.word_id}
           deckId={props.word.deck_id}
         />}

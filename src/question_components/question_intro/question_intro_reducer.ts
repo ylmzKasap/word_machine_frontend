@@ -1,7 +1,8 @@
 import { RequestMessageTypes } from '../../profile_components/types/profilePageTypes';
 import { cache_question_audio, cache_question_image, generate_pages } from '../common/handlers';
+import { generate_revision_pages } from '../common/handlers/generate_revision_pages';
 import { randint } from '../common/utils';
-import { DeckResponseTypes, PageContent } from '../types/QuestionPageTypes';
+import { DeckResponseTypes, PageContent, PageTypes } from '../types/QuestionPageTypes';
 import { ReviseWord } from './question_content/components/revise_word';
 import { QuestionPageTypes } from './question_intro';
 
@@ -61,6 +62,15 @@ export const handleQuestionPage = (
         pages: generate_pages(state.wordInfo)
       };
 
+    case 'startRevise':
+      return {
+        ...state,
+        view: 'revision',
+        pageNumber: 0,
+        progress: 0,
+        pages: generate_revision_pages(state.wordInfo)
+      };
+
     case 'goBack':
       return {
         ...state,
@@ -100,7 +110,7 @@ export const handleQuestionPage = (
 
     case 'questionAnswered': {
       const isCorrect = action.value as boolean;
-      const pages = state.pages;
+      const pages = state.pages as PageTypes;
       let pagesToReturn : PageContent[] = [];
 
       if (pages[state.pageNumber].answered) return state;
@@ -157,7 +167,7 @@ export const handleQuestionPage = (
     }
 
     case 'showText': {
-      const pages = state.pages;
+      const pages = state.pages as PageTypes;
       const pageIndex = action.value as number;
 
       const pagesSoFar = pages.slice(0, pageIndex);
@@ -175,7 +185,7 @@ export const handleQuestionPage = (
     }
 
     case 'showThumbs': {
-      const pages = state.pages;
+      const pages = state.pages as PageTypes;
       const pageIndex = action.value as number;
 
       const pagesSoFar = pages.slice(0, pageIndex);
@@ -193,7 +203,7 @@ export const handleQuestionPage = (
     }
 
     case 'changeThumbs': {
-      const pages = state.pages;
+      const pages = state.pages as PageTypes;
       const pageIndex = action.index as number;
       let pagesToReturn : PageContent[] = [];
 
