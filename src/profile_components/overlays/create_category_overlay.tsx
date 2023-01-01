@@ -153,7 +153,7 @@ export const CreateCategoryOverlay: React.FC = () => {
         className={`create-item-info${categoryOverlay.editing ? ' short' : ''}`}
         onSubmit={handleSubmit}>
         <OverlayNavbar
-          setOverlay={setCategoryOverlay}
+          handleExit={() => setCategoryOverlay({type: 'view', value: 'hide' })}
           description={categoryOverlay.editing ? 'Edit category' : 'Create a new category'}
         />
         <div className="form-content">

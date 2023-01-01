@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { WordTypes } from '../../../../profile_components/types/profilePageTypes';
+import { ImageInfo } from '../../../common/components/image_info';
 import { play_audio } from '../../../common/utils';
 import { QuestionContextTypes } from '../../../types/QuestionPageTypes';
 import { QuestionContext } from '../../question_intro';
@@ -36,10 +37,22 @@ export const ReviseWords: React.FC = () => {
     }
   };
 
+  const handlePictureClick = (index: number, word: WordTypes) => {
+    if (index === shownIndex) {
+      setShownIndex(x => x + 1);
+      return;
+    };
+    audioMixer.src = word.sound_path;
+    play_audio(audioMixer, 'Playback failed');
+  };
+
   const pages = questionPage.pages as WordTypes[][];
   return (
     <div id="revise-words-container" onClick={handleClick}>
-      <header id="revise-header">Time to revise!</header>
+      <div id="revise-head">
+        <div id="revise-page-number">{questionPage.pageNumber + 1}/{pages.length}</div>
+        <header id="revise-header">Time to revise!</header>
+      </div>
       <div id="revise-words">
         {pages[questionPage.pageNumber].map((word, index) => {
           const vocab = word[questionPage.wordInfo.target_language as keyof WordTypes] as string;
@@ -47,21 +60,18 @@ export const ReviseWords: React.FC = () => {
             {index <= shownIndex
               && <div 
                 className={'revision-picture-container'
-                  + (index === shownIndex ? ' disabled' : '')
-                  + (index === 0 ? ' first-image' : '')}
-                onClick={() => {
-                  if (index === shownIndex) return;
-                  audioMixer.src = word.sound_path;
-                  play_audio(audioMixer, 'Playback failed');
-                }}>
+                  + (index === 0 ? ' first-image' : '')}>
                 <img 
-                  className="revision-picture"
+                  className={'revision-picture'
+                    + (index === shownIndex ? ' disabled' : '')}
+                  onClick={() => handlePictureClick(index, word)}
                   src={word.image_path}
                   alt={vocab} />
                 {questionPage.wordInfo.show_translation 
                   && <div className="word-translation">
                     {word[questionPage.wordInfo.source_language as keyof WordTypes]}
                   </div>}
+                <ImageInfo imageId={word.image_id}/>
               </div>}
             {index + 1 <= shownIndex 
               && <div 

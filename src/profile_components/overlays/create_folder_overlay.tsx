@@ -116,7 +116,7 @@ export const CreateFolderOverlay: React.FC = () => {
         onKeyDown={handleSubmit}
       >
         <OverlayNavbar
-          setOverlay={setFolderOverlay}
+          handleExit={() => setFolderOverlay({ type: 'view', value: 'hide' })}
           description={folderOverlay.editing ? 'Edit folder' : 'Create a new folder'}
         />
         <div className="form-content">

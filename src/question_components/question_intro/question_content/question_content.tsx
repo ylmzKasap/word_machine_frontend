@@ -10,6 +10,7 @@ import {
   QuestionContextTypes } from '../../types/QuestionPageTypes';
 import { ReviseWords } from './components/words_revision';
 import { WordTypes } from '../../../profile_components/types/profilePageTypes';
+import { ImageDetails } from '../../common/components/image_details';
 
 export var audioMixer = new Audio();
 
@@ -54,6 +55,7 @@ export const QuestionContent: React.FC = () => {
       {!deckInfo.isLoaded && deckInfo.showLoading &&
         <LoadingIcon elementClass="image-request white" />}
       {setPages()}
+      {questionPage.imageDetails.view && <ImageDetails />}
     </div>
   );
 };

@@ -139,7 +139,7 @@ export const AddSoundOverlay: React.FC = () => {
         onSubmit={handleSubmit}
       >
         <OverlayNavbar
-          setOverlay={setEditImageOverlay}
+          handleExit={() => setEditImageOverlay({ type: 'view-add-sound', value: 'hide' })}
           specialClass="add-sound"
           description="Upload a new sound"
         />

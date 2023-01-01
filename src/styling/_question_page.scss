@@ -123,6 +123,11 @@
     width: max(40vw, 200px);
     margin-top: max(2vh, 20px);
   }
+  > .fa-circle-info {
+    font-size: 1.4rem;
+    left: max(1.5vw, 15px);
+    top: max(2vh, 12px);
+  }
 }
 
 .word-translation {
@@ -135,6 +140,7 @@
   color: white;
   text-align: center;
   border-radius: 0 0 30px 30px;
+  border-top: solid white 1px;
   font-size: calc(0.8rem + 1vh);
   overflow: hidden;
 }
@@ -223,6 +229,8 @@
     width: 100%;
     top: -5px;
     border-radius: 10px 10px 0 0;
+    border-top: 0px;
+    border-bottom: solid white 1px;
   }
 }
 
@@ -526,12 +534,23 @@
   }
 }
 
-#revise-header {
-  font-size: calc(0.7vw + 1rem);
-  text-align: center;
-  padding: 16px;
+#revise-head {
+  display: flex;
+  align-items: center;
   background-color: rgb(72, 100, 75);
   color: white;
+}
+
+#revise-header {
+  text-align: center;
+  padding: 16px;
+  margin: auto;
+  font-size: calc(0.7vw + 1rem);
+}
+
+#revise-page-number {
+  margin-left: max(1vw, 12px);
+  font-size: calc(0.5vw + 0.8rem);
 }
 
 #revise-words {
@@ -553,6 +572,13 @@
   width: 100%;
   height: 100%;
   border-radius: 16px;
+  &:active {
+    transform: scale(0.98);
+  }
+  &.disabled {
+    cursor: default;
+    transform: scale(1);
+  }
 }
 
 .revision-picture-container {
@@ -564,19 +590,19 @@
   animation-duration: 1s;
   animation-delay: 1.4s;
   .word-translation {
-    cursor: pointer;
     width: 100%;
     top: -5px;
     border-radius: 10px 10px 0 0;
-  }
-  &:active {
-    transform: scale(0.98);
-  }
-  &.disabled {
-    pointer-events: none;
+    border-top: 0px;
+    border-bottom: solid white 1px;
   }
   &.first-image {
     animation-delay: 0s;
+  }
+  > .fa-circle-info {
+    font-size: 1.2rem;
+    right: max(1vw, 6px);
+    bottom: max(0.7vh, 7px);
   }
 }
 
@@ -604,4 +630,50 @@
   &:hover {
     border-color: rgb(220, 11, 95);
   }
+}
+
+#image-details {
+  @include flexit();
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(222, 222, 222, 0.4);
+  inset: 0px;
+  z-index: 3;
+}
+
+#image-details-container {
+  height: 350px;
+  width: max(250px, 34vw);
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: white;
+}
+
+#image-details-header {
+  font-size: calc(0.8rem + 0.3vw + 0.3vh);
+  padding: 20px 16px 20px 16px;
+}
+
+#image-details-body {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.image-artist {
+  font-weight: bold;
+  color: rgb(17, 17, 120);
+}
+
+#image-reference-container {
+  margin-top: 6px;
+}
+
+#reference-list-header {
+  padding: 0px 16px 0px 16px;
+}
+
+.image-reference {
+  padding-bottom: 5px;
+  height: 25px;
 }

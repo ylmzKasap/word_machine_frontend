@@ -292,8 +292,16 @@ menu {
   }
 
   &.request-message {
-    width: max(20vw, 200px);
-    
+    width: max(20vw, 200px);  
+  }
+
+  &.empty {
+    width: max(10vw, 120px); 
+    >.request-text {
+      >.submitting {
+        margin: auto;
+      }
+    }
   }
 }
 

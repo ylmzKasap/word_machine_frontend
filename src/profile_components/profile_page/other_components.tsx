@@ -15,7 +15,9 @@ export const RequestInfo: React.FC<RequestInfoTypes> = ({
 }) => {
 
   return (
-    <label className={`request-box${className ? ` ${className}` : ''}`}>
+    <label className={'request-box'
+      + (className ? ` ${className}` : '')
+      + (description === ' ' ? ' empty' : '')}>
       <div className="request-text">
         {loading && <LoadingIcon elementClass="submitting" />}
         <h5>{description}{link && 

@@ -1,4 +1,6 @@
+import { requestMessageDefault } from '../../profile_components/types/profilePageDefaults';
 import { RequestMessageTypes } from '../../profile_components/types/profilePageTypes';
+import { ImageDetailsDefaults, ImageDetailsTypes } from '../common/components/image_details';
 import { cache_question_audio, cache_question_image, generate_pages } from '../common/handlers';
 import { generate_revision_pages } from '../common/handlers/generate_revision_pages';
 import { randint } from '../common/utils';
@@ -10,7 +12,7 @@ export const handleQuestionPage = (
   state: QuestionPageTypes,
   action: {
     type: string,
-    value?: string | boolean | number | DeckResponseTypes | RequestMessageTypes,
+    value?: string | boolean | number | DeckResponseTypes | RequestMessageTypes | ImageDetailsTypes,
     index?: number
   }
 ): QuestionPageTypes => {
@@ -18,7 +20,8 @@ export const handleQuestionPage = (
     case 'view':
       return {
         ...state,
-        view: action.value as string
+        view: action.value as string,
+        imageDetails: ImageDetailsDefaults
       };
 
     case 'setDeckData':
@@ -76,7 +79,8 @@ export const handleQuestionPage = (
         ...state,
         pageNumber: state.pageNumber - 1,
         childAnimation: state.childAnimation === 'load-page' ? 'load-page-2' : 'load-page',
-        progress: ((state.pageNumber - 1) * 100) / (state.pages.length - 1)
+        progress: ((state.pageNumber - 1) * 100) / (state.pages.length - 1),
+        imageDetails: ImageDetailsDefaults
       };
 
     case 'goForward':
@@ -84,7 +88,8 @@ export const handleQuestionPage = (
         ...state,
         pageNumber: state.pageNumber + 1,
         childAnimation: state.childAnimation === 'load-page' ? 'load-page-2' : 'load-page',
-        progress: ((state.pageNumber + 1) * 100) / (state.pages.length - 1)
+        progress: ((state.pageNumber + 1) * 100) / (state.pages.length - 1),
+        imageDetails: ImageDetailsDefaults
       };
 
     case 'showLoading':
@@ -242,6 +247,23 @@ export const handleQuestionPage = (
         progress: action.value === 'down' 
           ? ((state.pageNumber - 1) * 100) / (state.pages.length - 1)
           : state.progress
+      };
+    }
+
+    case 'imageDetails': {
+      const details = action.value as ImageDetailsTypes;
+      return {
+        ...state,
+        requestMessage: requestMessageDefault,
+        imageDetails: !details.view
+          ? ImageDetailsDefaults
+          : {
+            view: true,
+            artistName: details.artistName,
+            references: details.references,
+            submittedBy: details.submittedBy,
+            approved: details.approved
+          }
       };
     }
 

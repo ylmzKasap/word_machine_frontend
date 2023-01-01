@@ -4,6 +4,7 @@ import {
   RequestMessageTypes,
   WordTypes,
 } from '../../profile_components/types/profilePageTypes';
+import { ImageDetailsTypes } from '../common/components/image_details';
 import { QuestionPageTypes } from '../question_intro/question_intro';
 
 export interface LocationTypes {
@@ -46,7 +47,7 @@ export interface QuestionContextTypes {
   questionPage: QuestionPageTypes;
   setQuestionPage: React.Dispatch<{
     type: string;
-    value?: string | number | DeckResponseTypes | RequestMessageTypes | boolean;
+    value?: string | number | DeckResponseTypes | RequestMessageTypes | ImageDetailsTypes | boolean;
     index?: number;
   }>;
   reRender: number;

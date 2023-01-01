@@ -36,7 +36,7 @@ export const IntroduceWord: React.FC<QuestionComponentPropTypes> = (props) => {
 
   function handle_click(event: React.MouseEvent) {
     const element = event.target as HTMLInputElement;
-    if (!/^intro-text/.test(element.className)) {
+    if (!/^intro-text|fa-solid/.test(element.className)) {
       goForward();
     }
   }

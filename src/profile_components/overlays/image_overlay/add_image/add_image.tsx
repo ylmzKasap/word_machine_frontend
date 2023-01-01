@@ -312,7 +312,7 @@ export const AddImageOverlay = () => {
         onSubmit={handleSubmit}
       >
         <OverlayNavbar
-          setOverlay={setEditImageOverlay}
+          handleExit={() => setEditImageOverlay({ type: 'view-add-image', value: 'hide' })}
           specialClass="add-image"
           description="Upload a new image"
         />

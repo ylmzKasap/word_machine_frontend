@@ -170,6 +170,11 @@
       font-size: calc(0.5rem + 1vh);
     }
   }
+  .revision-picture-container {
+    >.word-translation {
+      font-size: calc(0.5rem + 1vh);
+    }
+  }
   .ask-from-text {
     height: max(7vh, 30px);
   }
@@ -187,7 +192,7 @@
   .revision-picture-container {
     height: 70%;
   }
-  #revise-header {
+  #revise-head {
     display: none;
   }
 }
@@ -262,7 +267,7 @@
   .revision-picture-container {
     height: 150px;
   }
-  #revise-header {
+  #revise-head {
     display: none;
   }
 }

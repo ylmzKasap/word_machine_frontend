@@ -1,5 +1,6 @@
 import { WordTypes } from '../../../profile_components/types/profilePageTypes';
 import { WordInfoTypes } from '../../types/QuestionPageTypes';
+import { ImageInfo } from './image_info';
 import { WordTranslation } from './word_translation';
 
 export const IntroImage: React.FC<IntroImageTypes> = (props) => {
@@ -17,6 +18,7 @@ export const IntroImage: React.FC<IntroImageTypes> = (props) => {
         src={`${props.word.image_path}`}
         alt={`${props.word[props.wordInfo.target_language as keyof WordTypes]}`}
       />
+      <ImageInfo imageId={props.word.image_id}/>
       {props.answeredCorrectly ?
         <span id="answer-sign" className="image correct">
           <i className="fa-solid fa-check" />

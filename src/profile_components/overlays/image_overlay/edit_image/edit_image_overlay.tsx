@@ -36,7 +36,7 @@ const EditImageOverlay: React.FC<EditImageOverlayPropTypes> = ({exitHandler}) =>
   return (
     <div id="edit-image-overlay" onClick={handleClick}>
       <OverlayNavbar
-        setOverlay={setEditImageOverlay}
+        handleExit={() => setEditImageOverlay({ type: 'view-edit-image', value: 'hide' })}
         specialClass={'edit-image'}
         description={editImageOverlay.deckInfo.editing 
           ? `Edit ${editImageOverlay.deckInfo.name}`

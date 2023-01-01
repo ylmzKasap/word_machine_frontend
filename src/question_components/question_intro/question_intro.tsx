@@ -12,6 +12,7 @@ import { isProduction, serverUrl } from '../../constants';
 import { RequestMessageTypes, WordTypes } from '../../profile_components/types/profilePageTypes';
 import { requestMessageDefault } from '../../profile_components/types/profilePageDefaults';
 import { RequestInfo } from '../../profile_components/profile_page/other_components';
+import { ImageDetailsDefaults, ImageDetailsTypes } from '../common/components/image_details';
 
 export const QuestionContext = createContext<
   types.QuestionContextTypes | undefined
@@ -106,6 +107,7 @@ export interface QuestionPageTypes {
   deckInfo: types.DeckInfoTypes;
   wordInfo: types.WordInfoTypes;
   pages: types.PageTypes | WordTypes[][];
+  imageDetails: ImageDetailsTypes;
   pageNumber: number;
   progress: number;
   childAnimation: string;
@@ -118,6 +120,7 @@ export const QuestionPageDefaults = {
   deckInfo: defaults.deckInfoDefault,
   wordInfo: defaults.wordInfoDefault,
   pages: defaults.pageDefault,
+  imageDetails: ImageDetailsDefaults,
   pageNumber: 0,
   progress: 0,
   childAnimation: 'load-page',

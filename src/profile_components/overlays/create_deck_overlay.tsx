@@ -233,7 +233,7 @@ export const CreateDeckOverlay: React.FC = () => {
       <form className={`create-item-info${deckOverlay.editing ? ' short' : ''}`}
         onSubmit={handleSubmit}>
         <OverlayNavbar
-          setOverlay={setDeckOverlay}
+          handleExit={() => setDeckOverlay({ type: 'view', value: 'hide' })}
           description={deckOverlay.editing ? 'Edit deck' : 'Create a new deck'}
         />
         <div className="form-content">

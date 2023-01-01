@@ -200,3 +200,13 @@
     color: rgb(152, 152, 152);
   }
 }
+
+.fa-circle-info {
+  cursor: pointer;
+  position: absolute;
+  background-color: white;
+  color: rgb(152, 152, 152);
+  border-radius: 60%;;
+  z-index: 2;
+  opacity: 0.75;
+}
