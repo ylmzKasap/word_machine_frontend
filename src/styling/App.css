@@ -403,6 +403,8 @@ input[type=radio] {
 }
 .intro-word.revise, .revise.ask-from-picture {
   flex-direction: column;
+  height: 100%;
+  justify-content: flex-start;
 }
 
 .intro-text, .revise-text, .ask-from-text, .text-option {
@@ -958,17 +960,9 @@ input[type=radio] {
 }
 
 .revision-picture {
-  cursor: pointer;
   width: 100%;
   height: 100%;
   border-radius: 16px;
-}
-.revision-picture:active {
-  transform: scale(0.98);
-}
-.revision-picture.disabled {
-  cursor: default;
-  transform: scale(1);
 }
 
 .revision-picture-container {
@@ -1052,6 +1046,8 @@ input[type=radio] {
 #image-details-body {
   height: 300px;
   overflow-y: auto;
+  padding-right: 10px;
+  word-wrap: break-word;
 }
 
 .image-artist {
@@ -1068,8 +1064,7 @@ input[type=radio] {
 }
 
 .image-reference {
-  padding-bottom: 5px;
-  height: 25px;
+  padding-bottom: 10px;
 }
 
 .fas, .fa-home {

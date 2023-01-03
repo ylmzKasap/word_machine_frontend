@@ -19,7 +19,8 @@ export const ReviseWords: React.FC = () => {
   const handleClick = (event: React.MouseEvent) => {
     const element = event.target as HTMLDivElement;
     const pages = questionPage.pages as WordTypes[][];
-    if (element.className === 'word-revision' || element.id === 'revise-words') {
+    if (!/fa-solid|revision-text/.test(element.className) 
+      && !/revise-head|revise-header/.test(element.id)) {
       if (shownIndex < pages[questionPage.pageNumber].length) {
         setShownIndex(x => x + 1);
       } else {
@@ -35,15 +36,6 @@ export const ReviseWords: React.FC = () => {
       audioMixer.src = word.sound_path;
       play_audio(audioMixer, 'Playback failed');
     }
-  };
-
-  const handlePictureClick = (index: number, word: WordTypes) => {
-    if (index === shownIndex) {
-      setShownIndex(x => x + 1);
-      return;
-    };
-    audioMixer.src = word.sound_path;
-    play_audio(audioMixer, 'Playback failed');
   };
 
   const pages = questionPage.pages as WordTypes[][];
@@ -62,9 +54,7 @@ export const ReviseWords: React.FC = () => {
                 className={'revision-picture-container'
                   + (index === 0 ? ' first-image' : '')}>
                 <img 
-                  className={'revision-picture'
-                    + (index === shownIndex ? ' disabled' : '')}
-                  onClick={() => handlePictureClick(index, word)}
+                  className={'revision-picture'}
                   src={word.image_path}
                   alt={vocab} />
                 {questionPage.wordInfo.show_translation 

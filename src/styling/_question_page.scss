@@ -25,6 +25,8 @@
   flex-direction: row;
   &.revise {
     flex-direction: column;
+    height: 100%;
+    justify-content: flex-start;
   }
 }
 
@@ -568,17 +570,9 @@
 }
 
 .revision-picture {
-  cursor: pointer;
   width: 100%;
   height: 100%;
   border-radius: 16px;
-  &:active {
-    transform: scale(0.98);
-  }
-  &.disabled {
-    cursor: default;
-    transform: scale(1);
-  }
 }
 
 .revision-picture-container {
@@ -658,6 +652,8 @@
 #image-details-body {
   height: 300px;
   overflow-y: auto;
+  padding-right: 10px;
+  word-wrap: break-word
 }
 
 .image-artist {
@@ -674,6 +670,5 @@
 }
 
 .image-reference {
-  padding-bottom: 5px;
-  height: 25px;
+  padding-bottom: 10px;
 }
