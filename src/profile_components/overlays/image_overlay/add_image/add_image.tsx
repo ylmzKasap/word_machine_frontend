@@ -136,7 +136,7 @@ export const AddImageOverlay = () => {
   };
 
   const handleArtistReferenceChange = (event: ChangeEvent, index: number) => {
-    const [inputValue, inputError] = handleItemName(event, 250, urlRegex);
+    const [inputValue, inputError] = handleItemName(event, 1000, urlRegex);
     setEditImageOverlay({
       type: 'changeArtistReference',
       value: {
