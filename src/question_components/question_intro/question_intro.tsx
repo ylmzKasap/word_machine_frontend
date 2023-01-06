@@ -27,7 +27,7 @@ export const QuestionIntro = () => {
 
   // Get the content from state or fetch it.
   useEffect(() => {
-    if (['question', 'revision'].includes(questionPage.view)) return;
+    if (['question', 'revision', 'test'].includes(questionPage.view)) return;
     let deck_id = params.deckId;
 
     // Show laoding icon after half a second
@@ -86,7 +86,7 @@ export const QuestionIntro = () => {
         />
         {questionPage.view === 'introduction' && deckInfo.isLoaded 
           && <QuestionIntroContent />}
-        {['question', 'revision'].includes(questionPage.view) && deckInfo.isLoaded
+        {['question', 'revision', 'test'].includes(questionPage.view) && deckInfo.isLoaded
           && <QuestionContent />}
         {requestMessage.description && <RequestInfo 
           className="request-message"

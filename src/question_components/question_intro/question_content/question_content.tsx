@@ -20,7 +20,7 @@ export const QuestionContent: React.FC = () => {
   const { questionPage } = useContext(QuestionContext) as QuestionContextTypes;
 
   const setPages = (): JSX.Element => {
-    if (questionPage.view === 'question') {
+    if (['question', 'test'].includes(questionPage.view)) {
       const pages = questionPage.pages as PageTypes;
       if (pages[0].component !== null && pageNumber < pages.length ) {
         return <QuestionBody

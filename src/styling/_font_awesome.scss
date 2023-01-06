@@ -210,3 +210,23 @@
   z-index: 2;
   opacity: 0.75;
 }
+
+.fa-rotate-right {
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.1);
+  }
+  &:active {
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+  margin-right: max(1.5vw, 10px);
+}
+
+.fa-book {
+  margin-right: 4px;
+}
+
+.fa-magnifying-glass {
+  margin-right: 2px;
+}

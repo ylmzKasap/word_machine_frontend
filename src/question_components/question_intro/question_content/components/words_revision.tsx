@@ -44,6 +44,7 @@ export const ReviseWords: React.FC = () => {
       <div id="revise-head">
         <div id="revise-page-number">{questionPage.pageNumber + 1}/{pages.length}</div>
         <header id="revise-header">Time to revise!</header>
+        <i className="fa-solid fa-rotate-right" onClick={() => setShownIndex(0)} />
       </div>
       <div id="revise-words">
         {pages[questionPage.pageNumber].map((word, index) => {

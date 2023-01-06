@@ -29,7 +29,11 @@ export const ReviseWord: React.FC<QuestionComponentPropTypes> = (props) => {
     };
   }, [showText]);
 
-  function handleClick() {
+  function handleClick(event: React.MouseEvent) {
+    const element = event.target as HTMLDivElement;
+    if (element.className.includes('fa-circle-info')) {
+      return;
+    }
     if (!showText) {
       setQuestionPage({type: 'showText', value: questionPage.pageNumber});
     }

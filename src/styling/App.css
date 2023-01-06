@@ -764,7 +764,7 @@ input[type=radio] {
   border-radius: 0 0 16px 16px;
 }
 
-.study-button, .revise-button {
+.study-button, .test-button, .revise-button {
   cursor: pointer;
   width: 100%;
   padding: 20px;
@@ -777,10 +777,10 @@ input[type=radio] {
   background-color: #0bb35f;
   color: white;
 }
-.study-button:hover, .revise-button:hover {
+.study-button:hover, .test-button:hover, .revise-button:hover {
   background-color: #0ecc6d;
 }
-.study-button.disabled, .disabled.revise-button {
+.study-button.disabled, .disabled.test-button, .disabled.revise-button {
   cursor: default;
   background-color: #989898;
 }
@@ -790,6 +790,13 @@ input[type=radio] {
 }
 .revise-button:hover {
   background-color: #2b9cf8;
+}
+
+.test-button {
+  background-color: #b41049;
+}
+.test-button:hover {
+  background-color: #c21854;
 }
 
 .word-column {
@@ -1266,6 +1273,26 @@ input[type=radio] {
   border-radius: 60%;
   z-index: 2;
   opacity: 0.75;
+}
+
+.fa-rotate-right {
+  cursor: pointer;
+  margin-right: max(1.5vw, 10px);
+}
+.fa-rotate-right:hover {
+  transform: scale(1.1);
+}
+.fa-rotate-right:active {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+.fa-book {
+  margin-right: 4px;
+}
+
+.fa-magnifying-glass {
+  margin-right: 2px;
 }
 
 #drag-item-clone {

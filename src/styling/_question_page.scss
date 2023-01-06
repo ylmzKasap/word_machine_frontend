@@ -401,6 +401,14 @@
   }
 }
 
+.test-button {
+  @extend .study-button;
+  background-color: rgb(180, 16, 73);
+  &:hover {
+    background-color: rgb(194, 24, 84);
+  }
+}
+
 .word-column {
   width: 30%;
 }

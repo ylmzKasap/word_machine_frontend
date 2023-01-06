@@ -3,6 +3,7 @@ import { RequestMessageTypes } from '../../profile_components/types/profilePageT
 import { ImageDetailsDefaults, ImageDetailsTypes } from '../common/components/image_details';
 import { cache_question_audio, cache_question_image, generate_pages } from '../common/handlers';
 import { generate_revision_pages } from '../common/handlers/generate_revision_pages';
+import { generate_test_pages } from '../common/handlers/generate_test_pages';
 import { randint } from '../common/utils';
 import { DeckResponseTypes, PageContent, PageTypes } from '../types/QuestionPageTypes';
 import { ReviseWord } from './question_content/components/revise_word';
@@ -74,6 +75,15 @@ export const handleQuestionPage = (
         pages: generate_revision_pages(state.wordInfo)
       };
 
+    case 'startTest':
+      return {
+        ...state,
+        view: 'test',
+        pageNumber: 0,
+        progress: 0,
+        pages: generate_test_pages(state.wordInfo)
+      };
+
     case 'goBack':
       return {
         ...state,
@@ -130,23 +140,28 @@ export const handleQuestionPage = (
 
       const updatedPages =  [...pagesSoFar, currentPage, ...otherPages];
       if (isCorrect) {
-        const revisionIndex = state.pageNumber + randint(2, 5);
+        if (state.view === 'question') {
+          const revisionIndex = state.pageNumber + randint(2, 5);
   
-        const pagesBeforeRevision = updatedPages.slice(0, revisionIndex);
-        const pagesAfterRevision = updatedPages.slice(revisionIndex);
-        const revision = {
-          component: ReviseWord,
-          type: 'ReviseWord',
-          word: pages[state.pageNumber].word,
-          options: [],
-          order: state.pages.length + 1,  // For unique key
-          answered: false,
-          answeredCorrectly: null,
-          showText: false,
-          showThumbs: false,
-          clickedThumbs: ''
-        };
-        pagesToReturn = [...pagesBeforeRevision, revision, ...pagesAfterRevision];
+          const pagesBeforeRevision = updatedPages.slice(0, revisionIndex);
+          const pagesAfterRevision = updatedPages.slice(revisionIndex);
+          const revision = {
+            component: ReviseWord,
+            type: 'ReviseWord',
+            word: pages[state.pageNumber].word,
+            options: [],
+            order: state.pages.length + 1,  // For unique key
+            answered: false,
+            answeredCorrectly: null,
+            showText: false,
+            showThumbs: false,
+            clickedThumbs: ''
+          };
+          pagesToReturn = [...pagesBeforeRevision, revision, ...pagesAfterRevision];
+        } else {
+          // Test page
+          pagesToReturn = updatedPages;
+        }
       } else {
         const repeatIndex = state.pageNumber + randint(2, 4);
 
