@@ -15,6 +15,16 @@ export default function validate_sound_upload(
     return;
   }
 
+  if (file.size / 1000000 > 0.3) {
+    setEditImageOverlay({
+      type: 'changeUploadedSound',
+      value: {
+        error: 'File size too big ( > 300kb )',
+      },
+    });
+    return;
+  }
+
   if (!file.name.match(soundNameRegex)) {
     setEditImageOverlay({
       type: 'changeUploadedSound',
