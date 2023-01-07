@@ -33,7 +33,8 @@ const App = () => {
         <Route path="settings" element={<UserSettings />} />
         <Route path="reset_password/:reset_string" element={<ResetPassword />} /> 
       </Route>
-      <Route path="deck/:username/:deckId" element={<QuestionIntro />} />
+      <Route path="deck/:username/:itemId" element={<QuestionIntro type="deck" />} />
+      <Route path="category/:username/:itemId" element={<QuestionIntro type="category" />} />
       <Route path="*" element={<LayoutsWithNavbar />} >
         <Route path="*" element={<NotFound />} />  
       </Route>

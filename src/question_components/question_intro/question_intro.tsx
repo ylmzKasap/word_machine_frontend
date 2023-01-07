@@ -13,12 +13,13 @@ import { RequestMessageTypes, WordTypes } from '../../profile_components/types/p
 import { requestMessageDefault } from '../../profile_components/types/profilePageDefaults';
 import { RequestInfo } from '../../profile_components/profile_page/other_components';
 import { ImageDetailsDefaults, ImageDetailsTypes } from '../common/components/image_details';
+import LoadingIcon from '../../assets/animations/loading_icon';
 
 export const QuestionContext = createContext<
   types.QuestionContextTypes | undefined
 >(undefined);
 
-export const QuestionIntro = () => {
+export const QuestionIntro: React.FC<{type: string}> = (props) => {
   const params = useParams<types.ParamTypes>();
 
   const [questionPage, setQuestionPage] = useReducer(handleQuestionPage, QuestionPageDefaults);
@@ -27,17 +28,17 @@ export const QuestionIntro = () => {
   // Get the content from state or fetch it.
   useEffect(() => {
     if (['question', 'revision', 'test'].includes(questionPage.view)) return;
-    let deck_id = params.deckId;
-
-    // Show loading icon after half a second
-    setTimeout(() => {
-      setQuestionPage({type: 'showLoading', value: 'true'});
-    }, 500);
+    let item_id = params.itemId;
 
     axios
-      .get(`${isProduction ? serverUrl : ''}/deck/${params.username}/${deck_id}`)
+      .get(`${isProduction ? serverUrl : ''}/${props.type}/${params.username}/${item_id}`)
       .then((res) => {
-        const response = res.data as types.DeckResponseTypes;
+        let response = res.data as types.DeckResponseTypes;
+        let orderedwords: WordTypes[];
+        if (props.type === 'category') {
+          orderedwords = response.words.map((word, index) => ({...word, word_order: index}));
+          response.words = orderedwords;
+        }
         setQuestionPage({type: 'setDeckData', value: response});
         setReRender();
       })
@@ -83,8 +84,9 @@ export const QuestionIntro = () => {
           goForward={goForward}
           user={params.username}
         />
+        {!deckInfo.isLoaded && <LoadingIcon elementClass="image-request" />}
         {questionPage.view === 'introduction' && deckInfo.isLoaded 
-          && <QuestionIntroContent />}
+          && <QuestionIntroContent type={props.type} />}
         {['question', 'revision', 'test'].includes(questionPage.view) && deckInfo.isLoaded
           && <QuestionContent />}
         {requestMessage.description && <RequestInfo 

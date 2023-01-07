@@ -26,8 +26,8 @@ export const wordInfoDefault = {
 
 export const deckInfoDefault = {
   isLoaded: false,
-  showLoading: false,
   deck_name: '',
+  category_name: '',
   root_id: '',
   directory: '',
   username: '',

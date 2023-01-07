@@ -24,14 +24,17 @@ export const ImageDetails: React.FC = () => {
         <header id="image-details-header">
           This image was created by <span className="image-artist">
             {artistName}
-            {references?.some(ref => /flaticon.com/.test(ref)) 
-              ? <> - <a href="https://www.flaticon.com" target="_blank" rel="noreferrer">
-                Flaticon</a></> : ''}
-            {references?.some(ref => /freepik.com/.test(ref)) 
-              ? <> - <a href="https://www.freepik.com" target="_blank" rel="noreferrer">
-                Freepik</a></> : ''}
-            .
           </span> 
+          {references?.some(ref => /flaticon.com/.test(ref)) 
+            ? <> on <a href="https://www.flaticon.com" target="_blank" rel="noreferrer">
+              Flaticon</a></> : ''}
+          {references?.some(ref => /freepik.com/.test(ref)) 
+            ? <> on <a href="https://www.freepik.com" target="_blank" rel="noreferrer">
+              Freepik</a></> : ''}
+          {references?.some(ref => /pixabay.com/.test(ref)) 
+            ? <> on <a href="https://www.pixabay.com" target="_blank" rel="noreferrer">
+              Pixabay</a></> : ''}
+          .
         </header>
         <div id="reference-list-header">References:</div>
         <ol id="image-reference-container">

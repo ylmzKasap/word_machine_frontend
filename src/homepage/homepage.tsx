@@ -58,10 +58,6 @@ export const Homepage: React.FC = () => {
           loginForm={loginForm}
           setLoginForm={setLoginForm}
         />}
-      {/*       <div className="homepage-section">
-          
-      </div>  */}
-
     </div>
   );
 };

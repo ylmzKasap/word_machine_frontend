@@ -1164,16 +1164,19 @@ input[type=radio] {
   color: white;
 }
 
-.category-circle, .image-circle {
-  margin-left: auto;
+.category-circle {
   margin-right: 15px;
 }
-.category-circle:hover, .image-circle:hover {
+.category-circle:hover {
   transform: scale(1);
 }
 
 .image-circle {
   margin-right: 10px;
+  margin-left: auto;
+}
+.image-circle:hover {
+  transform: scale(1);
 }
 
 .fa-file-circle-plus {
@@ -1296,6 +1299,12 @@ input[type=radio] {
 
 .fa-magnifying-glass {
   margin-right: 2px;
+}
+
+.fa-dumbbell {
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 10px;
 }
 
 #drag-item-clone {

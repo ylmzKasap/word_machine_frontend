@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useContext } from 'react';
 import * as handlers from '../../common/handlers';
-import LoadingIcon from '../../../assets/animations/loading_icon';
 import { QuestionContext } from '../question_intro';
 import { ProgressBar, QuestionBody } from './components';
 import { 
@@ -51,13 +50,11 @@ export const QuestionContent: React.FC = () => {
     }
   }, [questionPage.pages, questionPage.pageNumber]);
 
-  const { deckInfo, pageNumber, wordInfo } = questionPage;
+  const { pageNumber, wordInfo } = questionPage;
   // Children: NavBar, ProgressBar, QuestionBody.
   return (
     <div className="question-page">
       <ProgressBar width={questionPage.progress} />
-      {!deckInfo.isLoaded && deckInfo.showLoading &&
-        <LoadingIcon elementClass="image-request white" />}
       {setPages()}
       {questionPage.imageDetails.view && <ImageDetails />}
     </div>

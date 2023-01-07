@@ -86,7 +86,6 @@
 }
 
 .category-circle {
-  margin-left: auto;
   margin-right: 15px;
   &:hover {
     transform: scale(1);
@@ -94,8 +93,11 @@
 }
 
 .image-circle {
-  @extend .category-circle;
   margin-right: 10px;
+  margin-left: auto;
+  &:hover {
+    transform: scale(1);
+  }
 }
 
 .fa-file-circle-plus {
@@ -229,4 +231,10 @@
 
 .fa-magnifying-glass {
   margin-right: 2px;
+}
+
+.fa-dumbbell {
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 10px;
 }

@@ -45,8 +45,8 @@ export const handleQuestionPage = (
         wordInfo: wordInfo,
         deckInfo: {
           isLoaded: true,
-          showLoading: false,
           deck_name: response.deck_name,
+          category_name: response.category_name || '',
           root_id: response.root_id,
           directory: response.directory,
           username: response.username,
@@ -100,15 +100,6 @@ export const handleQuestionPage = (
         childAnimation: state.childAnimation === 'load-page' ? 'load-page-2' : 'load-page',
         progress: ((state.pageNumber + 1) * 100) / (state.pages.length - 1),
         imageDetails: ImageDetailsDefaults
-      };
-
-    case 'showLoading':
-      return {
-        ...state,
-        deckInfo: {
-          ...state.deckInfo,
-          showLoading: action.value === 'true'
-        }
       };
 
     case 'fetchError':

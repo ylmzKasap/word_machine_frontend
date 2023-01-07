@@ -3,7 +3,7 @@ import { seperate_language_region } from '../../../profile_components/common/fun
 import { QuestionContextTypes } from '../../types/QuestionPageTypes';
 import { QuestionContext } from '../question_intro';
 
-export const DeckInfo = () => {
+export const DeckInfo: React.FC<{type: string}> = (props) => {
   const { questionPage, setQuestionPage } = useContext(QuestionContext) as QuestionContextTypes;
 
   const handleStudy = () => {
@@ -26,7 +26,9 @@ export const DeckInfo = () => {
   return (
     <div id="deck-info-intro">
       <div id="deck-name-intro">
-        <div>{questionPage.deckInfo.deck_name}</div>
+        <div>{props.type === 'category' 
+          ? questionPage.deckInfo.category_name
+          : questionPage.deckInfo.deck_name}</div>
       </div>
       <DeckInfoRow
         description={`${totalWords} ${totalWords <= 1 ? 'word' : 'words'}`}

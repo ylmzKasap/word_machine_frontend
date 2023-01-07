@@ -17,11 +17,11 @@ export default function validate_image_upload(
     return;
   }
 
-  if (file.size / 1000000 > 1) {
+  if (file.size / 1000000 > 0.5) {
     setEditImageOverlay({
       type: 'changeUploadedImage',
       value: {
-        imageError: 'Image size is too big ( > 1mb )',
+        imageError: 'Image size is too big ( > 500kb )',
       },
     });
     scrollToFormError();

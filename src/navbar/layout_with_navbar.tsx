@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createContext, useEffect, useReducer, useState } from 'react';
-import { Outlet, useLocation, useParams } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import LoadingIcon from '../assets/animations/loading_icon';
 import { isProduction, serverUrl } from '../constants';
 import { NavBar } from './navbar';
 
@@ -53,7 +54,7 @@ export function LayoutsWithNavbar() {
         <NavBar 
           userInfo={currentUserInfo}
           sessionChecked={sessionChecked} />
-        {sessionChecked && <Outlet />} 
+        {sessionChecked ? <Outlet /> : <LoadingIcon elementClass="image-request" />} 
       </div>
     </NavbarContext.Provider>
   );

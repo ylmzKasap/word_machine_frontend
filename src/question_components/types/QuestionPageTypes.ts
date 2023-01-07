@@ -17,7 +17,7 @@ export interface LocationTypes {
 }
 
 export type ParamTypes = {
-  deckId: string;
+  itemId: string;
   username: string;
 };
 
@@ -64,8 +64,8 @@ export interface TextAnimationContextTypes {
 
 export interface DeckInfoTypes {
   isLoaded: boolean;
-  showLoading: boolean;
   deck_name: string;
+  category_name?: string;
   root_id: string;
   directory: string;
   username: string;
