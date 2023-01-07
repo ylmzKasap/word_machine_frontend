@@ -33,7 +33,7 @@
 .intro-text {
   @include flexit();
   position: relative;
-  font-size: calc(1.2rem + 1.2vh);
+  font-size: calc(1.2rem + 0.6vh + 0.4vw);
   font-weight: bold;
   text-align: center;
   padding: 10px;
@@ -41,11 +41,13 @@
   width: max(35vw, 200px);
   border: solid rgb(62, 162, 255);
   border-radius: max(2vh, 20px);
+  box-shadow: 0px 0px 6px rgb(195, 195, 195);
   transition: 0.3s;
   overflow: hidden;
   cursor: pointer;
   &:hover {
     border-color: rgb(213, 224, 110);
+    box-shadow: 0px 0px 6px rgb(213, 224, 110);
     transition: 0.15s;
     > .text-number-box {
       background-color: rgb(213, 224, 110);
@@ -126,7 +128,7 @@
     margin-top: max(2vh, 20px);
   }
   > .fa-circle-info {
-    font-size: 1.4rem;
+    font-size: max(1vw, 1.4rem);
     left: max(1.5vw, 15px);
     top: max(2vh, 12px);
   }
@@ -180,7 +182,7 @@
   padding: 5px;
   position: absolute;
   left: 0px;
-  font-size: 1.6rem;
+  font-size: calc(1.2rem + 0.6vh + 0.6vw);;
   border-radius: 3px 1px 1px 3px;
   cursor: pointer;
   z-index: 1;
@@ -585,7 +587,7 @@
 
 .revision-picture-container {
   position: relative;
-  height: 300px;
+  height: max(30vh, 300px);
   opacity: 0;
   animation-fill-mode: forwards;
   animation-name: slideUp;
@@ -602,7 +604,7 @@
     animation-delay: 0s;
   }
   > .fa-circle-info {
-    font-size: 1.2rem;
+    font-size: max(1.2rem, 0.8vw);
     right: max(1vw, 6px);
     bottom: max(0.7vh, 7px);
   }
@@ -645,15 +647,16 @@
 }
 
 #image-details-container {
-  height: 350px;
+  height: max(350px, 34vh);
   width: max(250px, 34vw);
   border-radius: 20px;
   overflow: hidden;
   background-color: white;
+  box-shadow: 0px 0px 7px gray;
 }
 
 #image-details-header {
-  font-size: calc(0.8rem + 0.3vw + 0.3vh);
+  font-size: calc(0.6rem + 0.5vw + 0.4vh);
   padding: 20px 16px 20px 16px;
 }
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useReducer, createContext } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { QuestionNavbar } from './question_content/components';
 import { handleQuestionPage } from './question_intro_reducer';
 import * as defaults from '../types/QuestionPageDefaults';
@@ -20,7 +20,6 @@ export const QuestionContext = createContext<
 
 export const QuestionIntro = () => {
   const params = useParams<types.ParamTypes>();
-  const navigate = useNavigate();
 
   const [questionPage, setQuestionPage] = useReducer(handleQuestionPage, QuestionPageDefaults);
   const [reRender, setReRender] = useReducer(x => x + 1, 0);
@@ -30,7 +29,7 @@ export const QuestionIntro = () => {
     if (['question', 'revision', 'test'].includes(questionPage.view)) return;
     let deck_id = params.deckId;
 
-    // Show laoding icon after half a second
+    // Show loading icon after half a second
     setTimeout(() => {
       setQuestionPage({type: 'showLoading', value: 'true'});
     }, 500);

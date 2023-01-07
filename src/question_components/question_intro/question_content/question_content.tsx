@@ -11,6 +11,7 @@ import {
 import { ReviseWords } from './components/words_revision';
 import { WordTypes } from '../../../profile_components/types/profilePageTypes';
 import { ImageDetails } from '../../common/components/image_details';
+import { cache_revision_media } from '../../common/handlers/cache_revision_media';
 
 export var audioMixer = new Audio();
 
@@ -38,12 +39,15 @@ export const QuestionContent: React.FC = () => {
 
   // Cache images
   useEffect(() => {
-    if (questionPage.view === 'question') {
+    if (['question', 'test'].includes(questionPage.view)) {
       const pages = questionPage.pages as PageTypes;
       if (pages[0].component) {
         handlers.cache_question_image(pages, questionPage.pageNumber, 2);
         handlers.cache_question_audio(pages, questionPage.pageNumber, 1); 
       }
+    } else if (questionPage.view === 'revision') {
+      const pages = questionPage.pages as WordTypes[][];
+      cache_revision_media(pages[questionPage.pageNumber]);
     }
   }, [questionPage.pages, questionPage.pageNumber]);
 

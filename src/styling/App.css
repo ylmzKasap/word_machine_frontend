@@ -379,7 +379,7 @@ input[type=radio] {
   background-color: #3f3c3c;
   justify-content: space-between;
   width: 100%;
-  height: max(2.5vw + 3vh, 50px);
+  height: max(2vw + 3vh, 50px);
   min-height: 40px;
   max-height: 15vh;
   position: sticky;
@@ -412,7 +412,7 @@ input[type=radio] {
   justify-content: center;
   align-items: center;
   position: relative;
-  font-size: calc(1.2rem + 1.2vh);
+  font-size: calc(1.2rem + 0.6vh + 0.4vw);
   font-weight: bold;
   text-align: center;
   padding: 10px;
@@ -420,12 +420,14 @@ input[type=radio] {
   width: max(35vw, 200px);
   border: solid #3ea2ff;
   border-radius: max(2vh, 20px);
+  box-shadow: 0px 0px 6px #c3c3c3;
   transition: 0.3s;
   overflow: hidden;
   cursor: pointer;
 }
 .intro-text:hover, .revise-text:hover, .ask-from-text:hover, .text-option:hover {
   border-color: #d5e06e;
+  box-shadow: 0px 0px 6px #d5e06e;
   transition: 0.15s;
 }
 .intro-text:hover > .text-number-box, .revise-text:hover > .text-number-box, .ask-from-text:hover > .text-number-box, .text-option:hover > .text-number-box {
@@ -512,7 +514,7 @@ input[type=radio] {
   margin-top: max(2vh, 20px);
 }
 .intro-img-box > .fa-circle-info {
-  font-size: 1.4rem;
+  font-size: max(1vw, 1.4rem);
   left: max(1.5vw, 15px);
   top: max(2vh, 12px);
 }
@@ -567,7 +569,7 @@ input[type=radio] {
   padding: 5px;
   position: absolute;
   left: 0px;
-  font-size: 1.6rem;
+  font-size: calc(1.2rem + 0.6vh + 0.6vw);
   border-radius: 3px 1px 1px 3px;
   cursor: pointer;
   z-index: 1;
@@ -703,7 +705,7 @@ input[type=radio] {
 }
 
 #question-intro {
-  height: calc(100% - max(2.5vw + 3vh, 50px));
+  height: calc(100% - max(2vw + 3vh, 50px));
   width: 100%;
 }
 
@@ -974,7 +976,7 @@ input[type=radio] {
 
 .revision-picture-container {
   position: relative;
-  height: 300px;
+  height: max(30vh, 300px);
   opacity: 0;
   animation-fill-mode: forwards;
   animation-name: slideUp;
@@ -992,7 +994,7 @@ input[type=radio] {
   animation-delay: 0s;
 }
 .revision-picture-container > .fa-circle-info {
-  font-size: 1.2rem;
+  font-size: max(1.2rem, 0.8vw);
   right: max(1vw, 6px);
   bottom: max(0.7vh, 7px);
 }
@@ -1038,15 +1040,16 @@ input[type=radio] {
 }
 
 #image-details-container {
-  height: 350px;
+  height: max(350px, 34vh);
   width: max(250px, 34vw);
   border-radius: 20px;
   overflow: hidden;
   background-color: white;
+  box-shadow: 0px 0px 7px gray;
 }
 
 #image-details-header {
-  font-size: calc(0.8rem + 0.3vw + 0.3vh);
+  font-size: calc(0.6rem + 0.5vw + 0.4vh);
   padding: 20px 16px 20px 16px;
 }
 
@@ -1509,7 +1512,7 @@ input[type=radio] {
 }
 
 .profile-content {
-  height: calc(100% - max(2.5vw + 3vh, 50px));
+  height: calc(100% - max(2vw + 3vh, 50px));
   display: flex;
   flex-direction: row;
 }
@@ -1522,7 +1525,7 @@ input[type=radio] {
   display: flex;
   position: absolute;
   flex-direction: column;
-  height: max(450px, 100% - max(2.5vw + 3vh, 50px));
+  height: max(450px, 100% - max(2vw + 3vh, 50px));
   width: calc(max(2vw, 16px) * 2 + 75px);
   background: linear-gradient(-180deg, #3f3c3c, #5e5e5e);
   z-index: 101;
@@ -1696,7 +1699,7 @@ input[type=radio] {
   justify-content: space-evenly;
   justify-items: center;
   height: auto;
-  min-height: max(450px, 100% - max(2.5vw + 3vh, 50px));
+  min-height: max(450px, 100% - max(2vw + 3vh, 50px));
   width: 100%;
   margin-left: calc(max(2vw, 16px) * 2 + 75px);
   overflow-y: auto;
@@ -1859,7 +1862,6 @@ menu[title]::before {
   align-items: center;
   cursor: pointer;
   height: 100%;
-  background-color: #3F4E4F;
   width: 75px;
   user-select: none;
   font-family: "Coda", cursive;
@@ -2531,7 +2533,7 @@ form > button {
   box-shadow: 0px 7px 12px 2px #9c9a9a;
 }
 #form-body.navbar-margin {
-  margin-bottom: max(2.5vw + 3vh, 50px);
+  margin-bottom: max(2vw + 3vh, 50px);
 }
 #form-body * .overlay-description {
   padding: 25px 10px 25px 20px;
@@ -2927,7 +2929,7 @@ hr.margin-top {
   display: flex;
   justify-content: center;
   width: 100%;
-  height: calc(100% - max(2.5vw + 3vh, 50px));
+  height: calc(100% - max(2vw + 3vh, 50px));
   overflow: auto;
 }
 
@@ -3063,7 +3065,7 @@ input.space-bottom {
 }
 
 #homepage {
-  height: calc(100% - max(2.5vw + 3vh, 50px));
+  height: calc(100% - max(2vw + 3vh, 50px));
   background: linear-gradient(-180deg, #f39a6b, #481f05);
 }
 

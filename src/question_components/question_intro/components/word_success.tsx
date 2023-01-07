@@ -20,8 +20,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
   const [sortType, setSortType] = useState({column: '', descending: false});
   const [wordStats, setWordstats] = useState<WordStatsTypes[]>([]);
   const [deckCloned, setDeckCloned] = useState(false);
-  const allHeaders = ['#', 'Word', 'Success', 'Revisions', 'Last revision'];
-  
+  const allHeaders = ['#', 'Word', 'Success', 'Revisions', 'Last revision'];  
   // Calculate success breakdown and sort rows
   useEffect(() => {
     const { target_language: targetLanguage, words } = questionPage.wordInfo;
@@ -37,6 +36,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
         correctAnswer: word.correct_answer,
         incorrectAnswer: word.incorrect_answer,
         successRate: successRate,
+        wordOrder: word.word_order,
         lastReview: word.last_review!
       };
     });
@@ -75,10 +75,11 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
     } 
     
     else {
-      return setWordstats(wordStats);
+      sortedStats = wordStats.sort((a, b) => a.wordOrder - b.wordOrder);
     }
 
     setWordstats(sortedStats);
+    
   }, [sortType, reRender]);
 
   const handleSortClick = (event: React.MouseEvent) => {

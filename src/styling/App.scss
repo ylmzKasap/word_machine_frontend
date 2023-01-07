@@ -25,7 +25,7 @@ body {
 $mobile: 480px;
 $tablet: 768px;
 $small-screen: 1024px;
-$navbar-height: max(calc(2.5vw + 3vh), 50px);
+$navbar-height: max(calc(2vw + 3vh), 50px);
 
 // Mixins
 @mixin flexit() {
