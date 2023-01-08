@@ -2,7 +2,7 @@
 
 // Libraries
 import React, { useState, useEffect, useContext, useReducer, createContext } from 'react';
-import { useParams, Outlet } from 'react-router-dom';
+import { useParams, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Hooks
@@ -54,6 +54,8 @@ export const ProfileContext = createContext<
 export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
   // Rendered by main.
   const params = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const dirId = params.dirId;
   
@@ -112,14 +114,6 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
     editImagesDefaults
   );
 
-  let currentContainer: string;
-  if (directoryInfo) {
-    currentContainer =
-      directoryInfo.item_type === 'thematic_folder'
-        ? '.category-container'
-        : '.card-container';
-  }
-
   // Render directory.
   useEffect(() => {
     const currentDir = dirId ? dirId : dir;
@@ -147,6 +141,18 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
         }
         setDirectory(dirId ? dirId : rootDirectory);
 
+        if (location.state) {
+          const container = document.querySelector(
+            dirInfo.item_type === 'thematic_folder'
+              ? '.category-container'
+              : '.card-container');
+          container?.scrollTo({
+            top: location.state.scrollTop ? location.state.scrollTop : 0,
+            behavior: 'smooth'
+          });
+          navigate(location.pathname, {}); 
+        };
+
         // Load directory user picture, remove after connecting to aws
         let image = new Image();
         if (dirInfo.user_picture) {
@@ -165,7 +171,8 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
         setDrag({type: 'reset' });
         setDirectoryLoaded(true);
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         setDirectoryLoaded(false);
         setFetchError(true);
       });
@@ -240,7 +247,10 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
         const scrollDiv = scroll_div(event, scrolling, window);
 
         if (scrollDiv) {
-          const scrolledElement = document.querySelector(currentContainer)!;
+          const scrolledElement = document.querySelector(
+            directoryInfo.item_type === 'thematic_folder'
+              ? '.category-container'
+              : '.card-container')!;
           const element = event.target as HTMLDivElement;
           const sidebarElement = element.closest('.sidebar-container');
           // Stop scrolling when cursor is hovered over the sidebar.
@@ -315,7 +325,10 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
     }
     setContextMenu({type: 'reset'});
 
-    const container = document.querySelector(currentContainer) as HTMLElement;
+    const container = document.querySelector(
+      directoryInfo.item_type === 'thematic_folder'
+        ? '.category-container'
+        : '.card-container') as HTMLElement;
     const closestItem = find_closest_element(event, [
       '.deck',
       '.folder',

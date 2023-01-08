@@ -189,8 +189,12 @@ export const PageItem: React.FC<PageItemPropTypes> = (props) => {
       }
     }
 
+    const currentContainer = document.querySelector(
+      `.${directoryInfo.item_type === 'thematic_folder' ? 'category' : 'card'}-container`);
+
     if (targetElem.className === 'deck' && !drag.isDragging) {
-      navigate(`/deck/${directoryInfo.owner}/${extract_int(targetElem.id)}`);
+      navigate(`/deck/${directoryInfo.owner}/${extract_int(targetElem.id)}`,
+        {state: {scrollTop: currentContainer?.scrollTop}});
     }
   };
 

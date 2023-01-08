@@ -47,6 +47,7 @@ export const QuestionContent: React.FC = () => {
     } else if (questionPage.view === 'revision') {
       const pages = questionPage.pages as WordTypes[][];
       cache_revision_media(pages[questionPage.pageNumber]);
+      cache_revision_media(pages[questionPage.pageNumber + 1]);
     }
   }, [questionPage.pages, questionPage.pageNumber]);
 

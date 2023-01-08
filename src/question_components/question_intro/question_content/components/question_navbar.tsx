@@ -1,11 +1,13 @@
 import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { QuestionContextTypes } from '../../../types/QuestionPageTypes';
 import { QuestionContext } from '../../question_intro';
 
 export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
   // Component of QuestionPage.
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { questionPage, setQuestionPage } = useContext(QuestionContext) as QuestionContextTypes;
   const { deckInfo, fetchError, pageNumber } = questionPage;
 
@@ -16,7 +18,8 @@ export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
 
   const handleHomeClick = () => {
     if (questionPage.view === 'introduction') {
-      navigate(`/user/${props.user}${currentDirectory}`);
+      navigate(`/user/${props.user}${currentDirectory}`, 
+        {state: {scrollTop: location.state.scrollTop}});
     } else if (['question', 'revision', 'test'].includes(questionPage.view)) {
       setQuestionPage({type: 'view', value: 'introduction'});
     }

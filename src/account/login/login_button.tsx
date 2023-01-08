@@ -1,10 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const LoginButton: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleClick = () => {
-    navigate('/login');
+    navigate('/login', {state: {next: location.pathname}});
   };
 
   return (
