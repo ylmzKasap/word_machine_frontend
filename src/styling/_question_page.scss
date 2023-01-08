@@ -391,7 +391,7 @@
   }
   &.disabled {
     cursor: default;
-    background-color: rgb(152, 152, 152);
+    background-color: rgb(152, 152, 152) !important;
   }
 }
 

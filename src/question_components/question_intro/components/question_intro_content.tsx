@@ -6,7 +6,7 @@ export const QuestionIntroContent: React.FC<{type: string}> = (props) => {
   return (
     <div id="question-intro-content">
       <DeckInfo type={props.type} />
-      <WordSuccess title="Word stats" />
+      <WordSuccess title="Word stats" type={props.type} />
     </div>
   );
 };

@@ -10,7 +10,7 @@ import { Link, useParams } from 'react-router-dom';
 import { requestMessageDefault } from '../../../profile_components/types/profilePageDefaults';
 import { isProduction, serverUrl } from '../../../constants';
 
-export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
+export const WordSuccess: React.FC<WordSuccessTypes> = ({ title, type }) => {
   const params = useParams();
   const { 
     questionPage,
@@ -130,6 +130,38 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
     });
   };
 
+  const createWordRows = () => {
+    const existingWords = wordStats.filter(word => word.word);
+    const allRows = existingWords.map((word, i) => { 
+      return (
+        <tr className="word-stats-row" key={`${word.word}-${i}`}>
+          <td>{i + 1}</td>
+          <td>{word.word}</td>
+          <td>
+            {word.successRate.toFixed(1)}%
+            <div className="word-success-bar">
+              <div 
+                className="green-success-bar"
+                style={{'width': `${word.successRate}%`}}></div>
+              <div 
+                className="red-success-bar"
+                style={word.lastReview
+                  ? {'width': `${100 - word.successRate}%`}
+                  : {}}></div>
+            </div>
+          </td>
+          <td>{word.correctAnswer + word.incorrectAnswer}</td>
+          <td>{word.lastReview ? format_date(word.lastReview) : 'Not yet studied'}</td>
+        </tr>
+      );
+    });
+    return allRows.length 
+      ? allRows 
+      : <tr className="word-stats-row">
+        <td colSpan={6}>This {type} has no words yet</td>
+      </tr> ;
+  };
+
   const { logged_in_user, username } = questionPage.deckInfo;
   return (
     <div id="word-success">
@@ -155,8 +187,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
                   onClick={handleCloneClick}>Clone</span> this deck to save your progress
               </>
               : <span>Cloned!</span> 
-            }
-            
+            }   
           </div>
       }
       <div id="deck-table-container">
@@ -174,34 +205,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
             </tr>
           </thead>
           <tbody>
-            {wordStats.map((word, i) => {
-              return (
-                <tr className="word-stats-row" key={`${word.word}-${i}`}>
-                  {word.word ?
-                    <>
-                      <td>{i + 1}</td>
-                      <td>{word.word}</td>
-                      <td>
-                        {word.successRate.toFixed(1)}%
-                        <div className="word-success-bar">
-                          <div 
-                            className="green-success-bar"
-                            style={{'width': `${word.successRate}%`}}></div>
-                          <div 
-                            className="red-success-bar"
-                            style={word.lastReview
-                              ? {'width': `${100 - word.successRate}%`}
-                              : {}}></div>
-                        </div>
-                      </td>
-                      <td>{word.correctAnswer + word.incorrectAnswer}</td>
-                      <td>{word.lastReview ? format_date(word.lastReview) : 'Not yet studied'}</td>
-                    </>
-                    : <td colSpan={6}>This deck has no words yet</td>}
-                  
-                </tr>
-              );
-            })}
+            {createWordRows()}
           </tbody>
         </table>
       </div>
@@ -211,6 +215,7 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title }) => {
 
 interface WordSuccessTypes {
   title: string;
+  type: string;
 }
 
 interface WordStatsTypes {

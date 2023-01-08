@@ -784,7 +784,7 @@ input[type=radio] {
 }
 .study-button.disabled, .disabled.test-button, .disabled.revise-button {
   cursor: default;
-  background-color: #989898;
+  background-color: #989898 !important;
 }
 
 .revise-button {

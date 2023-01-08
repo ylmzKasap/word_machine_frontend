@@ -22,7 +22,7 @@ export const DeckInfo: React.FC<{type: string}> = (props) => {
   };
 
   const { target_language, source_language, words } = questionPage.wordInfo;
-  const totalWords = words[0].image_id ? words.length : 0;
+  const totalWords = words.filter(w => w.image_id).length;
   return (
     <div id="deck-info-intro">
       <div id="deck-name-intro">
