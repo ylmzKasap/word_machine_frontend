@@ -117,6 +117,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
   // Render directory.
   useEffect(() => {
     const currentDir = dirId ? dirId : dir;
+    let scrollTimeout: number;
     axios
       .get(`${isProduction ? serverUrl : ''}/u/${params.username}/${currentDir}`)
       .then((response) => {
@@ -142,15 +143,17 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
         setDirectory(dirId ? dirId : rootDirectory);
 
         if (location.state) {
-          const container = document.querySelector(
-            dirInfo.item_type === 'thematic_folder'
-              ? '.category-container'
-              : '.card-container');
-          container?.scrollTo({
-            top: location.state.scrollTop ? location.state.scrollTop : 0,
-            behavior: 'smooth'
-          });
-          navigate(location.pathname, {}); 
+          scrollTimeout = window.setTimeout(() => {
+            const container = document.querySelector(
+              dirInfo.item_type === 'thematic_folder'
+                ? '.category-container'
+                : '.card-container');
+            container?.scrollTo({
+              top: location.state.scrollTop ? location.state.scrollTop : 0,
+              behavior: 'smooth'
+            });
+            navigate(location.pathname, {}); 
+          }, 100); 
         };
 
         // Load directory user picture, remove after connecting to aws
@@ -171,8 +174,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
         setDrag({type: 'reset' });
         setDirectoryLoaded(true);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         setDirectoryLoaded(false);
         setFetchError(true);
       });
@@ -182,6 +184,7 @@ export const ProfilePage: React.FC<{ dir: string }> = ({ dir }) => {
       setFetchError(false);
       setDrag({ type: 'reset' });
       setContextMenu({type: 'reset'});
+      window.clearTimeout(scrollTimeout);
     };
   }, [dirId, params.username, reRender]);
 
