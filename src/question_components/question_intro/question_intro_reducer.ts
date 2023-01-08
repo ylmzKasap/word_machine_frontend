@@ -27,6 +27,7 @@ export const handleQuestionPage = (
 
     case 'setDeckData':
       const response = action.value as DeckResponseTypes;
+      if (state.view !== 'introduction') return state; 
 
       const wordInfo = {
         words: response.words,
