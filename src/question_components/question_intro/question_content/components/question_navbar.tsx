@@ -19,7 +19,7 @@ export const QuestionNavbar: React.FC<NavBarTypes> = (props) => {
   const handleHomeClick = () => {
     if (questionPage.view === 'introduction') {
       navigate(`/user/${props.user}${currentDirectory}`, 
-        {state: {scrollTop: location.state.scrollTop}});
+        {state: {scrollTop: location.state ? location.state.scrollTop : 0}});
     } else if (['question', 'revision', 'test'].includes(questionPage.view)) {
       setQuestionPage({type: 'view', value: 'introduction'});
     }

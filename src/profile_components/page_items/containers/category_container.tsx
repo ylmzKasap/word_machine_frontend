@@ -44,6 +44,9 @@ const CategoryContainer = () => {
     });
   };
 
+  const currentContainer = document.querySelector(
+    `.${directoryInfo.item_type === 'thematic_folder' ? 'category' : 'card'}-container`);
+
   return (
     <div
       id={parentProps.id}
@@ -58,7 +61,8 @@ const CategoryContainer = () => {
       <div className="category-header">
         <p className={`${parentProps.type}-navbar-description`}>{parentProps.name}</p>
         <i className="fa-solid fa-dumbbell" title="Study all" onClick={() => 
-          navigate(`/category/${directoryInfo.owner}/${extract_int(parentProps.id)}`)} />
+          navigate(`/category/${directoryInfo.owner}/${extract_int(parentProps.id)}`,
+            {state: {scrollTop: currentContainer?.scrollTop}})} />
         {currentUserInfo.username === directoryInfo.owner &&
          <i className="fas fa-plus-circle category-circle" title="Add deck" onClick={addItem}></i>}
       </div>
