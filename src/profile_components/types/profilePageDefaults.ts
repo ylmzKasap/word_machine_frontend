@@ -47,6 +47,7 @@ export const wordDefault = [
     image_path: '',
     sound_path: '',
     sound_id: '',
+    item_order: '',
     word_order: 0,
     correct_answer: 0,
     incorrect_answer: 0,

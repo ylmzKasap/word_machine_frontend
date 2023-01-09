@@ -34,10 +34,11 @@ export const QuestionIntro: React.FC<{type: string}> = (props) => {
       .get(`${isProduction ? serverUrl : ''}/${props.type}/${params.username}/${item_id}`)
       .then((res) => {
         let response = res.data as types.DeckResponseTypes;
-        let orderedwords: WordTypes[];
         if (props.type === 'category') {
-          orderedwords = response.words.map((word, index) => ({...word, word_order: index}));
-          response.words = orderedwords;
+          const sortedWords: WordTypes[] = response.words
+            .sort((a, b) => Number(a.item_order) - Number(b.item_order))
+            .map((word, index) => ({...word, word_order: index}));
+          response.words = sortedWords;
         }
         setQuestionPage({type: 'setDeckData', value: response});
         setReRender();

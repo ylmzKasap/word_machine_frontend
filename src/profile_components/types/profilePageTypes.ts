@@ -95,6 +95,7 @@ export interface WordTypes {
   sound_path: string;
   sound_id: string;
   word_order: number;
+  item_order: string;
   correct_answer: number;
   incorrect_answer: number;
   last_review: string | null;
