@@ -16,7 +16,7 @@ export const IntroImage: React.FC<IntroImageTypes> = (props) => {
       <img
         className="intro-img"
         src={`${props.word.image_path}`}
-        alt={`${props.word[props.wordInfo.target_language as keyof WordTypes]}`}
+        alt="word figure"
       />
       <ImageInfo imageId={props.word.image_id}/>
       {props.answeredCorrectly ?

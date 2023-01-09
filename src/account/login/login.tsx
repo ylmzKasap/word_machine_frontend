@@ -50,7 +50,7 @@ export const LoginForm: React.FC<LoginPropTypes> = (
     }).then(res => {
       setSessionChecked(false);
       setLoginForm({type: 'submitting', value: 'false'});
-      if (location.state) {
+      if (location.state && location.state.next) {
         navigate(location.state.next);
       } else {
         navigate(`/user/${res.data.username}`);

@@ -133,7 +133,7 @@ const ImageOptionBox: React.FC<types.OptionPropTypes> = (props) => {
       <img
         className="image-option"
         src={`${props.image_path}`}
-        alt={`${props[props.wordInfo.target_language as keyof types.OptionPropTypes]}`}
+        alt="word option"
       />
       {props.wordInfo.show_translation && (
         <WordTranslation

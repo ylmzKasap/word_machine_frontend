@@ -5,7 +5,8 @@ export const LoginButton: React.FC = () => {
   const location = useLocation();
 
   const handleClick = () => {
-    navigate('/login', {state: {next: location.pathname}});
+    navigate('/login', {state: 
+      {next: location.pathname !== '/' ? location.pathname : ''}});
   };
 
   return (

@@ -2876,7 +2876,7 @@ hr.margin-top {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-color: aliceblue;
+  background-color: #f0f0f0;
   overflow: auto;
 }
 
@@ -2888,6 +2888,9 @@ hr.margin-top {
   height: max(300px, 30vh);
   background-color: white;
   margin: 10vh 0 auto 0;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: -1px 2px 7px #a7a7a7;
 }
 
 #verify-header {

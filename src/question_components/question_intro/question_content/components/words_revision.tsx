@@ -57,7 +57,7 @@ export const ReviseWords: React.FC = () => {
                 <img 
                   className={'revision-picture'}
                   src={word.image_path}
-                  alt={vocab} />
+                  alt="word revision" />
                 {questionPage.wordInfo.show_translation 
                   && <div className="word-translation">
                     {word[questionPage.wordInfo.source_language as keyof WordTypes]}
