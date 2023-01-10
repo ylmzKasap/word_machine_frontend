@@ -103,14 +103,14 @@ export const WordSuccess: React.FC<WordSuccessTypes> = ({ title, type }) => {
         ? questionPage.wordInfo.words[0].deck_id
         : window.location.pathname.split('/')[3]
     }).then((res) => {
-      const deck_id = res.data.deck_id as string;
+      const item_id = res.data.item_id as string;
       setQuestionPage({type: 'requestMessage', value: {
         loading: false,
         description: ' ',
-        link: `/deck/${questionPage.deckInfo.logged_in_user}/${deck_id}`,
+        link: `/deck/${questionPage.deckInfo.logged_in_user}/${item_id}`,
         linkDescription: 'View deck'
       }});
-    }).catch((err) => {
+    }).catch(() => {
       setDeckCloned(false);
       setQuestionPage({type: 'requestMessage', value: requestMessageDefault});
     });

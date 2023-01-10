@@ -10,7 +10,7 @@ export function create_context_menu(
   if (!closestItem) {
     return {
       closest: element,
-      openedElem: { id: undefined, type: 'void', name: undefined },
+      openedElem: { id: '', type: 'void', name: '' },
       ops: ['no actions'],
     };
   }
@@ -24,9 +24,9 @@ export function create_context_menu(
     ['card-container', 'category-container'].includes(closestItem.className)
   ) {
     contextMenuInfo.openedElem = {
-      id: undefined,
+      id: '',
       type: 'container',
-      name: undefined,
+      name: '',
     };
     contextMenuInfo.ops = userAtHome ? ['paste'] : [];
   } else {
@@ -55,7 +55,7 @@ export function create_context_menu(
         contextMenuInfo.ops = ['cut', 'rename', 'delete'];
       } else {
         // Someone elses directory
-        contextMenuInfo.ops = /* closestItem.className === 'thematic-folder' ? ['clone'] :  */ [];
+        contextMenuInfo.ops = closestItem.className === 'thematic-folder' ? ['clone'] :  [];
       }
     }
   }
@@ -63,15 +63,15 @@ export function create_context_menu(
 }
 
 export interface ContextOpenedElemTypes {
-  id: string | undefined;
-  type: string | undefined;
-  name: string | undefined;
+  id: string;
+  type: string;
+  name: string;
 }
 
 export const contextOpenedElemDefault = {
-  id: undefined,
-  type: undefined,
-  name: undefined,
+  id: '',
+  type: '',
+  name: '',
 };
 
 export interface ContextMenuInfoTypes {

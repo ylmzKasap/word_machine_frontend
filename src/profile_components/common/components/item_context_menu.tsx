@@ -182,14 +182,15 @@ const ItemContextMenu: React.FC<{username: string;}> = ({username}) => {
     } else if (action === 'clone') {
       setRequestMessage({loading: true, description: 'Cloning...'});
       axios.post(`${isProduction ? serverUrl : ''}/clone`, {
-        item_id: extract_int(contextOpenedElem.id!)
+        item_id: extract_int(contextOpenedElem.id)
       }).then((res) => {
-        const deck_id = res.data.deck_id as string;
+        const item_id = res.data.item_id as string;
+        const route = contextOpenedElem.type === 'deck' ? 'deck' : 'user';
         setRequestMessage({
           loading: false,
           description: ' ',
-          link: `/deck/${username}/${deck_id}`,
-          linkDescription: 'View deck'
+          link: `/${route}/${username}/${item_id}`,
+          linkDescription: `View ${contextOpenedElem.type === 'deck' ? 'deck' : 'folder'}`
         });
       }).catch((err) => {
         setRequestMessage(requestMessageDefault);
